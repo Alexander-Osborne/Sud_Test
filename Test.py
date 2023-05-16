@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import time
 from datetime import datetime, timedelta
 
 # Sample rainfall data
@@ -14,8 +15,19 @@ nowTime = datetime.now()
 bstTime = nowTime + timedelta(minutes=60)  # Adjust the time by adding 60 minutes (1 hour) for BST
 dateStr = bstTime.strftime('%b %d, %Y %H:%M:%S')
 
-# Display the bar chart using Streamlit
-st.bar_chart(df['Rainfall (mm)'])
+# Display the initial bar chart using Streamlit
+chart = st.bar_chart(df['Rainfall (mm)'])
 
 # Display the current time and date
 st.write(dateStr)
+
+# Auto-update the bar chart every 10 seconds
+while True:
+    # Update the data
+    df['Rainfall (mm)'] = [value + 5 for value in df['Rainfall (mm)']]
+
+    # Update the chart
+    chart.bar_chart(df['Rainfall (mm)'])
+
+    # Wait for 10 seconds
+    time.sleep(10)
