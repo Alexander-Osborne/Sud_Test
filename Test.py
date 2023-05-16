@@ -16,6 +16,9 @@ now_time = datetime.now()
 # Display the initial bar chart using Streamlit
 chart = st.bar_chart(df['Rainfall (mm)'])
 
+# Initialize the time container
+time_container = st.empty()
+
 # Auto-update the bar chart every 10 seconds
 while True:
     # Update the data
@@ -30,7 +33,7 @@ while True:
     date_str = bst_time.strftime('%b %d, %Y %H:%M:%S')
 
     # Display the current time
-    st.write(date_str)
+    time_container.markdown(f"**Current Time (BST):** {date_str}")
 
     # Wait for 10 seconds
     time.sleep(10)
