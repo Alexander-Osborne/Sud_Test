@@ -25,6 +25,7 @@ while True:
     chart.bar_chart(df['Rainfall (mm)'])
 
     # Update the current time
+    now_time += timedelta(seconds=10)  # Increment the time by 10 seconds
     bst_time = now_time + timedelta(minutes=60)  # Adjust the time by adding 60 minutes (1 hour) for BST
     date_str = bst_time.strftime('%b %d, %Y %H:%M:%S')
 
