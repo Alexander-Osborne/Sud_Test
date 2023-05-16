@@ -10,16 +10,11 @@ rainfall = [45, 62, 32, 14, 67, 78, 92, 85, 47, 32, 15, 23]
 # Create a dataframe for the data
 df = pd.DataFrame({'Month': months, 'Rainfall (mm)': rainfall})
 
-# Adding current time and date in the top right corner as BST
-nowTime = datetime.now()
-bstTime = nowTime + timedelta(minutes=60)  # Adjust the time by adding 60 minutes (1 hour) for BST
-dateStr = bstTime.strftime('%b %d, %Y %H:%M:%S')
+# Initialize the current time
+now_time = datetime.now()
 
 # Display the initial bar chart using Streamlit
 chart = st.bar_chart(df['Rainfall (mm)'])
-
-# Display the current time and date
-st.write(dateStr)
 
 # Auto-update the bar chart every 10 seconds
 while True:
@@ -28,6 +23,13 @@ while True:
 
     # Update the chart
     chart.bar_chart(df['Rainfall (mm)'])
+
+    # Update the current time
+    bst_time = now_time + timedelta(minutes=60)  # Adjust the time by adding 60 minutes (1 hour) for BST
+    date_str = bst_time.strftime('%b %d, %Y %H:%M:%S')
+
+    # Display the current time
+    st.write(date_str)
 
     # Wait for 10 seconds
     time.sleep(10)
