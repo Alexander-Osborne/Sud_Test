@@ -1,29 +1,21 @@
 import streamlit as st
-import numpy as np
+import pandas as pd
+from datetime import datetime, timedelta
 
-# Create a Streamlit app
-st.title("Random Graph Stream")
+# Sample rainfall data
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+rainfall = [45, 62, 32, 14, 67, 78, 92, 85, 47, 32, 15, 23]
 
-# Function to generate random data
-def generate_data():
-    x = np.linspace(0, 100, 100)
-    y = np.random.randint(0, 100, size=(100,))
-    return x, y
+# Create a dataframe for the data
+df = pd.DataFrame({'Month': months, 'Rainfall (mm)': rainfall})
 
-# Initialize the chart data
-data = {'x': [], 'y': []}
+# Adding current time and date in the top right corner as BST
+nowTime = datetime.now()
+bstTime = nowTime + timedelta(minutes=60)  # Adjust the time by adding 60 minutes (1 hour) for BST
+dateStr = bstTime.strftime('%b %d, %Y %H:%M:%S')
 
-# Update the graph within a while loop
-while True:
-    # Generate random data
-    x, y = generate_data()
+# Display the line chart using Streamlit
+st.line_chart(df['Rainfall (mm)'])
 
-    # Update the chart data
-    data['x'] = x
-    data['y'] = y
-
-    # Display the line chart
-    st.line_chart(data)
-
-    # Wait for a short duration before updating again
-    st.experimental_rerun()
+# Display the current time and date
+st.write(dateStr)
