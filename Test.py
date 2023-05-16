@@ -14,8 +14,8 @@ nowTime = datetime.now()
 bstTime = nowTime + timedelta(minutes=60)  # Adjust the time by adding 60 minutes (1 hour) for BST
 dateStr = bstTime.strftime('%b %d, %Y %H:%M:%S')
 
-# Display the line chart using Streamlit
-st.line_chart(df['Rainfall (mm)'])
+# Display the bar chart using Streamlit
+st.bar_chart(df['Rainfall (mm)'])
 
 # Display the current time and date
 st.write(dateStr)
