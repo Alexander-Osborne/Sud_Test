@@ -33,15 +33,18 @@ try:
     # Create a dataframe for the data
     df = pd.DataFrame({'Timestamp': tsData, 'Temperature': tempData, 'Depth': depthData, 'Salinity': salinityData})
 
+    # Define colors for each line
+    line_colors = ['red', 'green', 'blue']
+
     # Display the line charts using Streamlit
     st.subheader('Temperature')
-    st.line_chart(df.set_index('Timestamp')['Temperature'])
+    st.line_chart(df.set_index('Timestamp')['Temperature'], color=line_colors[0])
 
     st.subheader('Depth')
-    st.line_chart(df.set_index('Timestamp')['Depth'])
+    st.line_chart(df.set_index('Timestamp')['Depth'], color=line_colors[1])
 
     st.subheader('Salinity')
-    st.line_chart(df.set_index('Timestamp')['Salinity'])
+    st.line_chart(df.set_index('Timestamp')['Salinity'], color=line_colors[2])
 
 except:
     st.write('Error occurred while retrieving the dataset.')
