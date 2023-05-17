@@ -10,18 +10,18 @@ import pandas as pd
 import numpy as np
 
 import folium
+import streamlit as st
 
-# Define the coordinates for Hull University
-hull_uni_coordinates = (53.764001, -0.352543)
+from streamlit_folium import st_folium
 
-# Create a Folium map centered at Hull University
-m = folium.Map(location=hull_uni_coordinates, zoom_start=15)
+# center on Liberty Bell, add marker
+m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
+folium.Marker(
+    [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
+).add_to(m)
 
-# Add a marker at Hull University
-folium.Marker(hull_uni_coordinates, popup='Hull University').add_to(m)
-
-# Display the map using Streamlit
-st.write(m._repr_html_(), unsafe_allow_html=True)
+# call to render Folium map in Streamlit
+st_data = st_folium(m, width=725)
 
 image = Image.open('Swale.jpg')
 image = image.rotate(90)  # Rotate the image by 90 degrees clockwise
