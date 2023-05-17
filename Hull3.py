@@ -16,7 +16,7 @@ st.image(image, caption='Swale')
 apiUrl = 'https://opendata.hullcc.gov.uk/api/3'
 
 # Dataset resource ID
-resourceId = '6a9bc5a3-9c5d-4b0c-87af-1a18f7c507ef'
+resourceId = 'f4f85e47-f8d9-4f13-8138-4bec4afde84d'
 
 # Number of rows to retrieve from the end of the dataset
 numRows = 1000
