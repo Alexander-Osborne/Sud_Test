@@ -5,7 +5,7 @@ import altair as alt
 from datetime import datetime
 from PIL import Image
 
-st.title('A title with _italics_ :blue[colors] and emojis :sunglasses:')
+st.title('SuDS_lab_ UK - Wilberforce 002')
 
 
 # Define the coordinates for Hull University
