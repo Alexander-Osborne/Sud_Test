@@ -7,8 +7,9 @@ import streamlit as st
 from PIL import Image
 
 image = Image.open('Swale.JPG')
+rotated_image = image.rotate(90)  # Rotate the image by 90 degrees clockwise
 
-st.image(image, caption='Swale')
+st.image(rotated_image, caption='Swale')
 
 
 # CKAN API endpoint URL
