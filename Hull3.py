@@ -95,7 +95,8 @@ try:
     b64 = base64.b64encode(csv.encode()).decode()
     filename = "data.csv"
     href = f'<a href="data:file/csv;base64,{b64}" download="{filename}">Download Data</a>'
-    st.markdown(href, unsafe_allow_html=True)
+    st.sidebar.markdown('## Download Data')
+    st.sidebar.markdown(href, unsafe_allow_html=True)
 
 except:
     st.write('Error occurred while retrieving the dataset.')
