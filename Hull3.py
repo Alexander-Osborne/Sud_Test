@@ -16,7 +16,7 @@ hull_uni_coordinates = (53.77112479674445, -0.36430147342257124)
 df = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
 
 # Display the map centered at Hull University
-st.map(df, zoom=15,marker_size=4)
+st.map(df, zoom=15)
 
 image = Image.open('Swale.jpg')
 image = image.rotate(90)  # Rotate the image by 90 degrees clockwise
