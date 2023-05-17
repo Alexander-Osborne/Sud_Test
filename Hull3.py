@@ -3,7 +3,12 @@ import requests
 import pandas as pd
 import altair as alt
 from datetime import datetime
+import streamlit as st
+from PIL import Image
 
+image = Image.open('Swale.JPG')
+
+st.image(image, caption='Swale')
 
 
 # CKAN API endpoint URL
