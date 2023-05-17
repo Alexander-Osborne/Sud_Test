@@ -4,11 +4,6 @@ import pandas as pd
 import altair as alt
 from datetime import datetime
 
-# Latitude and longitude coordinates of Hull University
-hull_university_location = (53.767851, -0.366748)
-
-# Create a DataFrame for the location of Hull University
-
 
 
 # CKAN API endpoint URL
@@ -68,13 +63,6 @@ try:
     )
     st.altair_chart(chart_salinity, use_container_width=True)
 
-    df_location = pd.DataFrame({
-    'Latitude': [hull_university_location[0]],
-    'Longitude': [hull_university_location[1]]
-})
-
-# Show Hull University on a map
-st.map(df_location)
     
 except:
     st.write('Error occurred while retrieving the dataset.')
