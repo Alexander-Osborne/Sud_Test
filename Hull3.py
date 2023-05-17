@@ -9,10 +9,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+# Define the coordinates for Hull University
+hull_uni_coordinates = (53.764001, -0.352543)
+
+# Create a DataFrame with random coordinates near Hull University
 df = pd.DataFrame(
-    np.random.randn(53.7731 + 0.3670,
+    np.random.randn(1000, 2) / [500, 500] + hull_uni_coordinates,
     columns=['lat', 'lon'])
 
+# Display the map using Streamlit
 st.map(df)
 
 image = Image.open('Swale.jpg')
