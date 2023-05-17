@@ -9,14 +9,19 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+import folium
+
 # Define the coordinates for Hull University
-hull_uni_coordinates = (53.77112479674445, -0.36430147342257124)
+hull_uni_coordinates = (53.764001, -0.352543)
 
-# Create a DataFrame with a single row containing Hull University coordinates
-df = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
+# Create a Folium map centered at Hull University
+m = folium.Map(location=hull_uni_coordinates, zoom_start=15)
 
-# Display the map centered at Hull University
-st.map(df, zoom=15)
+# Add a marker at Hull University
+folium.Marker(hull_uni_coordinates, popup='Hull University').add_to(m)
+
+# Display the map using Streamlit
+st.write(m._repr_html_(), unsafe_allow_html=True)
 
 image = Image.open('Swale.jpg')
 image = image.rotate(90)  # Rotate the image by 90 degrees clockwise
