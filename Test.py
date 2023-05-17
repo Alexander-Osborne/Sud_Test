@@ -50,6 +50,9 @@ try:
       # Load the image
     image = Image.open('Swale.jpg')
 
+     # Display the last timestamp value
+    st.write(f"Last timestamp value: {tsData[-1]}")
+    
     # Create a layout with two columns
     col1, col2 = st.columns(2)
 
