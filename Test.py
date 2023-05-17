@@ -76,7 +76,7 @@ try:
     st.subheader('Depth')
     chart_depth = alt.Chart(df).mark_line().encode(
         x='Timestamp:T',
-        y='Depth:Q',
+        y=alt.Y('Depth:Q', axis=alt.Axis(title='Depth (m)')),
         color=alt.value('blue')
     )
     st.altair_chart(chart_depth, use_container_width=True)
