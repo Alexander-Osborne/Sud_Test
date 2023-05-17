@@ -51,7 +51,7 @@ try:
     st.write(f"Last timestamp value: {last_timestamp}")
 
     # Create a layout with two columns
-    col1, col2 = st.columns(2)
+    col1, col2 = st.beta_columns(2)
 
     # In the first column, display the map
     with col1:
@@ -63,40 +63,40 @@ try:
         st.subheader('Image')
         st.image(image, caption='Outfall of Swale')
 
-    # Create a single row layout for the three graphs
+    # Create a horizontal layout for the three graphs
     st.subheader('Data Visualization')
-    col1, col2, col3 = st.columns(3)
+    scrollable_container = st.beta_container()
 
-    # Create the three separate figures using Streamlit and Altair
-    chart_temp = alt.Chart(df).mark_line().encode(
-        x='Timestamp:T',
-        y=alt.Y('Temperature:Q', axis=alt.Axis(title='Temperature (\u00B0C)')),
-        color=alt.value('red')
-    )
+    # Display the three graphs horizontally
+    with scrollable_container:
+        col1, col2, col3 = st.beta_columns(3)
 
-    chart_depth = alt.Chart(df).mark_line().encode(
-        x='Timestamp:T',
-        y=alt.Y('Depth:Q', axis=alt.Axis(title='Depth (m)')),
-        color=alt.value('blue')
-    )
+        # Create the three separate figures using Streamlit and Altair
+        chart_temp = alt.Chart(df).mark_line().encode(
+            x='Timestamp:T',
+            y=alt.Y('Temperature:Q', axis=alt.Axis(title='Temperature (\u00B0C)')),
+            color=alt.value('red')
+        )
 
-    chart_salinity = alt.Chart(df).mark_line().encode(
-        x='Timestamp:T',
-        y='Salinity:Q',
-        color=alt.value('green')
-    )
+        chart_depth = alt.Chart(df).mark_line().encode(
+            x='Timestamp:T',
+            y=alt.Y('Depth:Q', axis=alt.Axis(title='Depth (m)')),
+            color=alt.value('blue')
+        )
 
-    # Create a slider to control the index of the graph to be displayed
-    index = st.slider('Select Graph', min_value=0, max_value=2)
+        chart_salinity = alt.Chart(df).mark_line().encode(
+            x='Timestamp:T',
+            y='Salinity:Q',
+            color=alt.value('green')
+        )
 
-    # Display the graph based on the selected index
-    if index == 0:
+        # Display the graphs in the horizontal layout
         col1.subheader('Temperature')
         col1.altair_chart(chart_temp, use_container_width=True)
-    elif index == 1:
+
         col2.subheader('Depth')
         col2.altair_chart(chart_depth, use_container_width=True)
-    elif index == 2:
+
         col3.subheader('Salinity')
         col3.altair_chart(chart_salinity, use_container_width=True)
 
