@@ -33,15 +33,18 @@ try:
     # Create a dataframe for the data
     df = pd.DataFrame({'Date': tsData, 'Temperature': tempData, 'Depth': depthData, 'Salinity': salinityData})
 
+    # Group data by date and calculate average values
+    df_agg = df.groupby('Date').mean().reset_index()
+
     # Display the line charts using Streamlit
     st.subheader('Temperature')
-    st.line_chart(df.set_index('Date')['Temperature'])
+    st.line_chart(df_agg.set_index('Date')['Temperature'])
 
     st.subheader('Depth')
-    st.line_chart(df.set_index('Date')['Depth'])
+    st.line_chart(df_agg.set_index('Date')['Depth'])
 
     st.subheader('Salinity')
-    st.line_chart(df.set_index('Date')['Salinity'])
+    st.line_chart(df_agg.set_index('Date')['Salinity'])
 
 except:
     st.write('Error occurred while retrieving the dataset.')
