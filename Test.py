@@ -1,9 +1,14 @@
+import folium
 import streamlit as st
-import pandas as pd
-import numpy as np
 
-df = pd.DataFrame(
-    np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
-    columns=['lat', 'lon'])
+from streamlit_folium import st_folium
 
-st.map(df)
+# center on Liberty Bell, add marker
+m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
+folium.Marker(
+    [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
+).add_to(m)
+
+# call to render Folium map in Streamlit, but don't get any data back
+# from the map (so that it won't rerun the app when the user interacts)
+st_folium(m, width=725, returned_objects=[])
