@@ -6,10 +6,10 @@ from datetime import datetime
 import streamlit as st
 from PIL import Image
 
-image = Image.open('Swale.JPG')
-rotated_image = image.rotate(90)  # Rotate the image by 90 degrees clockwise
+image = Image.open('swale.jpg')
+image = image.rotate(90)  # Rotate the image by 90 degrees clockwise
 
-st.image(rotated_image, caption='Swale')
+st.image(image, caption='Swale')
 
 
 # CKAN API endpoint URL
