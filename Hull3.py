@@ -14,7 +14,7 @@ resourceId = '6a9bc5a3-9c5d-4b0c-87af-1a18f7c507ef'
 numRows = 1000
 
 # Create the API request URL
-apiRequestUrl = f'{apiUrl}/action/datastore_search?resource_id={resourceId}&fields=ts,temp,salinity,depth,lat,lng&sort=_id desc&limit={numRows}'
+apiRequestUrl = f'{apiUrl}/action/datastore_search?resource_id={resourceId}&fields=ts,temp,salinity,depth&sort=_id desc&limit={numRows}'
 
 try:
     # Send API request to retrieve the dataset
@@ -33,7 +33,7 @@ try:
     tsData = [datetime.fromtimestamp(ts) for ts in tsData]
 
     # Create a dataframe for the data
-    df = pd.DataFrame({'Timestamp': tsData, 'Temperature': tempData, 'Depth': depthData, 'Salinity': salinityData, 'Latitude': latData, 'Longitude': lngData})
+    df = pd.DataFrame({'Timestamp': tsData, 'Temperature': tempData, 'Depth': depthData, 'Salinity': salinityData})
 
     # Create a map at the top and zoom to Hull University
     st.subheader('Map')
