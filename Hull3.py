@@ -12,13 +12,11 @@ import numpy as np
 # Define the coordinates for Hull University
 hull_uni_coordinates = (53.764001, -0.352543)
 
-# Create a DataFrame with random coordinates near Hull University
-df = pd.DataFrame(
-    np.random.randn(1000, 2) / [500, 500] + hull_uni_coordinates,
-    columns=['lat', 'lon'])
+# Create a DataFrame with a single row containing Hull University coordinates
+df = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
 
-# Display the map using Streamlit
-st.map(df)
+# Display the map centered at Hull University
+st.map(df, zoom=15)
 
 image = Image.open('Swale.jpg')
 image = image.rotate(90)  # Rotate the image by 90 degrees clockwise
