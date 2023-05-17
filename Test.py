@@ -48,7 +48,7 @@ try:
     st.subheader('Temperature')
     chart_temp = alt.Chart(df).mark_line().encode(
         x='Timestamp:T',
-        y='Temperature (Celcius):Q',
+        y='Temperature:Q',
         color=alt.value('red')
     )
     st.altair_chart(chart_temp, use_container_width=True)
@@ -56,7 +56,7 @@ try:
     st.subheader('Depth')
     chart_depth = alt.Chart(df).mark_line().encode(
         x='Timestamp:T',
-        y='Depth (m):Q',
+        y='Depth:Q',
         color=alt.value('blue')
     )
     st.altair_chart(chart_depth, use_container_width=True)
@@ -64,7 +64,7 @@ try:
     st.subheader('Salinity')
     chart_salinity = alt.Chart(df).mark_line().encode(
         x='Timestamp:T',
-        y='Salinity (DSM):Q',
+        y='Salinity:Q',
         color=alt.value('green')
     )
     st.altair_chart(chart_salinity, use_container_width=True)
