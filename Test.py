@@ -5,6 +5,9 @@ import altair as alt
 from datetime import datetime
 from PIL import Image
 
+st.title('A title with _italics_ :blue[colors] and emojis :sunglasses:')
+
+
 # Define the coordinates for Hull University
 hull_uni_coordinates = (53.77114698979646, -0.36430683784066786)
 
@@ -80,7 +83,7 @@ try:
     # In the second column, display the image
     with col2:
         st.subheader('Image')
-        st.image(image, caption='Swale')
+        st.image(image, caption='Outfall of Swale')
 
 except:
     st.write('Error occurred while retrieving the dataset.')
