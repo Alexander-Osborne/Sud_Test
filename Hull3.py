@@ -19,7 +19,7 @@ apiUrl = 'https://opendata.hullcc.gov.uk/api/3'
 resourceId = 'f4f85e47-f8d9-4f13-8138-4bec4afde84d'
 
 # Number of rows to retrieve from the end of the dataset
-numRows = 1000
+numRows = 2000
 
 # Create the API request URL
 apiRequestUrl = f'{apiUrl}/action/datastore_search?resource_id={resourceId}&fields=ts,temp,salinity,depth&sort=_id desc&limit={numRows}'
