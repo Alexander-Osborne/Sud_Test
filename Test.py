@@ -51,7 +51,7 @@ try:
     image = Image.open('Swale.jpg')
 
      # Display the last timestamp value
-   last_timestamp = tsData[-1].strftime("%d, %B %Y, %H:%M:%S")
+    last_timestamp = tsData[-1].strftime("%d, %B %Y, %H:%M:%S")
     st.write(f"Last timestamp value: {last_timestamp}")
     
     # Create a layout with two columns
