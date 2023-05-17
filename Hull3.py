@@ -4,6 +4,7 @@ import pandas as pd
 import altair as alt
 from datetime import datetime
 from PIL import Image
+import io
 
 st.title('SuDS'' _lab_ '' UK - Wilberforce 002')
 
@@ -51,7 +52,7 @@ try:
     st.write(f"Last timestamp value: {last_timestamp}")
 
     # Create a layout with two columns
-    col1, col2 = st.beta_columns(2)
+    col1, col2 = st.columns(2)
 
     # In the first column, display the map
     with col1:
@@ -63,42 +64,37 @@ try:
         st.subheader('Image')
         st.image(image, caption='Outfall of Swale')
 
-    # Create a horizontal layout for the three graphs
-    st.subheader('Data Visualization')
-    scrollable_container = st.beta_container()
+    # Create three separate figures using Streamlit and Altair
+    st.subheader('Temperature')
+    chart_temp = alt.Chart(df).mark_line().encode(
+        x='Timestamp:T',
+        y=alt.Y('Temperature:Q', axis=alt.Axis(title='Temperature (\u00B0C)')),
+        color=alt.value('red')
+    )
+    st.altair_chart(chart_temp, use_container_width=True)
 
-    # Display the three graphs horizontally
-    with scrollable_container:
-        col1, col2, col3 = st.beta_columns(3)
+    st.subheader('Depth')
+    chart_depth = alt.Chart(df).mark_line().encode(
+        x='Timestamp:T',
+        y=alt.Y('Depth:Q', axis=alt.Axis(title='Depth (m)')),
+        color=alt.value('blue')
+    )
+    st.altair_chart(chart_depth, use_container_width=True)
 
-        # Create the three separate figures using Streamlit and Altair
-        chart_temp = alt.Chart(df).mark_line().encode(
-            x='Timestamp:T',
-            y=alt.Y('Temperature:Q', axis=alt.Axis(title='Temperature (\u00B0C)')),
-            color=alt.value('red')
-        )
+    st.subheader('Salinity')
+    chart_salinity = alt.Chart(df).mark_line().encode(
+        x='Timestamp:T',
+        y='Salinity:Q',
+        color=alt.value('green')
+    )
+    st.altair_chart(chart_salinity, use_container_width=True)
 
-        chart_depth = alt.Chart(df).mark_line().encode(
-            x='Timestamp:T',
-            y=alt.Y('Depth:Q', axis=alt.Axis(title='Depth (m)')),
-            color=alt.value('blue')
-        )
-
-        chart_salinity = alt.Chart(df).mark_line().encode(
-            x='Timestamp:T',
-            y='Salinity:Q',
-            color=alt.value('green')
-        )
-
-        # Display the graphs in the horizontal layout
-        col1.subheader('Temperature')
-        col1.altair_chart(chart_temp, use_container_width=True)
-
-        col2.subheader('Depth')
-        col2.altair_chart(chart_depth, use_container_width=True)
-
-        col3.subheader('Salinity')
-        col3.altair_chart(chart_salinity, use_container_width=True)
+    # Download button for the dataframe
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()
+    filename = "data.csv"
+    href = f'<a href="data:file/csv;base64,{b64}" download="{filename}">Download Data</a>'
+    st.markdown(href, unsafe_allow_html=True)
 
 except:
     st.write('Error occurred while retrieving the dataset.')
