@@ -5,23 +5,16 @@ import altair as alt
 from datetime import datetime
 import streamlit as st
 from PIL import Image
-import streamlit as st
-import pandas as pd
-import numpy as np
 
-import folium
-import streamlit as st
+# Define the coordinates for Hull University
+hull_uni_coordinates = (53.77114698979646, -0.36430683784066786)
 
-from streamlit_folium import st_folium
+# Create a DataFrame with a single row containing Hull University coordinates
+df = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
 
-# center on Liberty Bell, add marker
-m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
-folium.Marker(
-    [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
-).add_to(m)
+# Display the map centered at Hull University
+st.map(df, zoom=15)
 
-# call to render Folium map in Streamlit
-st_data = st_folium(m, width=725)
 
 image = Image.open('Swale.jpg')
 image = image.rotate(90)  # Rotate the image by 90 degrees clockwise
