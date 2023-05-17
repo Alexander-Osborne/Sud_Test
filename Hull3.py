@@ -6,7 +6,7 @@ from datetime import datetime
 import streamlit as st
 from PIL import Image
 
-image = Image.open('swale.jpg')
+image = Image.open('Swale.jpg')
 image = image.rotate(90)  # Rotate the image by 90 degrees clockwise
 
 st.image(image, caption='Swale')
