@@ -14,21 +14,7 @@ hull_uni_coordinates = (53.77114698979646, -0.36430683784066786)
 # Create a DataFrame with a single row containing Hull University coordinates
 df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
 
-  # Load the image
-    image = Image.open('Swale.jpg')
 
-    # Create a layout with two columns
-    col1, col2 = st.columns(2)
-
-    # In the first column, display the map
-    with col1:
-        st.subheader('Map')
-        st.map(df1, zoom=15)
-
-    # In the second column, display the image
-    with col2:
-        st.subheader('Image')
-        st.image(image, caption='Outfall of Swale')
 
 
 # CKAN API endpoint URL
@@ -61,6 +47,23 @@ try:
     # Create a dataframe for the data
     df = pd.DataFrame({'Timestamp': tsData, 'Temperature': tempData, 'Depth': depthData, 'Salinity': salinityData})
 
+      # Load the image
+    image = Image.open('Swale.jpg')
+
+    # Create a layout with two columns
+    col1, col2 = st.columns(2)
+
+    # In the first column, display the map
+    with col1:
+        st.subheader('Map')
+        st.map(df1, zoom=15)
+
+    # In the second column, display the image
+    with col2:
+        st.subheader('Image')
+        st.image(image, caption='Outfall of Swale')
+    
+    
     # Create three separate figures using Streamlit and Altair
     st.subheader('Temperature')
     chart_temp = alt.Chart(df).mark_line().encode(
