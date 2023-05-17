@@ -28,21 +28,20 @@ try:
     salinityData = [record['salinity'] for record in records]
 
     # Convert timestamps to datetime objects
-    tsData = [datetime.fromtimestamp(ts) for ts in tsData]
+    tsData = [datetime.fromtimestamp(ts).strftime('%Y-%m-%d') for ts in tsData]
 
     # Create a dataframe for the data
-    df = pd.DataFrame({'Timestamp': tsData, 'Temperature': tempData, 'Depth': depthData, 'Salinity': salinityData})
+    df = pd.DataFrame({'Date': tsData, 'Temperature': tempData, 'Depth': depthData, 'Salinity': salinityData})
 
     # Display the line charts using Streamlit
     st.subheader('Temperature')
-    st.line_chart(df.set_index('Timestamp')['Temperature'])
+    st.line_chart(df.set_index('Date')['Temperature'])
 
     st.subheader('Depth')
-    st.line_chart(df.set_index('Timestamp')['Depth'])
+    st.line_chart(df.set_index('Date')['Depth'])
 
     st.subheader('Salinity')
-    st.line_chart(df.set_index('Timestamp')['Salinity'])
+    st.line_chart(df.set_index('Date')['Salinity'])
 
 except:
     st.write('Error occurred while retrieving the dataset.')
-
