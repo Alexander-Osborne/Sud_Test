@@ -27,8 +27,7 @@ try:
     tempData = [record['temp'] for record in records]
     depthData = [record['depth'] for record in records]
     salinityData = [record['salinity'] for record in records]
-    latData = [record['lat'] for record in records]
-    lngData = [record['lng'] for record in records]
+    
 
     # Convert timestamps to datetime objects
     tsData = [datetime.fromtimestamp(ts) for ts in tsData]
@@ -36,9 +35,10 @@ try:
     # Create a dataframe for the data
     df = pd.DataFrame({'Timestamp': tsData, 'Temperature': tempData, 'Depth': depthData, 'Salinity': salinityData, 'Latitude': latData, 'Longitude': lngData})
 
-    # Create a map at the top
+    # Create a map at the top and zoom to Hull University
     st.subheader('Map')
-    st.map(df)
+    hull_university = (53.7643, -0.3559)  # Latitude and longitude of Hull University
+    st.map(df, zoom=14, location=hull_university)
 
     # Create three separate figures using Streamlit and Altair
     st.subheader('Temperature')
