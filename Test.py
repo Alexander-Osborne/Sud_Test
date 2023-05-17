@@ -1,7 +1,6 @@
 import streamlit as st
+from PIL import Image
 
-# Latitude and longitude coordinates of Hull University
-hull_university_location = (53.767851, -0.366748)
+image = Image.open('swale.jpg')
 
-# Show Hull University on a map
-st.map(hull_university_location)
+st.image(image, caption='Swale')
