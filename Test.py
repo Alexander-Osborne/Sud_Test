@@ -48,7 +48,7 @@ try:
     st.subheader('Temperature')
     chart_temp = alt.Chart(df).mark_line().encode(
         x='Timestamp:T',
-        y='Temperature:Q',
+        y='Temperature (Celcius):Q',
         color=alt.value('red')
     )
     st.altair_chart(chart_temp, use_container_width=True)
