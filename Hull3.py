@@ -5,6 +5,7 @@ import altair as alt
 from datetime import datetime
 from PIL import Image
 import io
+import base64
 
 st.title('SuDS'' _lab_ '' UK - Wilberforce 002')
 
