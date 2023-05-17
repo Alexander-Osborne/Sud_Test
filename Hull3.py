@@ -37,8 +37,18 @@ try:
 
     # Create a map at the top and zoom to Hull University
     st.subheader('Map')
-    hull_university = (53.7643, -0.3559)  # Latitude and longitude of Hull University
-    st.map(df, zoom=14, location=hull_university)
+    import folium
+
+# Create a map centered at Hull University
+map_hull = folium.Map(location=hull_university, zoom_start=14)
+
+# Add markers to the map
+for _, row in df.iterrows():
+    folium.Marker([row['Latitude'], row['Longitude']]).add_to(map_hull)
+
+# Display the map
+st.markdown(map_hull._repr_html_(), unsafe_allow_html=True)
+
 
     # Create three separate figures using Streamlit and Altair
     st.subheader('Temperature')
