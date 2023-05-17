@@ -4,6 +4,12 @@ import pandas as pd
 import altair as alt
 from datetime import datetime
 
+# Latitude and longitude coordinates of Hull University
+hull_university_location = (53.767851, -0.366748)
+
+# Show Hull University on a map
+st.map(hull_university_location)
+
 # CKAN API endpoint URL
 apiUrl = 'https://opendata.hullcc.gov.uk/api/3'
 
