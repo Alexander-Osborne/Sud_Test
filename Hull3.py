@@ -17,7 +17,7 @@ st.map(df, zoom=15)
 
 
 image = Image.open('Swale.jpg')
-image = image.rotate(90)  # Rotate the image by 90 degrees clockwise
+
 
 st.image(image, caption='Swale')
 
