@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 
 # Define the coordinates for Hull University
-hull_uni_coordinates = (53.764001, -0.352543)
+hull_uni_coordinates = (53.77112479674445, -0.36430147342257124)
 
 # Create a DataFrame with a single row containing Hull University coordinates
 df = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
