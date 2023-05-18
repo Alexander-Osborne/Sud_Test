@@ -95,8 +95,8 @@ st.write(df)
 timestamps = df['ts']
 depths = df['depth']
 
-# Combine the timestamps and depths into a new DataFrame
-data = pd.DataFrame({'Timestamp': timestamps, 'Depth': depths})
+# Create a new DataFrame with timestamps as the index
+data = pd.DataFrame({'Depth': depths}, index=pd.to_datetime(timestamps, unit='s'))
 
 # Plot the line chart using Streamlit
 st.line_chart(data)
