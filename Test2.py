@@ -13,7 +13,7 @@ api_key = st.secrets["api_key"]
 station_id = st.secrets["station_id"]
 
 t = str(int(time.time()))
-start_timestamp = str(int(time.time() - 86400))
+start_timestamp = str(int(time.time() - 2000))
 end_timestamp = str(int(time.time()))
 
 # Step 1: Sort parameters by parameter name
@@ -88,6 +88,9 @@ df = pd.json_normalize(sensor_data)
 # Convert 'depth' from feet to meters
 df['depth'] = df['depth'] * 0.3048
 
+# Round 'depth' to 3 significant figures
+df['depth'] = df['depth'].round(3)
+
 # Convert 'ts' from Unix timestamp to datetime
 df['ts'] = pd.to_datetime(df['ts'], unit='s')
 
@@ -95,4 +98,7 @@ df['ts'] = pd.to_datetime(df['ts'], unit='s')
 chart_data = df[['ts', 'depth']]
 
 # Display the line chart
-st.line_chart(chart_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
+chart = st.line_chart(chart_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
+
+# Configure x-axis to show a 24-hour clock format
+chart.set_xticklabels(rotation=45, format='%H:%M')
