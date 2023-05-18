@@ -80,7 +80,7 @@ filtered_tree = filter_tree(tree, lsid_to_filter)
 print(json.dumps(filtered_tree, indent=2))
 
 # Extract the relevant information from the JSON
-sensor_data = filtered_tree['sensors'][0]['data']
+sensor_data = filtered_tree['data']
 
 # Convert the data into a DataFrame
 df = pd.DataFrame(sensor_data)
