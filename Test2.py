@@ -92,11 +92,14 @@ df = pd.DataFrame(sensor_data)
 st.write(df)
 
 # Extract the timestamp and depth columns
-timestamps = df['ts']
+timestamps = pd.to_datetime(df['ts'], unit='s')
 depths = df['depth']
 
-# Create a new DataFrame with timestamps as the index
-data = pd.DataFrame({'Depth': depths}, index=pd.to_datetime(timestamps, unit='s'))
+# Create a new DataFrame with timestamps and depths
+data = pd.DataFrame({'Timestamp': timestamps, 'Depth': depths})
+
+# Set the Timestamp column as the index
+data.set_index('Timestamp', inplace=True)
 
 # Plot the line chart using Streamlit
 st.line_chart(data)
