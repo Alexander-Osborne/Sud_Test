@@ -89,4 +89,4 @@ df = pd.json_normalize(sensor_data)
 chart_data = df[['ts', 'depth']]
 
 # Display the line chart
-st.line_chart(chart_data.rename(columns={'ts': 'X', 'depth': 'Y'}))
+st.line_chart(chart_data.rename(columns={'ts': 'X', 'depth': 'Y'}).set_index('X'))
