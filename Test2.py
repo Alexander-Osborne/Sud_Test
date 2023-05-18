@@ -93,10 +93,13 @@ st.write(df)
 
 # Extract the timestamp and depth columns
 timestamps = pd.to_datetime(df['ts'], unit='s')
-depths = df['depth']
+depths_feet = df['depth']
 
-# Create a new DataFrame with timestamps and depths
-data = pd.DataFrame({'Timestamp': timestamps, 'Depth': depths})
+# Convert depths from feet to meters
+depths_meters = depths_feet * 0.3048
+
+# Create a new DataFrame with timestamps and depths in meters
+data = pd.DataFrame({'Timestamp': timestamps, 'Depth': depths_meters})
 
 # Set the Timestamp column as the index
 data.set_index('Timestamp', inplace=True)
