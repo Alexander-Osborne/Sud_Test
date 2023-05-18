@@ -80,18 +80,21 @@ filtered_tree = filter_tree(tree, lsid_to_filter)
 # Convert the filtered tree to a DataFrame
 df = pd.DataFrame(filtered_tree)
 
-# Extract the timestamp and depth columns
-timestamps = pd.to_datetime(df['ts'], unit='s')
-depths_feet = df['depth']
+if 'ts' in df.columns and 'depth' in df.columns:
+    # Extract the timestamp and depth columns
+    timestamps = pd.to_datetime(df['ts'], unit='s')
+    depths_feet = df['depth']
 
-# Convert depths from feet to meters
-depths_meters = depths_feet * 0.3048
+    # Convert depths from feet to meters
+    depths_meters = depths_feet * 0.3048
 
-# Create a new DataFrame with timestamps and depths in meters
-data = pd.DataFrame({'Timestamp': timestamps, 'Depth': depths_meters})
+    # Create a new DataFrame with timestamps and depths in meters
+    data = pd.DataFrame({'Timestamp': timestamps, 'Depth': depths_meters})
 
-# Set the Timestamp column as the index
-data.set_index('Timestamp', inplace=True)
+    # Set the Timestamp column as the index
+    data.set_index('Timestamp', inplace=True)
 
-# Plot the line chart using Streamlit
-st.line_chart(data)
+    # Plot the line chart using Streamlit
+    st.line_chart(data)
+else:
+    st.write("Error: Required columns 'ts' and 'depth' not found in the data.")
