@@ -72,7 +72,7 @@ def filter_tree(data, lsid):
 # Convert the JSON data into a tree
 tree = json_data
 
-# Filter the JSON tree based on "lsid" equal to 459397
+# Filter the JSON tree based on "lsid" equal to 492303
 lsid_to_filter = 492303
 filtered_tree = filter_tree(tree, lsid_to_filter)
 
@@ -83,8 +83,9 @@ print(json.dumps(filtered_tree, indent=2))
 sensor_data = filtered_tree['sensors'][0]['data']
 
 # Convert the data into a DataFrame
-df = pd.json_normalize(sensor_data)
+df = pd.DataFrame(sensor_data)
 
 # Plot the time series against depth using st.line_chart
-chart_data = df[['TimeSeries', 'Depth']]
+chart_data = df[['ts', 'depth']]
+chart_data['ts'] = pd.to_datetime(chart_data['ts'], unit='s')
 st.line_chart(chart_data)
