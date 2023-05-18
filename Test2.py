@@ -22,9 +22,7 @@ df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinat
  # Load the image
 image = Image.open('Swale.jpg')
 
-     # Display the last timestamp value
-last_timestamp = tsData[-1].strftime("%d, %B %Y, %H:%M:%S")
-st.write(f"Last timestamp value: {last_timestamp}")
+
     
 
 st.subheader('Map')
