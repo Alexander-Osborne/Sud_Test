@@ -72,8 +72,18 @@ def filter_tree(data, lsid):
 # Convert the JSON data into a tree
 tree = json_data
 
-# Filter the JSON tree based on "lsid" equal to 459397
+# Filter the JSON tree based on "lsid" equal to 492303
 lsid_to_filter = 492303
-filtered_tree = filter_tree(tree, lsid_to_filter)
+filtered_data = [item for item in json_data['sensors'][0]['data'] if item['lsid'] == lsid_to_filter]
 
-st.json(filtered_tree)
+# Extract "ts" and "depth" values from the filtered data
+ts_values = [item["ts"] for item in filtered_data]
+depth_values = [item["depth"] for item in filtered_data]
+
+# Create a DataFrame with "ts" and "depth" values
+data = {"ts": ts_values, "depth": depth_values}
+df = pd.DataFrame(data)
+
+# Plot "ts" and "depth" values using st.line_chart
+st.line_chart(df)
+
