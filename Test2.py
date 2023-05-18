@@ -18,6 +18,17 @@ df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinat
 
 
 
+# In the first column, display the map
+    with col1:
+        st.subheader('Map')
+        st.map(df1, zoom=15)
+
+    # In the second column, display the image
+    with col2:
+        st.subheader('Image')
+        st.image(image, caption='Outfall of Swale')
+
+
 # Retrieve secrets from Streamlit Secrets
 secret_key = st.secrets["secret_key"]
 api_key = st.secrets["api_key"]
