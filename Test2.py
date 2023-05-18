@@ -99,7 +99,7 @@ def filter_tree(data, lsid):
 tree = json_data
 
 # Filter the JSON tree based on "lsid" equal to 459397
-lsid_to_filter = 492303
+lsid_to_filter = 492304
 filtered_tree = filter_tree(tree, lsid_to_filter)
 
 
