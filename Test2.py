@@ -8,7 +8,7 @@ import pandas as pd
 import streamlit as st
 
 # Read secret key from configuration file
-config_file_path = "https://github.com/Alexander-Osborne/SuDSlab-Private/blob/7c2c0e97b40687692bab72e878fe8b96a3e32d21/config.json"
+config_file_path = "config.json"
 
 with open(config_file_path) as config_file:
     config = json.load(config_file)
