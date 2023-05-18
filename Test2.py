@@ -96,7 +96,7 @@ df['temp']=df['temp']
 
 depth_data = df[['ts', 'depth']]
 salinity_data = df[['ts', 'salinity']]
-temperature_data= df[['ts','temperature']]
+temperature_data= df[['ts','temp']]
 
 # Display the line chart for 'depth'
 st.line_chart(depth_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
