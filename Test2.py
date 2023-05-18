@@ -90,8 +90,13 @@ df['depth'] = df['depth'] * 0.3048
 # Convert 'ts' from Unix timestamp to datetime
 df['ts'] = pd.to_datetime(df['ts'], unit='s')
 
-# Select the 'ts' and 'depth' columns from the DataFrame
-chart_data = df[['ts', 'depth']]
+df['salinity']=df['salinity']
 
-# Display the line chart
-st.line_chart(chart_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
+depth_data = df[['ts', 'depth']]
+salinity_data = df[['ts', 'salinity']]
+
+# Display the line chart for 'depth'
+st.line_chart(depth_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
+
+# Display the line chart for 'salinity'
+st.line_chart(salinity_data.rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
