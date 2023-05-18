@@ -7,11 +7,11 @@ import json
 import pandas as pd
 import streamlit as st
 
-st.write("secret_key:", st.secrets["secret_key"])
+secret_key= st.secrets["secret_key"])
 
 # Parameters
-api_key = config["api_key"]
-station_id = config["station_id"]
+api_key = st.secrets["api_key"])
+station_id = st.secrets["station_id"])
 t = str(int(time.time()))
 start_timestamp = str(int(time.time() - 86400))
 end_timestamp = str(int(time.time()))
