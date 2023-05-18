@@ -92,7 +92,7 @@ df['ts'] = pd.to_datetime(df['ts'], unit='s')
 
 df['salinity']=df['salinity']
 
-df['temperature']=df['temperature]
+df['temperature']=df['temperature']
 
 depth_data = df[['ts', 'depth']]
 salinity_data = df[['ts', 'salinity']]
