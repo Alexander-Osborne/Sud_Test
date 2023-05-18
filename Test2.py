@@ -18,7 +18,17 @@ df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinat
 
 
 
-# In the first column, display the map
+ # Load the image
+    image = Image.open('Swale.jpg')
+
+     # Display the last timestamp value
+    last_timestamp = tsData[-1].strftime("%d, %B %Y, %H:%M:%S")
+    st.write(f"Last timestamp value: {last_timestamp}")
+    
+    # Create a layout with two columns
+    col1, col2 = st.columns(2)
+
+    # In the first column, display the map
     with col1:
         st.subheader('Map')
         st.map(df1, zoom=15)
@@ -27,6 +37,7 @@ df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinat
     with col2:
         st.subheader('Image')
         st.image(image, caption='Outfall of Swale')
+    
 
 
 # Retrieve secrets from Streamlit Secrets
