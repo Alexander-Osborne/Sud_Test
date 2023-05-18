@@ -85,8 +85,14 @@ sensor_data = filtered_tree['sensors'][0]['data']
 # Convert the data into a DataFrame
 df = pd.json_normalize(sensor_data)
 
+# Convert 'depth' from feet to meters
+df['depth'] = df['depth'] * 0.3048
+
+# Convert 'ts' from Unix timestamp to datetime
+df['ts'] = pd.to_datetime(df['ts'], unit='s')
+
 # Select the 'ts' and 'depth' columns from the DataFrame
 chart_data = df[['ts', 'depth']]
 
 # Display the line chart
-st.line_chart(chart_data.rename(columns={'ts': 'X', 'depth': 'Y'}).set_index('X'))
+st.line_chart(chart_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
