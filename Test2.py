@@ -98,10 +98,10 @@ def main():
     df = pd.json_normalize(sensor_data)
 
 # Save the DataFrame as a CSV file
-df.to_csv('table.csv', index=False)
+    df.to_csv('table.csv', index=False)
 
 # Add a button to download the CSV file
-st.download_button(label="Download CSV", data=df.to_csv(), file_name='table.csv', mime='text/csv')
+    st.download_button(label="Download CSV", data=df.to_csv(), file_name='table.csv', mime='text/csv')
 
-if __name__ == "__main__":
+    if __name__ == "__main__":
     main()
