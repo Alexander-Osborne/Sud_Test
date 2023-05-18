@@ -76,5 +76,10 @@ tree = json_data
 lsid_to_filter = 492303
 filtered_tree = filter_tree(tree, lsid_to_filter)
 
-# Print the filtered tree structure
-st.json(filtered_tree)
+# Extract "ts" and "depth" values from the filtered tree
+ts_values = [item["ts"] for item in filtered_tree["data"]]
+depth_values = [item["depth"] for item in filtered_tree["data"]]
+
+# Plot "ts" and "depth" values using st.line_chart
+chart_data = pd.DataFrame({"ts": ts_values, "depth": depth_values})
+st.line_chart(chart_data)
