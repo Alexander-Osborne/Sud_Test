@@ -7,6 +7,8 @@ import json
 import pandas as pd
 import streamlit as st
 from PIL import Image
+import base64
+
 
 st.title('SuDS_lab_UK - Wilberforce 001')
 
