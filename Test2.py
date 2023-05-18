@@ -6,8 +6,8 @@ import requests
 import json
 import pandas as pd
 import os
+import streamlit as st
 
-# Retrieve secrets from Streamlit Secrets
 secret_key = st.secrets["secret_key"]
 api_key = st.secrets["api_key"]
 station_id = st.secrets["station_id"]
