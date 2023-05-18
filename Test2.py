@@ -16,6 +16,7 @@ t = str(int(time.time()))
 start_timestamp = str(int(time.time() - 86400))
 end_timestamp = str(int(time.time()))
 
+
 # Step 1: Sort parameters by parameter name
 params = {
     "api-key": api_key,
@@ -76,14 +77,8 @@ tree = json_data
 lsid_to_filter = 492303
 filtered_tree = filter_tree(tree, lsid_to_filter)
 
-# Extract the relevant information from the JSON
-sensor_data = filtered_tree
-
-# Convert the data into a DataFrame
-df = pd.DataFrame(sensor_data)
-
-# Display the DataFrame
-st.write(df)
+# Convert the filtered tree to a DataFrame
+df = pd.DataFrame(filtered_tree)
 
 # Extract the timestamp and depth columns
 timestamps = pd.to_datetime(df['ts'], unit='s')
