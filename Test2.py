@@ -13,7 +13,7 @@ api_key = st.secrets["api_key"]
 station_id = st.secrets["station_id"]
 
 t = str(int(time.time()))
-start_timestamp = str(int(time.time() - 2000))
+start_timestamp = str(int(time.time() - 86400))
 end_timestamp = str(int(time.time()))
 
 # Step 1: Sort parameters by parameter name
