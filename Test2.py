@@ -103,5 +103,5 @@ def main():
 # Add a button to download the CSV file
     st.download_button(label="Download CSV", data=df.to_csv(), file_name='table.csv', mime='text/csv')
 
-    if __name__ == "__main__":
+if __name__ == "__main__":
     main()
