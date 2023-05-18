@@ -7,6 +7,17 @@ import json
 import pandas as pd
 import streamlit as st
 
+st.title('SuDS'' _lab_ '' UK - Wilberforce 001')
+
+
+# Define the coordinates for Hull University
+hull_uni_coordinates = (53.77114698979646, -0.36430683784066786)
+
+# Create a DataFrame with a single row containing Hull University coordinates
+df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
+
+
+
 # Retrieve secrets from Streamlit Secrets
 secret_key = st.secrets["secret_key"]
 api_key = st.secrets["api_key"]
