@@ -5,9 +5,9 @@ import time
 import requests
 import json
 import pandas as pd
-import os
 import streamlit as st
 
+# Retrieve secrets from Streamlit Secrets
 secret_key = st.secrets["secret_key"]
 api_key = st.secrets["api_key"]
 station_id = st.secrets["station_id"]
@@ -77,26 +77,4 @@ lsid_to_filter = 492303
 filtered_tree = filter_tree(tree, lsid_to_filter)
 
 # Print the filtered tree structure
-print(json.dumps(filtered_tree, indent=2))
-
-# Save the filtered tree as JSON to a file
-filtered_file_name = "filtered_tree.json"
-with open(filtered_file_name, "w") as file:
-    json.dump(filtered_tree, file, indent=2)
-
-print(f"Filtered tree saved as {filtered_file_name}")
-
-# Read JSON data from file
-with open('filtered_tree.json', 'r') as file:
-    json_data = json.load(file)
-
-# Extract the relevant information from the JSON
-sensor_data = json_data['sensors'][0]['data']
-
-# Convert the data into a DataFrame
-df = pd.json_normalize(sensor_data)
-
-# Save the DataFrame as a CSV file
-df.to_csv('table.csv', index=False)
-
-
+st.json(filtered_tree)
