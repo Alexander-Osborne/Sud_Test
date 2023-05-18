@@ -13,7 +13,7 @@ api_key = st.secrets["api_key"]
 station_id = st.secrets["station_id"]
 
 t = str(int(time.time()))
-start_timestamp = str(int(time.time() - 4000))
+start_timestamp = str(int(time.time() - 86400))
 end_timestamp = str(int(time.time()))
 
 # Step 1: Sort parameters by parameter name
@@ -80,6 +80,9 @@ filtered_tree = filter_tree(tree, lsid_to_filter)
 ts_values = [item["ts"] for item in filtered_tree["data"]]
 depth_values = [item["depth"] for item in filtered_tree["data"]]
 
+# Create a DataFrame with "ts" and "depth" values
+data = {"ts": ts_values, "depth": depth_values}
+df = pd.DataFrame(data)
+
 # Plot "ts" and "depth" values using st.line_chart
-chart_data = pd.DataFrame({"ts": ts_values, "depth": depth_values})
-st.line_chart(chart_data)
+st.line_chart(df)
