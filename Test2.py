@@ -76,8 +76,7 @@ tree = json_data
 lsid_to_filter = 492303
 filtered_tree = filter_tree(tree, lsid_to_filter)
 
-# Print the filtered tree structure
-st.json(filtered_tree)
+
 
 # Extract the relevant information from the JSON
 sensor_data = filtered_tree['sensors'][0]['data']
@@ -88,9 +87,6 @@ df = pd.json_normalize(sensor_data)
 # Convert 'depth' from feet to meters
 df['depth'] = df['depth'] * 0.3048
 
-# Round 'depth' to 3 significant figures
-df['depth'] = df['depth'].round(3)
-
 # Convert 'ts' from Unix timestamp to datetime
 df['ts'] = pd.to_datetime(df['ts'], unit='s')
 
@@ -98,7 +94,4 @@ df['ts'] = pd.to_datetime(df['ts'], unit='s')
 chart_data = df[['ts', 'depth']]
 
 # Display the line chart
-chart = st.line_chart(chart_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
-
-# Configure x-axis to show a 24-hour clock format
-chart.set_xticklabels(rotation=45, format='%H:%M')
+st.line_chart(chart_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
