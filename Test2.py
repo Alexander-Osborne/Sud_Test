@@ -92,7 +92,7 @@ df['ts'] = pd.to_datetime(df['ts'], unit='s')
 
 df['salinity']=df['salinity']
 
-df['temp']=df['temp']
+df['temp'] = (df['temp'] - 32) * 5/9
 
 depth_data = df[['ts', 'depth']]
 salinity_data = df[['ts', 'salinity']]
@@ -102,7 +102,7 @@ temperature_data= df[['ts','temp']]
 st.line_chart(depth_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
                      
 # Display the line chart for 'temperature'
-st.line_chart(temperature_data.rename(columns={'ts': 'DateTime', 'temp': 'Temperature (Celcius)'}).set_index('DateTime'))
+st.line_chart(temperature_data.rename(columns={'ts': 'DateTime', 'temp': 'Temperature (\u00B0C)'}).set_index('DateTime'))
 
 # Display the line chart for 'salinity'
 st.line_chart(salinity_data.rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
