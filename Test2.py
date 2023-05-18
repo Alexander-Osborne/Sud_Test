@@ -13,7 +13,7 @@ api_key = st.secrets["api_key"]
 station_id = st.secrets["station_id"]
 
 t = str(int(time.time()))
-start_timestamp = str(int(time.time() - 86400))
+start_timestamp = str(int(time.time() - 2000))
 end_timestamp = str(int(time.time()))
 
 # Step 1: Sort parameters by parameter name
@@ -76,6 +76,8 @@ tree = json_data
 lsid_to_filter = 492303
 filtered_tree = filter_tree(tree, lsid_to_filter)
 
+
+
 # Extract the relevant information from the JSON
 sensor_data = filtered_tree['sensors'][0]['data']
 
@@ -85,37 +87,11 @@ df = pd.json_normalize(sensor_data)
 # Convert 'depth' from feet to meters
 df['depth'] = df['depth'] * 0.3048
 
-# Round 'depth' to 3 significant figures
-df['depth'] = df['depth'].round(3)
-
 # Convert 'ts' from Unix timestamp to datetime
 df['ts'] = pd.to_datetime(df['ts'], unit='s')
 
 # Select the 'ts' and 'depth' columns from the DataFrame
 chart_data = df[['ts', 'depth']]
 
-# Extract temperature and salinity data from the JSON
-temperature_data = filtered_tree['sensors'][1]['data']
-salinity_data = filtered_tree['sensors'][2]['data']
-
-# Convert temperature from Fahrenheit to Celsius
-temperature_data = [(data['ts'], (data['data'] - 32) * 5 / 9) for data in temperature_data]
-
-# Convert the data into DataFrames
-temperature_df = pd.DataFrame(temperature_data, columns=['ts', 'temperature'])
-salinity_df = pd.json_normalize(salinity_data)
-
-# Convert 'ts' from Unix timestamp to datetime
-temperature_df['ts'] = pd.to_datetime(temperature_df['ts'], unit='s')
-
-# Merge the temperature and depth DataFrames
-chart_data = pd.merge(chart_data, temperature_df, on='ts')
-
-# Convert 'temperature' from Fahrenheit to Celsius
-chart_data['temperature'] = (chart_data['temperature'] - 32) * 5 / 9
-
-# Select the 'ts' and 'salinity' columns from the DataFrame
-chart_data = chart_data[['ts', 'depth', 'temperature']]
-
 # Display the line chart
-st.line_chart(chart_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)', 'temperature': 'Temperature (°C)'}).set_index('DateTime'))
+st.line_chart(chart_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
