@@ -13,7 +13,7 @@ api_key = st.secrets["api_key"]
 station_id = st.secrets["station_id"]
 
 t = str(int(time.time()))
-start_timestamp = str(int(time.time() - 2000))
+start_timestamp = str(int(time.time() - 86400))
 end_timestamp = str(int(time.time()))
 
 # Step 1: Sort parameters by parameter name
@@ -86,6 +86,9 @@ df = pd.json_normalize(sensor_data)
 
 # Convert 'depth' from feet to meters
 df['depth'] = df['depth'] * 0.3048
+
+# Round 'depth' to 3 significant figures
+df['depth'] = df['depth'].round(3)
 
 # Convert 'ts' from Unix timestamp to datetime
 df['ts'] = pd.to_datetime(df['ts'], unit='s')
