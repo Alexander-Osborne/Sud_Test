@@ -31,7 +31,7 @@ api_key = st.secrets["api_key"]
 station_id = st.secrets["station_id"]
 
 # Define the number of days to retrieve data for
-num_days = 7
+num_days = 14
 
 # Initialize an empty list to store the data frames for each day
 data_frames = []
