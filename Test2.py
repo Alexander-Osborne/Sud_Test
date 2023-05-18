@@ -76,4 +76,4 @@ tree = json_data
 lsid_to_filter = 492303
 filtered_tree = filter_tree(tree, lsid_to_filter)
 
-st.write(filtered_tree)
+st.json(filtered_tree)
