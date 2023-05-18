@@ -132,3 +132,9 @@ st.line_chart(combined_df[['ts', 'temp']].rename(columns={'ts': 'DateTime', 'tem
 
 # Display the line chart for 'salinity'
 st.line_chart(combined_df[['ts', 'salinity']].rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
+
+# Download button for CSV file
+csv_data = combined_df.to_csv(index=False)
+b64 = base64.b64encode(csv_data.encode()).decode()
+href = f'<a href="data:file/csv;base64,{b64}" download="SuDSlab_Data.csv">Download SuDSlab Data</a>'
+st.markdown(href, unsafe_allow_html=True)
