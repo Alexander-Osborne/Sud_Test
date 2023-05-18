@@ -6,7 +6,6 @@ import requests
 import json
 import pandas as pd
 import streamlit as st
-import base64
 
 # Retrieve secrets from Streamlit Secrets
 secret_key = st.secrets["secret_key"]
@@ -90,4 +89,4 @@ df = pd.json_normalize(sensor_data)
 chart_data = df[['ts', 'depth']]
 
 # Display the line chart
-st.line_chart(chart_data)
+st.line_chart(chart_data.rename(columns={'ts': 'X', 'depth': 'Y'}))
