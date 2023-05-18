@@ -25,18 +25,12 @@ image = Image.open('Swale.jpg')
 last_timestamp = tsData[-1].strftime("%d, %B %Y, %H:%M:%S")
 st.write(f"Last timestamp value: {last_timestamp}")
     
-    # Create a layout with two columns
-  col1, col2 = st.columns(2)
 
-    # In the first column, display the map
-    with col1:
-        st.subheader('Map')
-        st.map(df1, zoom=15)
+st.subheader('Map')
+st.map(df1, zoom=15)
 
-    # In the second column, display the image
-    with col2:
-        st.subheader('Image')
-        st.image(image, caption='Outfall of Swale')
+st.subheader('Image')
+st.image(image, caption='Outfall of Swale')
     
 
 
