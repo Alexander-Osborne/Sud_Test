@@ -6,6 +6,7 @@ import requests
 import json
 import pandas as pd
 import streamlit as st
+from PIL import Image
 
 st.title('SuDS'' _lab_ '' UK - Wilberforce 001')
 
