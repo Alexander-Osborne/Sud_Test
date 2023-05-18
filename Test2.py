@@ -86,10 +86,8 @@ sensor_data = filtered_tree['sensors'][0]['data']
 # Convert the data into a DataFrame
 df = pd.json_normalize(sensor_data)
 
-# Save the DataFrame as a CSV file
-csv_data = df.to_csv(index=False)
+# Select the 'ts' and 'depth' columns from the DataFrame
+chart_data = df[['ts', 'depth']]
 
-# Create a download link for the CSV file
-b64_csv = base64.b64encode(csv_data.encode()).decode()
-href = f'<a href="data:file/csv;base64,{b64_csv}" download="table.csv">Download CSV file</a>'
-st.markdown(href, unsafe_allow_html=True)
+# Display the line chart
+st.line_chart(chart_data)
