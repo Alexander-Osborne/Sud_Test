@@ -1,12 +1,14 @@
-import streamlit as st
+import hmac
+import hashlib
+from urllib.parse import urlencode
+import time
 import requests
+import json
 import pandas as pd
-import altair as alt
-from datetime import datetime
+import streamlit as st
 from PIL import Image
 
-st.title('SuDS'' _lab_ '' UK - Wilberforce 002')
-
+st.title('SuDS_lab_UK - Wilberforce 001')
 
 # Define the coordinates for Hull University
 hull_uni_coordinates = (53.77114698979646, -0.36430683784066786)
@@ -14,86 +16,119 @@ hull_uni_coordinates = (53.77114698979646, -0.36430683784066786)
 # Create a DataFrame with a single row containing Hull University coordinates
 df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
 
+# Load the image
+image = Image.open('Swale.jpg')
 
+st.subheader('Map')
+st.map(df1, zoom=15)
 
+st.subheader('Image')
+st.image(image, caption='Outfall of Swale')
 
-# CKAN API endpoint URL
-apiUrl = 'https://opendata.hullcc.gov.uk/api/3'
+# Retrieve secrets from Streamlit Secrets
+secret_key = st.secrets["secret_key"]
+api_key = st.secrets["api_key"]
+station_id = st.secrets["station_id"]
 
-# Dataset resource ID
-resourceId = 'f4f85e47-f8d9-4f13-8138-4bec4afde84d'
+# Define the number of days to retrieve data for
+num_days = 7
 
-# Number of rows to retrieve from the end of the dataset
-numRows = 2000
+# Initialize an empty list to store the data frames for each day
+data_frames = []
 
-# Create the API request URL
-apiRequestUrl = f'{apiUrl}/action/datastore_search?resource_id={resourceId}&fields=ts,temp,salinity,depth&sort=_id desc&limit={numRows}'
+# Loop over the past 'num_days' to retrieve data for each day
+for i in range(num_days):
+    # Calculate the start and end timestamps for the current day
+    start_timestamp = str(int(time.time()) - (i + 1) * 86400)
+    end_timestamp = str(int(time.time()) - i * 86400)
 
-try:
-    # Send API request to retrieve the dataset
-    response = requests.get(apiRequestUrl)
-    data = response.json()
-    records = data['result']['records']
+    # Step 1: Sort parameters by parameter name
+    params = {
+        "api-key": api_key,
+        "end-timestamp": end_timestamp,
+        "start-timestamp": start_timestamp,
+        "station-id": station_id,
+        "t": str(int(time.time()))
+    }
+    sorted_params = sorted(params.items(), key=lambda x: x[0])
 
-    # Extract the 'ts' and 'temp' columns from the records
-    tsData = [record['ts'] for record in records]
-    tempData = [record['temp'] for record in records]
-    depthData = [record['depth'] for record in records]
-    salinityData = [record['salinity'] for record in records]
+    # Step 2: Create concatenated string
+    concatenated_string = "".join([f"{param}{value}" for param, value in sorted_params])
 
-    # Convert timestamps to datetime objects
-    tsData = [datetime.fromtimestamp(ts) for ts in tsData]
+    # Step 3: Compute HMAC API Signature
+    message = concatenated_string.encode()
+    secret_key_bytes = secret_key.encode()
+    hmac_signature = hmac.new(secret_key_bytes, message, hashlib.sha256).hexdigest()
 
-    # Create a dataframe for the data
-    df = pd.DataFrame({'Timestamp': tsData, 'Temperature': tempData, 'Depth': depthData, 'Salinity': salinityData})
+    # Step 4: Generate API URL
+    base_url = "https://api.weatherlink.com/v2/historic/"
+    query_params = {
+        "api-key": api_key,
+        "t": str(int(time.time())),
+        "start-timestamp": start_timestamp,
+        "end-timestamp": end_timestamp
+    }
+    query_string = urlencode(query_params)
+    url = f"{base_url}{station_id}?{query_string}&api-signature={hmac_signature}"
 
-      # Load the image
-    image = Image.open('Swale.jpg')
+    # Step 5: Load JSON data from the API URL
+    response = requests.get(url)
+    json_data = response.json()
 
-     # Display the last timestamp value
-    last_timestamp = tsData[-1].strftime("%d, %B %Y, %H:%M:%S")
-    st.write(f"Last timestamp value: {last_timestamp}")
-    
-    # Create a layout with two columns
-    col1, col2 = st.columns(2)
+    # Function to filter the JSON tree based on "lsid"
+    def filter_tree(data, lsid):
+        if isinstance(data, dict):
+            tree = {}
+            if "lsid" in data and data["lsid"] == lsid:
+                return data
+            else:
+                for key, value in data.items():
+                    subtree = filter_tree(value, lsid)
+                    if subtree:
+                        tree[key] = subtree
+                return tree
+        elif isinstance(data, list):
+            tree = []
+            for item in data:
+                subtree = filter_tree(item, lsid)
+                if subtree:
+                    tree.append(subtree)
+            return tree
 
-    # In the first column, display the map
-    with col1:
-        st.subheader('Map')
-        st.map(df1, zoom=15)
+    # Convert the JSON data into a tree
+    tree = json_data
 
-    # In the second column, display the image
-    with col2:
-        st.subheader('Image')
-        st.image(image, caption='Outfall of Swale')
-    
-    
-    # Create three separate figures using Streamlit and Altair
-    st.subheader('Temperature')
-    chart_temp = alt.Chart(df).mark_line().encode(
-        x='Timestamp:T',
-        y=alt.Y('Temperature:Q', axis=alt.Axis(title='Temperature (\u00B0C)')),
-        color=alt.value('red')
-    )
-    st.altair_chart(chart_temp, use_container_width=True)
+    # Filter the JSON tree based on "lsid" equal to 459397
+    lsid_to_filter = 478072
+    filtered_tree = filter_tree(tree, lsid_to_filter)
 
-    st.subheader('Depth')
-    chart_depth = alt.Chart(df).mark_line().encode(
-        x='Timestamp:T',
-        y=alt.Y('Depth:Q', axis=alt.Axis(title='Depth (m)')),
-        color=alt.value('blue')
-    )
-    st.altair_chart(chart_depth, use_container_width=True)
+    # Extract the relevant information from the JSON
+    sensor_data = filtered_tree['sensors'][0]['data']
 
-    st.subheader('Salinity')
-    chart_salinity = alt.Chart(df).mark_line().encode(
-        x='Timestamp:T',
-        y='Salinity:Q',
-        color=alt.value('green')
-    )
-    st.altair_chart(chart_salinity, use_container_width=True)
+    # Convert the data into a DataFrame
+    df = pd.json_normalize(sensor_data)
 
-  
+    # Convert 'depth' from feet to meters
+    df['depth'] = df['depth'] * 0.3048
 
-except:
-    st.write('Error occurred while retrieving the dataset.')
+    # Convert 'ts' from Unix timestamp to datetime
+    df['ts'] = pd.to_datetime(df['ts'], unit='s')
+
+    df['salinity'] = df['salinity']
+
+    df['temp'] = (df['temp'] - 32) * 5 / 9
+
+    # Append the extracted data to the list
+    data_frames.append(df)
+
+# Concatenate all the data frames into a single data frame
+combined_df = pd.concat(data_frames)
+
+# Display the line chart for 'depth'
+st.line_chart(combined_df[['ts', 'depth']].rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
+
+# Display the line chart for 'temperature'
+st.line_chart(combined_df[['ts', 'temp']].rename(columns={'ts': 'DateTime', 'temp': 'Temperature (\u00B0C)'}).set_index('DateTime'))
+
+# Display the line chart for 'salinity'
+st.line_chart(combined_df[['ts', 'salinity']].rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
