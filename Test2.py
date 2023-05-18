@@ -6,6 +6,7 @@ import requests
 import json
 import pandas as pd
 import streamlit as st
+import base64
 
 # Retrieve secrets from Streamlit Secrets
 secret_key = st.secrets["secret_key"]
@@ -86,4 +87,9 @@ sensor_data = filtered_tree['sensors'][0]['data']
 df = pd.json_normalize(sensor_data)
 
 # Save the DataFrame as a CSV file
-df.to_csv('table.csv', index=False)
+csv_data = df.to_csv(index=False)
+
+# Create a download link for the CSV file
+b64_csv = base64.b64encode(csv_data.encode()).decode()
+href = f'<a href="data:file/csv;base64,{b64_csv}" download="table.csv">Download CSV file</a>'
+st.markdown(href, unsafe_allow_html=True)
