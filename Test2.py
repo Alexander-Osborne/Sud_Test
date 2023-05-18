@@ -45,7 +45,7 @@ query_params = {
 }
 query_string = urlencode(query_params)
 url = f"{base_url}{station_id}?{query_string}&api-signature={hmac_signature}"
-st.write=url
+st.write=(url)
 # Step 5: Load JSON data from the API URL
 response = requests.get(url)
 json_data = response.json()
