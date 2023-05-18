@@ -7,15 +7,14 @@ import json
 import pandas as pd
 import streamlit as st
 
-secret_key= st.secrets["secret_key"]
-
-# Parameters
+# Retrieve secrets from Streamlit Secrets
+secret_key = st.secrets["secret_key"]
 api_key = st.secrets["api_key"]
 station_id = st.secrets["station_id"]
+
 t = str(int(time.time()))
 start_timestamp = str(int(time.time() - 86400))
 end_timestamp = str(int(time.time()))
-
 
 # Step 1: Sort parameters by parameter name
 params = {
@@ -45,7 +44,7 @@ query_params = {
 }
 query_string = urlencode(query_params)
 url = f"{base_url}{station_id}?{query_string}&api-signature={hmac_signature}"
-st.write=(url)
+
 # Step 5: Load JSON data from the API URL
 response = requests.get(url)
 json_data = response.json()
@@ -77,24 +76,15 @@ tree = json_data
 lsid_to_filter = 492303
 filtered_tree = filter_tree(tree, lsid_to_filter)
 
-# Convert the filtered tree to a DataFrame
-df = pd.DataFrame(filtered_tree)
+# Print the filtered tree structure
+print(json.dumps(filtered_tree, indent=2))
 
-if 'ts' in df.columns and 'depth' in df.columns:
-    # Extract the timestamp and depth columns
-    timestamps = pd.to_datetime(df['ts'], unit='s')
-    depths_feet = df['depth']
+# Extract the relevant information from the JSON
+sensor_data = filtered_tree['sensors'][0]['data']
 
-    # Convert depths from feet to meters
-    depths_meters = depths_feet * 0.3048
+# Convert the data into a DataFrame
+df = pd.json_normalize(sensor_data)
 
-    # Create a new DataFrame with timestamps and depths in meters
-    data = pd.DataFrame({'Timestamp': timestamps, 'Depth': depths_meters})
-
-    # Set the Timestamp column as the index
-    data.set_index('Timestamp', inplace=True)
-
-    # Plot the line chart using Streamlit
-    st.line_chart(data)
-else:
-    st.write("Error: Required columns 'ts' and 'depth' not found in the data.")
+# Plot the time series against depth using st.line_chart
+chart_data = df[['TimeSeries', 'Depth']]
+st.line_chart(chart_data)
