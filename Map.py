@@ -61,9 +61,9 @@ def render_map_page():
 
         # Create a custom icon
         custom_icon = folium.CustomIcon(icon_image=icon_path, icon_size=(30, 30))
-
+        additional_details = row['additional_details']
         # Construct the tooltip content with the name and thumbnail image
-        thumbnail_html = f'<img src="{image_url}" alt="Thumbnail" width="100">'
+        thumbnail_html = f'<img src="{image_url}" alt="Thumbnail" width="300">'
         tooltip_content = f"<b>{name}</b><br>{thumbnail_html}<br><i>{additional_details}</i>"
 
         # Create the popup content with the name and larger image
