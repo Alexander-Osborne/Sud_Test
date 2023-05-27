@@ -1,6 +1,7 @@
 import streamlit as st
 import folium
 from streamlit_folium import folium_static
+from folium.plugins import MarkerCluster
 import random
 
 def main():
@@ -24,6 +25,9 @@ def render_map_page():
     markers = []
     classes = ["Class A", "Class B", "Class C"]
 
+    # Create marker clusters for each class
+    marker_clusters = {classification: MarkerCluster(name=classification) for classification in classes}
+
     for _ in range(10):
         latitude = random.uniform(51.4, 51.6)
         longitude = random.uniform(-0.2, 0.2)
@@ -31,22 +35,17 @@ def render_map_page():
 
         marker = folium.Marker(location=[latitude, longitude], popup='Random Location', tooltip=classification)
 
-        # Create a feature group for each class
-        feature_group = folium.FeatureGroup(name=classification)
-        marker.add_to(feature_group)
-        feature_group.add_to(m)
+        # Add marker to the corresponding marker cluster
+        marker.add_to(marker_clusters[classification])
 
-        markers.append((marker, feature_group))
+        markers.append(marker)
 
-    # Checkbox to toggle markers
-    selected_classes = st.multiselect("Select Classes", classes, default=classes)
+    # Add marker clusters to the map
+    for marker_cluster in marker_clusters.values():
+        marker_cluster.add_to(m)
 
-    # Filter and display markers based on selected classes
-    for marker, feature_group in markers:
-        if feature_group.name in selected_classes:
-            feature_group.add_to(m)
-        else:
-            m.get_root().add_child(folium.Element(f"<style>.leaflet-pane .leaflet-overlay-pane .{feature_group.get_name().replace(' ', '')} {{display: none;}}</style>"))
+    # Add layer control to toggle marker clusters
+    folium.LayerControl().add_to(m)
 
     # Render the map
     folium_static(m)
