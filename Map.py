@@ -26,18 +26,12 @@ def create_map():
             icon=icon
         ).add_to(map)
 
-        # Create a custom JavaScript snippet to handle the marker click event and set the selected_marker value
-        js_code = f"""
-            function onMarkerClick(e) {{
-                var markerIndex = {index};
-                Streamlit.setComponentValue('selected_marker', markerIndex);
-            }}
-            var marker = arguments[0];
-            marker.on('click', onMarkerClick);
-        """
+        # Add the marker index as a button on the sidebar
+        button = st.sidebar.button(f"Marker {index + 1}")
 
-        # Add the JavaScript code to the HTML template using Streamlit's components API
-        st.components.v1.html(f'<script>{js_code}</script>')
+        # Set the selected_marker value when the button is clicked
+        if button:
+            st.session_state.selected_marker = index
 
     return map
 
@@ -52,15 +46,14 @@ def main():
 
     # Display graph below the map when a marker is clicked
     if selected_marker is not None:
-        st.write(f"You clicked marker {selected_marker}. Here is additional content.")
+        st.write(f"You clicked marker {selected_marker + 1}. Here is additional content.")
 
         # Generate example data for the line chart
         np.random.seed(selected_marker)
         data = np.random.randn(100).cumsum()
 
         # Display the line chart below the map
-        chart_placeholder = st.empty()
-        chart_placeholder.line_chart(data)
+        st.line_chart(data)
 
 if __name__ == "__main__":
     main()
