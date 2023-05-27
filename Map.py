@@ -20,8 +20,6 @@ def create_map():
 
         # Define the JavaScript code to be executed on marker click
         js_code = f'''
-            var checkbox = document.getElementById('checkbox{index}');
-            checkbox.checked = true;
             Streamlit.setComponentValue("selected_marker", {index});
         '''
 
@@ -33,7 +31,7 @@ def create_map():
             icon=icon
         ).add_to(map)
 
-        marker.add_child(folium.Popup(f'<input type="checkbox" id="checkbox{index}" onclick="{js_code}">Click Me'))
+        marker.add_child(folium.Popup(f'<div onclick="{js_code}">Click Me</div>', parse_html=True))
 
     return map
 
