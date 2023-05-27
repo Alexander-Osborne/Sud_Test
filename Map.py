@@ -15,11 +15,11 @@ import base64
 
 def main():
     st.sidebar.title("Navigation")
-    page = st.sidebar.radio("Go to", ["Map", "Blank Page"])
+    page = st.sidebar.radio("Go to", ["Location Viewer", "Data Viewer"])
 
-    if page == "Map":
+    if page == "Location Viewer":
         render_map_page()
-    elif page == "Blank Page":
+    elif page == "Data Viewer":
         render_blank_page()
 
 def render_map_page():
