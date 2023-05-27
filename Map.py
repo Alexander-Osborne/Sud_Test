@@ -1,17 +1,30 @@
 import streamlit as st
 import folium
 import pandas as pd
+import geocoder
 from folium import features
 from streamlit_folium import folium_static
 
+def get_user_location():
+    g = geocoder.ip('me')
+    if g.latlng:
+        return g.latlng
+    else:
+        return None
+
 def create_map():
-    # Create the map object with the CartoDB Positron tileset
-    map = folium.Map(location=[53.7647, -0.3490], zoom_start=10, tiles='CartoDB Positron')
+    user_location = get_user_location()
+
+    # If user location is available, use it as the initial zoom location
+    if user_location:
+        map = folium.Map(location=user_location, zoom_start=10, tiles='CartoDB Positron')
+    else:
+        map = folium.Map(location=[53.7647, -0.3490], zoom_start=10, tiles='CartoDB Positron')
 
     # Read marker information from the CSV file
     markers_df = pd.read_csv("markers.csv")
 
-    # Create markers for each row in the CSV
+    # Create markers for each row in the CSV with custom icons
     for index, row in markers_df.iterrows():
         # Create a custom marker icon with an image
         icon_image = row["marker_icon"]  # Column name in the CSV for marker icon image path
