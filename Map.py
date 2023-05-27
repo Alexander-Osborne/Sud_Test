@@ -1,5 +1,5 @@
 import streamlit as st
-import streamlit.components.v1 as components
+import folium
 
 # Add a title to your app
 st.title("Map App")
@@ -7,25 +7,23 @@ st.title("Map App")
 # Define the map location
 location = [51.5074, -0.1278]  # London, UK
 
-# Add the map to your app
-map_html = """
-<div id="map" style="width: 100%; height: 500px;"></div>
-<script>
-var map = L.map('map').setView([51.5074, -0.1278], 13);
+# Create a folium map object
+m = folium.Map(location=location, zoom_start=13)
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-}).addTo(map);
+# Add markers to the map
+marker1 = folium.Marker([51.5074, -0.1278], popup='Marker 1')
+marker2 = folium.Marker([51.5072, -0.1276], popup='Marker 2')
 
-L.marker([51.5074, -0.1278]).addTo(map)
-    .bindPopup('Marker 1');
+# Add the markers to the map
+m.add_child(marker1)
+m.add_child(marker2)
 
-L.marker([51.5072, -0.1276]).addTo(map)
-    .bindPopup('Marker 2');
+# Display the map using Folium's iframe method
+folium_static = folium.Figure(width=800, height=500)
+folium_static.add_child(m)
 
-</script>
-"""
-components.html(map_html, height=600)
+# Render the map in Streamlit
+st.markdown(folium_static._repr_html_(), unsafe_allow_html=True)
 
 # Add a sub-window for the selected marker
 selected_marker = st.selectbox("Select a marker", ["Marker 1", "Marker 2"])
