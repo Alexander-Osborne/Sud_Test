@@ -24,32 +24,22 @@ def render_map_page():
     markers = []
     classes = ["Class A", "Class B", "Class C"]
 
-    # Create feature groups for each class
-    feature_groups = {classification: folium.FeatureGroup(name=classification) for classification in classes}
-
     for _ in range(10):
         latitude = random.uniform(51.4, 51.6)
         longitude = random.uniform(-0.2, 0.2)
         classification = random.choice(classes)
 
         marker = folium.Marker(location=[latitude, longitude], popup='Random Location', tooltip=classification)
-        markers.append((marker, classification))
 
-    # Add markers to the corresponding feature group
-    for marker, classification in markers:
-        marker.add_to(feature_groups[classification])
-
-    # Add feature groups to the map
-    for feature_group in feature_groups.values():
+        # Create a feature group for each class
+        feature_group = folium.FeatureGroup(name=classification)
+        marker.add_to(feature_group)
         feature_group.add_to(m)
 
-    # Checkbox to toggle markers
-    selected_classes = st.multiselect("Select Classes", classes, default=classes)
+        markers.append((marker, feature_group))
 
-    # Filter and display markers based on selected classes
-    for classification in classes:
-        if classification in selected_classes:
-            m.add_child(feature_groups[classification])
+    # Add layer control to toggle markers
+    folium.LayerControl().add_to(m)
 
     # Render the map
     folium_static(m)
