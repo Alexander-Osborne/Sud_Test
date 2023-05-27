@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import folium
 from streamlit_folium import folium_static
-import matplotlib.pyplot as plt
-import numpy as np
 
 # Create a Streamlit app and set a title
 st.title("Map App")
@@ -31,14 +29,13 @@ for i, row in df.iterrows():
 # Display the map in Streamlit
 folium_static(m)
 
-# Get the current map view
-lat_range = st.slider("Latitude Range", min_value=-90.0, max_value=90.0, value=(latitude-1, latitude+1), step=0.1)
-lon_range = st.slider("Longitude Range", min_value=-180.0, max_value=180.0, value=(longitude-1, longitude+1), step=0.1)
+# Get the selected marker
+selected_marker = st.selectbox("Select a marker", df['Marker'])
 
-# Generate random data for the graph
-x = np.linspace(lat_range[0], lat_range[1], 100)
-y = np.sin(x)
-
-# Plot the graph based on the current map view
-plt.plot(x, y)
-st.pyplot(plt)
+# Perform actions based on the selected marker
+if selected_marker == 'Marker 1':
+    st.write("You selected Marker 1.")
+    # Add your Streamlit code for Marker 1
+elif selected_marker == 'Marker 2':
+    st.write("You selected Marker 2.")
+    # Add your Streamlit code for Marker 2
