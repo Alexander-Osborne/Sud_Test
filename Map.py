@@ -30,35 +30,22 @@ def render_map_page():
         classification = random.choice(classes)
 
         marker = folium.Marker(location=[latitude, longitude], popup='Random Location', tooltip=classification)
+        marker.add_to(m)
         markers.append((marker, classification))
 
     # Get unique classes
     unique_classes = list(set([c for _, c in markers]))
 
-    # Create feature groups for each class
-    feature_groups = {classification: folium.FeatureGroup(name=classification) for classification in unique_classes}
-
-    # Add markers to the corresponding feature group
-    for marker, classification in markers:
-        marker.add_to(feature_groups[classification])
-
-    # Add feature groups to the map
-    for feature_group in feature_groups.values():
-        feature_group.add_to(m)
-
     # Checkbox to toggle markers
     selected_classes = st.multiselect("Select Classes", unique_classes, default=unique_classes)
 
+    # Filter and display markers based on selected classes
+    for marker, classification in markers:
+        if classification in selected_classes:
+            marker.add_to(m)
+
     # Render the map
     folium_static(m)
-
-    # Execute JavaScript to control marker visibility based on selected classes
-    visible_classes = [f"'.leaflet-pane .leaflet-feature-group[name=\"{c}\"]'" for c in selected_classes]
-    visible_classes_js = " + ".join(visible_classes)
-    hide_js = f"document.querySelectorAll({visible_classes_js}).forEach(function(g) {{ g.style.display = 'none'; }});"
-    show_js = f"document.querySelectorAll(':not({visible_classes_js})').forEach(function(g) {{ g.style.display = 'initial'; }});"
-    script = f"<script>{hide_js}{show_js}</script>"
-    st.components.v1.html(script, height=0)
 
 def render_blank_page():
     st.title("Blank Page")
