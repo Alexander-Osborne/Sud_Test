@@ -181,35 +181,38 @@ def render_blank_page():
             df = pd.json_normalize(sensor_data)
 
             # Convert 'depth' from feet to meters
+            if 'depth' in df.columns:
             df['depth'] = df['depth'] * 0.3048
 
             # Convert 'ts' from Unix timestamp to datetime
             df['ts'] = pd.to_datetime(df['ts'], unit='s')
 
-            df['salinity'] = df['salinity']
-
+            # Convert 'temp' from Fahrenheit to Celsius
+            if 'temp' in df.columns:
             df['temp'] = (df['temp'] - 32) * 5 / 9
-            
-            df['rainfall_mm'] = df['rainfall_mm']
 
             # Append the extracted data to the list
             data_frames.append(df)
 
-        # Concatenate all the data frames into a single data frame
-        combined_df = pd.concat(data_frames)
+            # Concatenate all the data frames into a single data frame
+            combined_df = pd.concat(data_frames)
 
-        # Display the line chart for 'depth'
-        st.line_chart(combined_df[['ts', 'depth']].rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
+# Display the line chart for 'depth' if available
+if 'depth' in combined_df.columns:
+    st.line_chart(combined_df[['ts', 'depth']].rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
 
-        # Display the line chart for 'temperature'
-        st.line_chart(combined_df[['ts', 'temp']].rename(columns={'ts': 'DateTime', 'temp': 'Temperature (\u00B0C)'}).set_index('DateTime'))
+# Display the line chart for 'temperature' if available
+if 'temp' in combined_df.columns:
+    st.line_chart(combined_df[['ts', 'temp']].rename(columns={'ts': 'DateTime', 'temp': 'Temperature (\u00B0C)'}).set_index('DateTime'))
 
-        # Display the line chart for 'salinity'
-        st.line_chart(combined_df[['ts', 'salinity']].rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
+# Display the line chart for 'salinity' if available
+if 'salinity' in combined_df.columns:
+    st.line_chart(combined_df[['ts', 'salinity']].rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
 
-        # Display the line chart for 'salinity'
-        st.line_chart(combined_df[['ts', 'rainfall_mm']].rename(columns={'ts': 'DateTime', 'rainfall_mm': 'Rainfall'}).set_index('DateTime'))
-        
+# Display the line chart for 'rainfall_mm' if available
+if 'rainfall_mm' in combined_df.columns:
+    st.line_chart(combined_df[['ts', 'rainfall_mm']].rename(columns={'ts': 'DateTime', 'rainfall_mm': 'Rainfall'}).set_index('DateTime'))
+
         # Download button for CSV file
         csv_data = combined_df.to_csv(index=False)
         b64 = base64.b64encode(csv_data.encode()).decode()
