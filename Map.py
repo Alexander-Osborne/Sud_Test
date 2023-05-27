@@ -1,7 +1,8 @@
 import streamlit as st
 import folium
 import numpy as np
-import matplotlib.pyplot as plt
+import pandas as pd
+import altair as alt
 
 # Create a map with Hull University marker
 def create_map():
@@ -24,13 +25,20 @@ def generate_random_data():
     x = np.linspace(0, 10, 100)
     y = np.random.randn(100)
 
-    return x, y
+    data = pd.DataFrame({'x': x, 'y': y})
+    return data
 
 # Generate and display the graph
-def display_graph(x, y):
-    fig, ax = plt.subplots()
-    ax.plot(x, y)
-    st.pyplot(fig)
+def display_graph(data):
+    chart = alt.Chart(data).mark_line().encode(
+        x='x',
+        y='y'
+    ).properties(
+        width=500,
+        height=300
+    )
+
+    st.altair_chart(chart)
 
 # Main function
 def main():
@@ -44,9 +52,9 @@ def main():
     # Handle marker click events
     if st.button('Click Marker'):
         # Generate random data for the graph
-        x, y = generate_random_data()
+        data = generate_random_data()
         # Display the graph
-        display_graph(x, y)
+        display_graph(data)
 
 if __name__ == '__main__':
     main()
