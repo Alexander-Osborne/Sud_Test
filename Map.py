@@ -59,7 +59,8 @@ def main():
         data = np.random.randn(100).cumsum()
 
         # Display the line chart below the map
-        st.line_chart(data)
+        chart_placeholder = st.empty()
+        chart_placeholder.line_chart(data)
 
 if __name__ == "__main__":
     main()
