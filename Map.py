@@ -25,28 +25,35 @@ def main():
 def render_map_page():
     st.title("Map Page")
 
+    # Load markers data from CSV
+    markers_data = pd.read_csv('markers.csv')  # Replace 'markers.csv' with your CSV file path
+
     m = folium.Map(location=[51.5074, -0.1278], zoom_start=12, tiles="CartoDB Positron")
 
-    markers = []
-    classes = ["Class A", "Class B", "Class C"]
-    marker_clusters = {classification: MarkerCluster(name=classification) for classification in classes}
+    marker_clusters = {}
 
-    for _ in range(10):
-        latitude = random.uniform(51.4, 51.6)
-        longitude = random.uniform(-0.2, 0.2)
-        classification = random.choice(classes)
+    # Create marker clusters for each class
+    for classification in markers_data['classification'].unique():
+        marker_clusters[classification] = MarkerCluster(name=classification)
 
-        marker = folium.Marker(location=[latitude, longitude], popup='Random Location', tooltip=classification)
+    # Add markers to the map
+    for _, row in markers_data.iterrows():
+        latitude = row['latitude']
+        longitude = row['longitude']
+        classification = row['classification']
+        name = row['name']
 
+        marker = folium.Marker(location=[latitude, longitude], popup=name, tooltip=classification)
         marker.add_to(marker_clusters[classification])
 
-        markers.append(marker)
-
+    # Add marker clusters to the map
     for marker_cluster in marker_clusters.values():
         marker_cluster.add_to(m)
 
+    # Add layer control to toggle marker clusters
     folium.LayerControl().add_to(m)
 
+    # Render the map
     folium_static(m)
     
 def render_blank_page():
