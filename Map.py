@@ -3,22 +3,11 @@ import folium
 from streamlit_folium import folium_static
 from folium.plugins import MarkerCluster
 import random
-import hmac
-import hashlib
-from urllib.parse import urlencode
-import time
-import requests
-import json
-import pandas as pd
-from PIL import Image
-import base64
 
 def main():
-    # Set up the sidebar
-    st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox("Go to", ["Map", "Blank Page"])
+    st.title("Navigation")
+    page = st.radio("Go to", ["Map", "Blank Page"])
 
-    # Render the appropriate page based on the selection
     if page == "Map":
         render_map_page()
     elif page == "Blank Page":
@@ -27,14 +16,10 @@ def main():
 def render_map_page():
     st.title("Map Page")
 
-    # Create a map object with CartoDB Positron basemap
     m = folium.Map(location=[51.5074, -0.1278], zoom_start=12, tiles="CartoDB Positron")
 
-    # Generate random markers with classifications
     markers = []
     classes = ["Class A", "Class B", "Class C"]
-
-    # Create marker clusters for each class
     marker_clusters = {classification: MarkerCluster(name=classification) for classification in classes}
 
     for _ in range(10):
@@ -44,21 +29,17 @@ def render_map_page():
 
         marker = folium.Marker(location=[latitude, longitude], popup='Random Location', tooltip=classification)
 
-        # Add marker to the corresponding marker cluster
         marker.add_to(marker_clusters[classification])
 
         markers.append(marker)
 
-    # Add marker clusters to the map
     for marker_cluster in marker_clusters.values():
         marker_cluster.add_to(m)
 
-    # Add layer control to toggle marker clusters
     folium.LayerControl().add_to(m)
 
-    # Render the map
     folium_static(m)
-
+    
 def render_blank_page():
     st.title('SuDS_lab_UK - Wilberforce 001')
 
