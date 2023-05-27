@@ -158,10 +158,10 @@ def create_map():
 
             # Display the line chart for 'salinity'
             st.line_chart(salinity_data.rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
-
+            '''
             
             
-        '''
+        
 
         # Create a popup with checkbox and JavaScript code
         popup_content = f'''
