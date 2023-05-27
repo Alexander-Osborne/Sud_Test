@@ -71,8 +71,7 @@ def render_blank_page():
     # Load the image
     image = Image.open('Swale.jpg')
 
-    st.subheader('Map')
-    st.map(df1, zoom=15)
+  
 
     st.subheader('Image')
     st.image(image, caption='Outfall of Swale')
