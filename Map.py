@@ -33,7 +33,6 @@ def render_map_page():
 
     m = folium.Map(location=hull_coordinates, zoom_start=12, tiles="CartoDB Positron")
 
-
     marker_clusters = {}
 
     # Create marker clusters for each class
@@ -49,6 +48,7 @@ def render_map_page():
         longitude = row['longitude']
         classification = row['classification']
         name = row['name']
+        additional_details = row['additional_details']  # Add the column name from your CSV that contains additional details
 
         # Construct the path to the custom marker icon for the classification
         if classification == 'Swale':
@@ -62,7 +62,10 @@ def render_map_page():
         # Create a custom icon
         custom_icon = folium.CustomIcon(icon_image=icon_path, icon_size=(30, 30))
 
-        marker = folium.Marker(location=[latitude, longitude], popup=name, tooltip=classification, icon=custom_icon)
+        # Create the tooltip content with the name and additional details
+        tooltip_content = f"<b>{name}</b><br>{additional_details}"
+
+        marker = folium.Marker(location=[latitude, longitude], popup=name, tooltip=tooltip_content, icon=custom_icon)
         marker.add_to(marker_clusters[classification])
 
     # Add marker clusters to the map
