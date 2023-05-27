@@ -18,20 +18,14 @@ marker_cluster = MarkerCluster()
 # Add a custom JavaScript callback function for click events
 callback = '''
 function(e){
-    var popup = L.popup()
-        .setLatLng(e.latlng)
-        .setContent("Marker")
-        .openOn(map);
-
     var marker = L.marker(e.latlng)
-        .addTo(marker_cluster);
-
-    marker.bindPopup(popup);
+        .bindPopup("Marker")
+        .addTo(markerCluster);
 }
 '''
 
 # Add the JavaScript callback function to the map
-m.get_root().add_child(folium.Element(callback))
+folium.Javascript(callback).add_to(m)
 
 # Add the marker cluster group to the map
 m.add_child(marker_cluster)
