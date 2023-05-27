@@ -1,7 +1,7 @@
 import streamlit as st
 import folium
 from streamlit_folium import folium_static
-from folium.plugins import MarkerCluster, ClickForMarker
+from folium.plugins import FastMarkerCluster, ClickCallback
 
 # Add a title to your app
 st.title("Map App")
@@ -12,18 +12,17 @@ location = [51.5074, -0.1278]  # London, UK
 # Create a folium map object
 m = folium.Map(location=location, zoom_start=13)
 
-# Add the ClickForMarker plugin to the map
-click_marker = ClickForMarker(popup='Clicked Marker')
-m.add_child(click_marker)
-
-# Create a marker cluster group
-marker_cluster = MarkerCluster()
+# Create a FastMarkerCluster group
+marker_cluster = FastMarkerCluster()
 
 # Register the click event handler
-def on_click(e):
-    lat, lon = e.latlng
+def on_click(event, **kwargs):
+    lat, lon = event["latlng"]
     marker = folium.Marker([lat, lon], popup='Marker')
     marker_cluster.add_child(marker)
+
+click_callback = ClickCallback(callback=on_click)
+m.add_child(click_callback)
 
 m.add_child(marker_cluster)
 m.add_child(folium.LatLngPopup())
