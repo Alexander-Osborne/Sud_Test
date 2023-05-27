@@ -75,10 +75,10 @@ def render_blank_page():
     station_id = st.secrets["station_id"]
 
     # Select the number of days
-    num_days = st.slider("Select the number of days", min_value=1, max_value=30, value=1)
+    num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
     lsid_options = [478072, 478073]  # Example lsid options, replace with your own values
-    lsid_to_filter = st.selectbox("Select the lsid to filter", options=lsid_options)
+    lsid_to_filter = st.selectbox("Select Sensor ID", options=lsid_options)
 
     if lsid_to_filter:
         # Initialize an empty list to store the data frames for each day
