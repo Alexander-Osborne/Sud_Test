@@ -24,14 +24,14 @@ function(e){
         .openOn(map);
 
     var marker = L.marker(e.latlng)
-        .addTo(markerCluster);
+        .addTo(marker_cluster);
 
     marker.bindPopup(popup);
 }
 '''
 
 # Add the JavaScript callback function to the map
-m.add_child(folium.Element(callback))
+m.get_root().add_child(folium.Element(callback))
 
 # Add the marker cluster group to the map
 m.add_child(marker_cluster)
