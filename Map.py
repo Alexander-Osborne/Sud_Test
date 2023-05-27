@@ -37,7 +37,7 @@ def render_map_page():
         marker_clusters[classification] = MarkerCluster(name=classification)
 
     # Define the path to the directory containing custom marker icons
-    icon_directory = 'marker_icons/'
+    icon_directory = ''
 
     # Add markers to the map
     for _, row in markers_data.iterrows():
@@ -47,7 +47,13 @@ def render_map_page():
         name = row['name']
 
         # Construct the path to the custom marker icon for the classification
-        icon_path = icon_directory + f'icon_{classification.lower()}.png'
+        if classification == 'Swale':
+            icon_path = icon_directory + 'Swale_Icon.png'
+        elif classification == 'Planter':
+            icon_path = icon_directory + 'Planter_Icon.png'
+        else:
+            # Use a default icon if no matching classification is found
+            icon_path = icon_directory + 'default_icon.png'  # Replace 'default_icon.png' with your default icon path
 
         # Create a custom icon
         custom_icon = folium.CustomIcon(icon_image=icon_path, icon_size=(30, 30))
@@ -64,6 +70,7 @@ def render_map_page():
 
     # Render the map
     folium_static(m)
+
     
 def render_blank_page():
     st.title('SuDS_lab_UK - Wilberforce 001')
