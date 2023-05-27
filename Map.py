@@ -5,8 +5,8 @@ from folium.plugins import MarkerCluster
 import random
 
 def main():
-    st.title("Navigation")
-    page = st.radio("Go to", ["Map", "Blank Page"])
+    st.sidebar.title("Navigation")
+    page = st.sidebar.radio("Go to", ["Map", "Blank Page"])
 
     if page == "Map":
         render_map_page()
