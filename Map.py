@@ -45,9 +45,15 @@ folium_static(m)
 selected_swales = st.checkbox("Swales", value=True)
 selected_rain = st.checkbox("Rain", value=True)
 
-# Set the visibility of marker groups based on selected checkboxes
-if not selected_swales:
+# Add or remove marker groups based on selected checkboxes
+if selected_swales:
+    m.get_root().add_child(swale_group)
+else:
+    m.get_root().add_child(folium.LayerControl().add_to(m))
     m.get_root().remove(swale_group)
 
-if not selected_rain:
+if selected_rain:
+    m.get_root().add_child(rain_group)
+else:
+    m.get_root().add_child(folium.LayerControl().add_to(m))
     m.get_root().remove(rain_group)
