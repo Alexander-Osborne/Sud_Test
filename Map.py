@@ -1,30 +1,12 @@
 import streamlit as st
 import folium
 import pandas as pd
-import geocoder
 from folium import features
 from streamlit_folium import folium_static
 
-def get_user_location():
-    if "gps" not in st.session_state:
-        return None
-
-    return st.session_state["gps"]
-
-def set_user_location():
-    if "gps" not in st.session_state:
-        g = geocoder.ip('me')
-        if g.latlng:
-            st.session_state["gps"] = g.latlng
-
 def create_map():
-    user_location = get_user_location()
-
-    # If user location is available, use it as the initial zoom location
-    if user_location:
-        map = folium.Map(location=user_location, zoom_start=10, tiles='CartoDB Positron')
-    else:
-        map = folium.Map(location=[53.7647, -0.3490], zoom_start=10, tiles='CartoDB Positron')
+    # Create the map object with the CartoDB Positron tileset and set the initial zoom location to England
+    map = folium.Map(location=[53.0, -1.0], zoom_start=6, tiles='CartoDB Positron')
 
     # Read marker information from the CSV file
     markers_df = pd.read_csv("markers.csv")
@@ -47,8 +29,6 @@ def create_map():
 def main():
     st.title("Monitoring Sites Map")
     st.markdown("Map showing the location of monitoring sites")
-
-    set_user_location()  # Retrieve and store user's GPS coordinates
 
     map = create_map()
     folium_static(map)
