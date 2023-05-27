@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 import folium
 from streamlit_folium import folium_static
 
@@ -40,4 +41,12 @@ selected_rain = st.checkbox("Rain", value=True)
 if not selected_swales:
     for child in m.get_root().children:
         if child.layer_name == 'Swale':
-           
+            m.get_root().remove_child(child)
+
+if not selected_rain:
+    for child in m.get_root().children:
+        if child.layer_name == 'Rain':
+            m.get_root().remove_child(child)
+
+# Display the updated map
+folium_static(m)
