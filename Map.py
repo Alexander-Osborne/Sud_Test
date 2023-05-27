@@ -7,19 +7,19 @@ import random
 def main():
     # Set up the sidebar
     st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox("Go to", ["Map", "Extra Content"])
+    page = st.sidebar.selectbox("Go to", ["Map", "Blank Page"])
 
     # Render the appropriate page based on the selection
     if page == "Map":
         render_map_page()
-    elif page == "Extra Content":
-        render_extra_content_page()
+    elif page == "Blank Page":
+        render_blank_page()
 
 def render_map_page():
-    st.title('SuDS_lab_UK - Wilberforce 001')
+    st.title("Map Page")
 
-    # Create a map object
-    m = folium.Map(location=[51.5074, -0.1278], zoom_start=12)  # London coordinates as an example
+    # Create a map object with CartoDB Positron basemap
+    m = folium.Map(location=[51.5074, -0.1278], zoom_start=12, tiles="CartoDB Positron")
 
     # Generate random markers with classifications
     markers = []
@@ -50,9 +50,9 @@ def render_map_page():
     # Render the map
     folium_static(m)
 
-def render_extra_content_page():
-    st.title("Extra Content")
-    # Your content for the extra page goes here
+def render_blank_page():
+    st.title("Blank Page")
+    # Add content to your blank page here
 
 if __name__ == "__main__":
     main()
