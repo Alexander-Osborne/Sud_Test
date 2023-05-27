@@ -1,8 +1,8 @@
 import streamlit as st
 import folium
 import pandas as pd
-import pydeck as pdk
-import numpy as np
+from folium import features
+from streamlit_folium import folium_static
 
 def create_map():
     # Create the map object with the CartoDB Positron tileset and set the initial zoom location to England
@@ -15,48 +15,46 @@ def create_map():
     for index, row in markers_df.iterrows():
         # Create a custom marker icon with an image
         icon_image = row["marker_icon"]  # Column name in the CSV for marker icon image path
-        icon = folium.features.CustomIcon(icon_image, icon_size=(30, 30))
+        icon = features.CustomIcon(icon_image, icon_size=(30, 30))
 
-        # Add the marker to the map
+        # Generate the HTML for the graph
+        graph_html = generate_graph_html(row["name"])  # Replace "generate_graph_html" with your function to generate the graph HTML
+
+        # Create a popup with the graph HTML
+        popup_content = folium.Popup(graph_html, max_width=800)
+
+        # Add the marker to the map with the custom popup
         marker = folium.Marker(
             location=[row["latitude"], row["longitude"]],
-            popup=row["name"],
+            popup=popup_content,
             tooltip=row["name"],
             icon=icon
-        )
-
-        # Add the marker index as a button on the map
-        marker.add_child(folium.Popup(f'<button onclick="setSelectedMarker({index})">Marker {index + 1}</button>', parse_html=True))
-
-        # Add the marker to the map
-        marker.add_to(map)
+        ).add_to(map)
 
     return map
+
+def generate_graph_html(marker_name):
+    # Replace this function with your code to generate the HTML for the graph
+    # You can use Streamlit components or any other plotting library to generate the graph and return the HTML
+    html = f"""
+        <html>
+        <head>
+            <title>{marker_name} Graph</title>
+        </head>
+        <body>
+            <h1>{marker_name} Graph</h1>
+            <p>Replace this with your graph HTML</p>
+        </body>
+        </html>
+    """
+    return html
 
 def main():
     st.title("Monitoring Sites Map")
     st.markdown("Map showing the location of monitoring sites")
 
     map = create_map()
-    map.save("map.html")
-    st.pydeck_chart(pdk.Deck(
-        map_style="mapbox://styles/mapbox/light-v9",
-        initial_view_state=pdk.ViewState(latitude=53.0, longitude=-1.0, zoom=6),
-        layers=[]
-    ), use_container_width=True)
-
-    selected_marker = st.session_state.get("selected_marker")
-
-    # Display graph below the map when a marker is clicked
-    if selected_marker is not None:
-        st.write(f"You clicked marker {selected_marker + 1}. Here is additional content.")
-
-        # Generate example data for the line chart
-        np.random.seed(selected_marker)
-        data = np.random.randn(100).cumsum()
-
-        # Display the line chart below the map
-        st.line_chart(data)
+    folium_static(map)
 
 if __name__ == "__main__":
     main()
