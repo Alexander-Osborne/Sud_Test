@@ -36,6 +36,9 @@ def render_map_page():
     for classification in markers_data['classification'].unique():
         marker_clusters[classification] = MarkerCluster(name=classification)
 
+    # Define the path to the directory containing custom marker icons
+    icon_directory = 'marker_icons/'
+
     # Add markers to the map
     for _, row in markers_data.iterrows():
         latitude = row['latitude']
@@ -43,7 +46,13 @@ def render_map_page():
         classification = row['classification']
         name = row['name']
 
-        marker = folium.Marker(location=[latitude, longitude], popup=name, tooltip=classification)
+        # Construct the path to the custom marker icon for the classification
+        icon_path = icon_directory + f'icon_{classification.lower()}.png'
+
+        # Create a custom icon
+        custom_icon = folium.CustomIcon(icon_image=icon_path, icon_size=(30, 30))
+
+        marker = folium.Marker(location=[latitude, longitude], popup=name, tooltip=classification, icon=custom_icon)
         marker.add_to(marker_clusters[classification])
 
     # Add marker clusters to the map
