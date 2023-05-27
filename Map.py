@@ -31,7 +31,7 @@ def create_map():
             icon=icon
         ).add_to(map)
 
-        marker.add_child(folium.Popup(f'<div onclick="{js_code}">Click Me</div>', parse_html=True))
+        marker.add_child(folium.Popup(f'<div onclick="{js_code.replace("\"", "&quot;")}">Click Me</div>', parse_html=True))
 
     return map
 
