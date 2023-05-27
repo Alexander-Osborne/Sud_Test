@@ -18,8 +18,8 @@ def main():
 def render_map_page():
     st.title("Map Page")
 
-    # Create a map object
-    m = folium.Map(location=[51.5074, -0.1278], zoom_start=12)  # London coordinates as an example
+    # Create a map object with CartoDB Positron basemap
+    m = folium.Map(location=[51.5074, -0.1278], zoom_start=12, tiles="CartoDB Positron")
 
     # Generate random markers with classifications
     markers = []
