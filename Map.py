@@ -1,5 +1,4 @@
 import streamlit as st
-import folium
 
 def create_map():
     site = {
@@ -9,30 +8,29 @@ def create_map():
         "url": "https://example.com/site1"
     }
     
-    map = folium.Map(location=[site["latitude"], site["longitude"]], zoom_start=10)
+    map_data = {
+        "name": [site["name"]],
+        "latitude": [site["latitude"]],
+        "longitude": [site["longitude"]],
+        "url": [site["url"]]
+    }
     
-    folium.Marker(
-        location=[site["latitude"], site["longitude"]],
-        popup=site["name"],
-        tooltip=site["name"]
-    ).add_to(map)
-    
-    return map
+    return map_data
 
 def main():
     st.title("Monitoring Sites Map")
     st.markdown("Map showing the location of monitoring sites")
 
-    map = create_map()
-    folium_static(map)
-
+    map_data = create_map()
+    st.map(map_data)
+    
     site = {
         "name": "Site 1",
         "url": "https://example.com/site1"
     }
-
+    
     if st.button(f"Click here for more info about {site['name']}"):
-        st.markdown(f"Redirecting to [{site['url']}]({site['url']})")
+        st.write("Redirecting to", site["url"])
         # Perform the redirection to site["url"]
 
 if __name__ == "__main__":
