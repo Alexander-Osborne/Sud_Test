@@ -1,7 +1,8 @@
 import streamlit as st
 import folium
-from streamlit_folium import folium_static, CustomJSElement
+from streamlit_folium import folium_static
 from folium.plugins import MarkerCluster
+from streamlit_folium import CustomJSElement
 
 # Add a title to your app
 st.title("Map App")
