@@ -1,5 +1,6 @@
 import streamlit as st
 import folium
+from streamlit_folium import folium_static
 
 # Add a title to your app
 st.title("Map App")
@@ -18,12 +19,8 @@ marker2 = folium.Marker([51.5072, -0.1276], popup='Marker 2')
 m.add_child(marker1)
 m.add_child(marker2)
 
-# Display the map using Folium's iframe method
-folium_static = folium.Figure(width=800, height=500)
-folium_static.add_child(m)
-
 # Render the map in Streamlit
-st.markdown(folium_static._repr_html_(), unsafe_allow_html=True)
+folium_static(m)
 
 # Add a sub-window for the selected marker
 selected_marker = st.selectbox("Select a marker", ["Marker 1", "Marker 2"])
