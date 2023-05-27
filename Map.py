@@ -60,13 +60,13 @@ def main():
         st.write(f"You clicked marker {selected_marker + 1}. Here is additional content.")
 
         # Generate example data for the line chart
-        # Retrieve secrets from Streamlit Secrets
+# Retrieve secrets from Streamlit Secrets
 secret_key = st.secrets["secret_key"]
 api_key = st.secrets["api_key"]
 station_id = st.secrets["station_id"]
 
 # Define the number of days to retrieve data for
-num_days = 1
+num_days = 14
 
 # Initialize an empty list to store the data frames for each day
 data_frames = []
@@ -160,13 +160,16 @@ for i in range(num_days):
 combined_df = pd.concat(data_frames)
 
 # Display the line chart for 'depth'
-st.line_chart(depth_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
-                     
+st.line_chart(combined_df[['ts', 'depth']].rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
+
 # Display the line chart for 'temperature'
-st.line_chart(temperature_data.rename(columns={'ts': 'DateTime', 'temp': 'Temperature (\u00B0C)'}).set_index('DateTime'))
+st.line_chart(combined_df[['ts', 'temp']].rename(columns={'ts': 'DateTime', 'temp': 'Temperature (\u00B0C)'}).set_index('DateTime'))
 
 # Display the line chart for 'salinity'
-st.line_chart(salinity_data.rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
+st.line_chart(combined_df[['ts', 'salinity']].rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
 
+# Download button for CSV file
+csv_data = combined_df.to_csv(index=False)
+b64 = base64.b64encode(csv_data.encode()).decode()
 if __name__ == "__main__":
     main()
