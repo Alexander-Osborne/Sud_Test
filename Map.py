@@ -68,11 +68,6 @@ def render_blank_page():
     # Create a DataFrame with a single row containing Hull University coordinates
     df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
 
-    # Load the image
-    image = Image.open('Swale.jpg')
-
-    st.subheader('Image')
-    st.image(image, caption='Outfall of Swale')
 
     # Retrieve secrets from Streamlit Secrets
     secret_key = st.secrets["secret_key"]
@@ -82,7 +77,7 @@ def render_blank_page():
     # Select the number of days
     num_days = st.slider("Select the number of days", min_value=1, max_value=30, value=1)
 
-    lsid_options = [478072, 123456, 789012]  # Example lsid options, replace with your own values
+    lsid_options = [478072, 478073]  # Example lsid options, replace with your own values
     lsid_to_filter = st.selectbox("Select the lsid to filter", options=lsid_options)
 
     if lsid_to_filter:
