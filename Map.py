@@ -36,8 +36,8 @@ def create_map():
             marker.on('click', onMarkerClick);
         """
 
-        # Add the JavaScript snippet to the map
-        map.add_child(folium.Javascript(js_code))
+        # Add the JavaScript code to the HTML template using Streamlit's components API
+        st.components.v1.html(f'<script>{js_code}</script>')
 
     return map
 
