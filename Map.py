@@ -194,7 +194,11 @@ def render_blank_page():
             # Convert 'moist_soil_last_1' to percentage
             if 'moist_soil_last_1' in df.columns:
                 df['moist_soil_last_1'] = df['moist_soil_last_1'] * 100
-            
+                
+            # Convert 'moist_soil_last_2' to percentage
+            if 'moist_soil_last_2' in df.columns:
+                df['moist_soil_last_2'] = df['moist_soil_last_2'] * 100
+                
             # Append the extracted data to the list
             data_frames.append(df)
 
@@ -217,9 +221,10 @@ def render_blank_page():
         if 'rainfall_mm' in combined_df.columns:
             st.line_chart(combined_df[['ts', 'rainfall_mm']].rename(columns={'ts': 'DateTime', 'rainfall_mm': 'Rainfall'}).set_index('DateTime'))
         
-        # Display the line chart for 'moist_soil_last_1' if available
-        if 'moist_soil_last_1' in combined_df.columns:
-            st.line_chart(combined_df[['ts', 'moist_soil_last_1']].rename(columns={'ts': 'DateTime', 'moist_soil_last_1': 'Soil Moisture'}).set_index('DateTime'))
+        # Display the line chart for 'moist_soil_last_1' and 'moist_soil_last_2' if available
+        if 'moist_soil_last_1' in combined_df.columns and 'moist_soil_last_2' in combined_df.columns:
+            chart_data = combined_df[['ts', 'moist_soil_last_1', 'moist_soil_last_2']].rename(columns={'ts': 'DateTime', 'moist_soil_last_1': 'Soil Moisture 1', 'moist_soil_last_2': 'Soil Moisture 2'})
+            st.line_chart(chart_data.set_index('DateTime'))
 
             
             
