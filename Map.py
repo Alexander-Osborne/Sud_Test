@@ -38,228 +38,35 @@ def generate_graph_html(marker_name):
     # You can use Streamlit components or any other plotting library to generate the graph and return the HTML
     html = f"""
         <html>
-        <head>
-            <title>{marker_name} Graph</title>
-        </head>
-        <body>
-            <h1>{marker_name} Graph</h1>
-            <!-- Horizontal, rounded -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<body>
 
-<div class="container horizontal rounded">
-  <h2>Horizontal, Rounded</h2>
-  <div class="progress-bar horizontal">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>100%</span>
-      </div>
-    </div>
-  </div>
+<div id="myPlot" style="width:100%;max-width:700px"></div>
 
-  <div class="progress-bar horizontal">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>75%</span>
-      </div>
-    </div>
-  </div>
+<script>
+const xArray = [50,60,70,80,90,100,110,120,130,140,150];
+const yArray = [7,8,8,9,9,9,10,11,14,14,15];
 
-  <div class="progress-bar horizontal">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>60%</span>
-      </div>
-    </div>
-  </div>
+// Define Data
+const data = [{
+  x:xArray,
+  y:yArray,
+  mode:"markers"
+}];
 
-  <div class="progress-bar horizontal">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>20%</span>
-      </div>
-    </div>
-  </div>
+// Define Layout
+const layout = {
+  xaxis: {range: [40, 160], title: "Square Meters"},
+  yaxis: {range: [5, 16], title: "Price in Millions"},  
+  title: "House Prices vs. Size"
+};
 
-  <div class="progress-bar horizontal">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>34%</span>
-      </div>
-    </div>
-  </div>
+// Display using Plotly
+Plotly.newPlot("myPlot", data, layout);
+</script>
 
-  <div class="progress-bar horizontal">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>82%</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Horizontal, flat -->
-
-<div class="container horizontal flat">
-  <h2>Horizontal, Flat</h2>
-  <div class="progress-bar horizontal">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>100%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar horizontal">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>75%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar horizontal">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>60%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar horizontal">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>20%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar horizontal">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>34%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar horizontal">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>82%</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- Vertical, rounded -->
-
-
-<div class="container vertical rounded">
-  <h2>Vertical, Rounded</h2>
-  <div class="progress-bar">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>100%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>75%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>60%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>20%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>34%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>82%</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- Vertical, flat -->
-
-
-<div class="container vertical flat">
-  <h2>Vertical, Flat</h2>
-  <div class="progress-bar">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>100%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>75%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>60%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>20%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>34%</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="progress-bar">
-    <div class="progress-track">
-      <div class="progress-fill">
-        <span>82%</span>
-      </div>
-    </div>
-  </div>
-</div>
-        </body>
-        </html>
+</body>
+</html>
     """
     return html
 
