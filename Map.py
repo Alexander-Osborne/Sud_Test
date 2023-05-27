@@ -48,7 +48,7 @@ def main():
 
     # Display the map
     st.title('Map with Markers')
-    folium_static(map)
+    st.markdown(map._repr_html_(), unsafe_allow_html=True)
 
     # Handle marker click events
     if st.button('Click Marker'):
