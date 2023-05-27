@@ -3,6 +3,7 @@ import folium
 import pandas as pd
 from folium import features
 from streamlit_folium import folium_static
+import numpy as np
 
 def create_map():
     # Create the map object with the CartoDB Positron tileset and set the initial zoom location to England
@@ -48,6 +49,12 @@ def main():
     # Display additional content when a marker is clicked
     if selected_marker is not None:
         st.write(f"You clicked marker {selected_marker}. Here is additional content.")
+        # Generate example data for the line chart
+        np.random.seed(selected_marker)
+        data = np.random.randn(100).cumsum()
+
+        # Display the line chart
+        st.line_chart(data)
 
 if __name__ == "__main__":
     main()
