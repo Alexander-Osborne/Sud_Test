@@ -102,7 +102,7 @@ def render_blank_page():
     # Select the number of days
     num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
-    lsid_options = [478072, 478073, 570517, 570522]  # Example lsid options, replace with your own values
+    lsid_options = [478072, 478073, 570517, 570522, 599263]  # Example lsid options, replace with your own values
     lsid_to_filter = st.selectbox("Select Sensor ID", options=lsid_options)
 
     if lsid_to_filter:
@@ -212,7 +212,13 @@ def render_blank_page():
         # Display the line chart for 'rainfall_mm' if available
         if 'rainfall_mm' in combined_df.columns:
             st.line_chart(combined_df[['ts', 'rainfall_mm']].rename(columns={'ts': 'DateTime', 'rainfall_mm': 'Rainfall'}).set_index('DateTime'))
+        
+        # Display the line chart for 'moist_soil_last_1' if available
+        if 'rainfall_mm' in combined_df.columns:
+            st.line_chart(combined_df[['ts', 'moist_soil_last_1']].rename(columns={'ts': 'DateTime', 'moist_soil_last_1': 'Soil Moisture'}).set_index('DateTime'))
 
+            
+            
         # Download button for CSV file
         csv_data = combined_df.to_csv(index=False)
         b64 = base64.b64encode(csv_data.encode()).decode()
