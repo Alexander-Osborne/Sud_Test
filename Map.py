@@ -79,7 +79,7 @@ def main():
 
             # Step 1: Sort parameters by parameter name
             params = {
-              "api-key": api_key,
+             "api-key": api_key,
              "end-timestamp": end_timestamp,
              "start-timestamp": start_timestamp,
               "station-id": station_id,
