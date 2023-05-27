@@ -10,18 +10,22 @@ def main():
         "name": "Site 1",
         "latitude": 37.7749,
         "longitude": -122.4194,
-        "url": "https://example.com/site1"
+        "url": "https://google.com"
     }
     
     map = folium.Map(location=[site["latitude"], site["longitude"]], zoom_start=10)
 
+    marker_html = f'''
+    <a href="{site["url"]}" target="_blank" style="font-weight:bold;">{site["name"]}</a>
+    '''
+
     folium.Marker(
         location=[site["latitude"], site["longitude"]],
-        popup=f'<a href="{site["url"]}" target="_blank">{site["name"]}</a>',
+        popup=folium.Popup(marker_html, max_width=300),
         tooltip=site["name"]
     ).add_to(map)
 
-    st_folium(map)
+    folium_static(map)
 
 if __name__ == "__main__":
     main()
