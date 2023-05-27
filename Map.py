@@ -5,7 +5,7 @@ from streamlit_folium import folium_static
 
 def create_map():
     # Create the map object with a different tileset
-    map = folium.Map(location=[37.7749, -122.4194], zoom_start=10, tiles='Stamen Terrain')
+    map = folium.Map(location=[53.7647, -0.3490], zoom_start=10, tiles='Stamen Terrain')
     
     site = {
         "name": "Site 1",
