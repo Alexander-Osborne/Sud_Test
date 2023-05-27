@@ -19,22 +19,20 @@ def create_map():
         icon = features.CustomIcon(icon_image, icon_size=(30, 30))
 
         # Define the JavaScript code to be executed on marker click
-        js_code = f'''
-            Streamlit.setComponentValue("selected_marker", {index});
-        '''
+        js_code = f"Streamlit.setComponentValue('selected_marker', {index});"
 
-        # Escape the quotation marks inside the JavaScript code
-        js_code_escaped = js_code.replace('"', '&quot;')
+        # Generate the marker's popup content dynamically using JavaScript
+        popup_content = f"""
+            <div onclick="{js_code}" style="cursor: pointer;">Click Me</div>
+        """
 
         # Add the marker to the map and attach the JavaScript code to the marker's onclick event
         marker = folium.Marker(
             location=[row["latitude"], row["longitude"]],
-            popup=row["name"],
+            popup=popup_content,
             tooltip=row["name"],
             icon=icon
         ).add_to(map)
-
-        marker.add_child(folium.Popup(f'<div onclick="{js_code_escaped}">Click Me</div>', parse_html=True))
 
     return map
 
