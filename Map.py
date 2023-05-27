@@ -39,10 +39,21 @@ def render_map_page():
         markers.append((marker, feature_group))
 
     # Add layer control to toggle markers
-    folium.LayerControl().add_to(m)
+    layer_control = folium.plugins.GroupedLayerControl(collapsed=False)
+    layer_control.add_to(m)
 
     # Render the map
     folium_static(m)
+
+    # Checkbox to toggle markers
+    selected_classes = st.multiselect("Select Classes", classes, default=classes)
+
+    # Filter and display markers based on selected classes
+    for marker, feature_group in markers:
+        if feature_group.name in selected_classes:
+            feature_group.add_to(m)
+        else:
+            feature_group.get_root().remove_child(feature_group)
 
 def render_blank_page():
     st.title("Blank Page")
