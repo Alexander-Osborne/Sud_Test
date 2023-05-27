@@ -102,7 +102,7 @@ def render_blank_page():
     # Select the number of days
     num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
-    lsid_options = [478072, 478073]  # Example lsid options, replace with your own values
+    lsid_options = [478072, 478073,570517]  # Example lsid options, replace with your own values
     lsid_to_filter = st.selectbox("Select Sensor ID", options=lsid_options)
 
     if lsid_to_filter:
@@ -189,6 +189,8 @@ def render_blank_page():
             df['salinity'] = df['salinity']
 
             df['temp'] = (df['temp'] - 32) * 5 / 9
+            
+            df['rainfall_mm'] = df['rainfall_mm']
 
             # Append the extracted data to the list
             data_frames.append(df)
@@ -205,6 +207,9 @@ def render_blank_page():
         # Display the line chart for 'salinity'
         st.line_chart(combined_df[['ts', 'salinity']].rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
 
+        # Display the line chart for 'salinity'
+        st.line_chart(combined_df[['ts', 'rainfall_mm']].rename(columns={'ts': 'DateTime', 'rainfall_mm': 'Rainfall'}).set_index('DateTime'))
+        
         # Download button for CSV file
         csv_data = combined_df.to_csv(index=False)
         b64 = base64.b64encode(csv_data.encode()).decode()
