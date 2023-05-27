@@ -102,7 +102,7 @@ def render_blank_page():
     # Select the number of days
     num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
-    lsid_options = [478072, 478073, 570517]  # Example lsid options, replace with your own values
+    lsid_options = [478072, 478073, 570517, 570522]  # Example lsid options, replace with your own values
     lsid_to_filter = st.selectbox("Select Sensor ID", options=lsid_options)
 
     if lsid_to_filter:
