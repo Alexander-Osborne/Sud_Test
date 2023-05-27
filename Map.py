@@ -214,7 +214,7 @@ def render_blank_page():
             st.line_chart(combined_df[['ts', 'rainfall_mm']].rename(columns={'ts': 'DateTime', 'rainfall_mm': 'Rainfall'}).set_index('DateTime'))
         
         # Display the line chart for 'moist_soil_last_1' if available
-        if 'rainfall_mm' in combined_df.columns:
+        if 'moist_soil_last_1' in combined_df.columns:
             st.line_chart(combined_df[['ts', 'moist_soil_last_1']].rename(columns={'ts': 'DateTime', 'moist_soil_last_1': 'Soil Moisture'}).set_index('DateTime'))
 
             
