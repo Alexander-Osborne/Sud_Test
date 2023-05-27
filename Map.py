@@ -64,7 +64,7 @@ def render_map_page():
 
         # Construct the tooltip content with the name and thumbnail image
         thumbnail_html = f'<img src="{image_url}" alt="Thumbnail" width="100">'
-        tooltip_content = f"<b>{name}</b><br>{thumbnail_html}"
+        tooltip_content = f"<b>{name}</b><br>{thumbnail_html}<br><i>{additional_details}</i>"
 
         # Create the popup content with the name and larger image
         popup_html = f'<h4>{name}</h4><img src="{image_url}" alt="Image" width="300">'
