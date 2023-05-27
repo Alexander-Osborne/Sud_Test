@@ -1,52 +1,58 @@
 import streamlit as st
 import pandas as pd
 import folium
-from streamlit_folium import folium_static
+import numpy as np
+import matplotlib.pyplot as plt
 
-# Create a Streamlit app and set a title
-st.title("Map App")
+# Generate random data for the map markers
+def generate_random_data(num_markers):
+    data = pd.DataFrame({
+        'latitude': np.random.uniform(-90, 90, num_markers),
+        'longitude': np.random.uniform(-180, 180, num_markers)
+    })
+    return data
 
-# Define the map location and zoom level
-latitude = 51.5074  # London, UK
-longitude = -0.1278
-zoom_level = 10
+# Create a map with markers
+def create_map(data):
+    # Create a map centered on a specific location
+    map_center = [data['latitude'].mean(), data['longitude'].mean()]
+    m = folium.Map(location=map_center, zoom_start=12)
 
-# Create a sample dataframe with marker data and types
-data = {
-    'Marker': ['Marker 1', 'Marker 2', 'Marker 3'],
-    'Latitude': [51.5074, 51.5072, 51.5080],
-    'Longitude': [-0.1278, -0.1276, -0.1280],
-    'Type': ['swale', 'rain', 'swale']
-}
-df = pd.DataFrame(data)
+    # Add markers to the map
+    for index, row in data.iterrows():
+        folium.Marker(
+            location=[row['latitude'], row['longitude']],
+            icon=folium.Icon(icon='cloud')
+        ).add_to(m)
 
-# Create a folium map
-m = folium.Map(location=[latitude, longitude], zoom_start=zoom_level)
+    return m
 
-# Iterate through the dataframe and add markers based on types
-for _, row in df.iterrows():
-    if row['Type'] == 'swale':
-        folium.Marker([row['Latitude'], row['Longitude']], popup=row['Marker'], icon=folium.Icon(color='blue')).add_to(m)
-    elif row['Type'] == 'rain':
-        folium.Marker([row['Latitude'], row['Longitude']], popup=row['Marker'], icon=folium.Icon(color='green')).add_to(m)
+# Generate random data for the graph
+def generate_random_graph():
+    # Generate random data for the graph
+    x = np.linspace(0, 10, 100)
+    y = np.random.randn(100)
 
-# Display the map in Streamlit
-folium_static(m)
+    # Create and display the graph
+    fig, ax = plt.subplots()
+    ax.plot(x, y)
+    st.pyplot(fig)
 
-# Get the selected markers
-selected_swales = st.checkbox("Swales", value=True)
-selected_rain = st.checkbox("Rain", value=True)
+# Main function
+def main():
+    # Generate random data for the map markers
+    data = generate_random_data(num_markers=10)
 
-# Update the map based on the selected checkboxes
-if not selected_swales:
-    for child in m.get_root().children:
-        if child.layer_name == 'Swale':
-            m.get_root().remove_child(child)
+    # Create the map
+    map = create_map(data)
 
-if not selected_rain:
-    for child in m.get_root().children:
-        if child.layer_name == 'Rain':
-            m.get_root().remove_child(child)
+    # Display the map
+    st.title('Map with Markers')
+    folium_static(map)
 
-# Display the updated map
-folium_static(m)
+    # Handle marker click events
+    if st.button('Click Marker'):
+        generate_random_graph()
+
+if __name__ == '__main__':
+    main()
