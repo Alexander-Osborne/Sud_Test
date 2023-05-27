@@ -1,5 +1,6 @@
 import streamlit as st
 import folium
+from folium import plugins
 from streamlit_folium import folium_static
 
 def create_map():
@@ -12,10 +13,14 @@ def create_map():
         "url": "https://example.com/site1"
     }
     
+    # Create a custom marker icon
+    icon = folium.features.CustomIcon("Swale_image.png", icon_size=(30, 30))
+    
     folium.Marker(
         location=[site["latitude"], site["longitude"]],
         popup=f'<a href="{site["url"]}" target="_blank">{site["name"]}</a>',
-        tooltip=site["name"]
+        tooltip=site["name"],
+        icon=icon  # Set the custom icon
     ).add_to(map)
     
     return map
