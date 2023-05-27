@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
-import plotly.graph_objects as go
+import folium
+from streamlit_folium import folium_static
+import matplotlib.pyplot as plt
 import numpy as np
 
 # Create a Streamlit app and set a title
@@ -19,44 +21,24 @@ data = {
 }
 df = pd.DataFrame(data)
 
-# Create a scattermapbox plot
-fig = go.Figure(go.Scattermapbox(
-    lat=df['Latitude'],
-    lon=df['Longitude'],
-    mode='markers',
-    marker=go.scattermapbox.Marker(
-        size=10,
-        color='blue'
-    ),
-    text=df['Marker']
-))
+# Create a folium map
+m = folium.Map(location=[latitude, longitude], zoom_start=zoom_level)
 
-# Set the layout for the map
-fig.update_layout(
-    mapbox=dict(
-        style='open-street-map',
-        center=dict(lat=latitude, lon=longitude),
-        zoom=zoom_level
-    ),
-    margin=dict(l=0, r=0, t=0, b=0)
-)
+# Add markers to the map
+for i, row in df.iterrows():
+    folium.Marker([row['Latitude'], row['Longitude']], popup=row['Marker']).add_to(m)
 
-# Render the map in Streamlit
-st.plotly_chart(fig)
+# Display the map in Streamlit
+folium_static(m)
 
 # Get the current map view
-map_data = st.pydeck_chart(viewport=st.deck_gl_chart.get_view_state())
+lat_range = st.slider("Latitude Range", min_value=-90.0, max_value=90.0, value=(latitude-1, latitude+1), step=0.1)
+lon_range = st.slider("Longitude Range", min_value=-180.0, max_value=180.0, value=(longitude-1, longitude+1), step=0.1)
 
-# Generate graphs based on the current map view
-if map_data is not None:
-    lat_range = [map_data["latitude"] - map_data["latitude_delta"] / 2,
-                 map_data["latitude"] + map_data["latitude_delta"] / 2]
-    lon_range = [map_data["longitude"] - map_data["longitude_delta"] / 2,
-                 map_data["longitude"] + map_data["longitude_delta"] / 2]
+# Generate random data for the graph
+x = np.linspace(lat_range[0], lat_range[1], 100)
+y = np.sin(x)
 
-    # Generate random data for the graph
-    x = np.linspace(lat_range[0], lat_range[1], 100)
-    y = np.sin(x)
-
-    # Display the graph based on the current map view
-    st.plotly_chart(go.Figure(data=go.Scatter(x=x, y=y), layout=go.Layout(height=400)))
+# Plot the graph based on the current map view
+plt.plot(x, y)
+st.pyplot(plt)
