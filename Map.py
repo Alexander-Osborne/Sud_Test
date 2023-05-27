@@ -1,6 +1,6 @@
 import streamlit as st
 import folium
-from streamlit_folium import folium_static
+from streamlit_folium import folium_static, CustomJSElement
 from folium.plugins import MarkerCluster
 
 # Add a title to your app
@@ -22,10 +22,12 @@ function(e){
         .bindPopup("Marker")
         .addTo(markerCluster);
 }
+
+map.on("click", callback);
 '''
 
-# Add the JavaScript callback function to the map
-folium.Javascript(callback).add_to(m)
+# Add the JavaScript callback function to the map using CustomJSElement
+CustomJSElement(callback).add_to(m)
 
 # Add the marker cluster group to the map
 m.add_child(marker_cluster)
