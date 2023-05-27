@@ -50,15 +50,17 @@ def main():
 
     selected_marker = st.session_state.get("selected_marker")
 
-    # Display additional content when a marker is clicked
+    # Display sidebar when a marker is clicked
     if selected_marker is not None:
-        st.write(f"You clicked marker {selected_marker}. Here is additional content.")
+        st.sidebar.title("Marker Details")
+        st.sidebar.write(f"You clicked marker {selected_marker}. Here is additional content.")
+        
         # Generate example data for the line chart
         np.random.seed(selected_marker)
         data = np.random.randn(100).cumsum()
 
-        # Display the line chart
-        st.line_chart(data)
+        # Display the line chart in the sidebar
+        st.sidebar.line_chart(data)
 
 if __name__ == "__main__":
     main()
