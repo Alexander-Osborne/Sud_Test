@@ -3,6 +3,7 @@ import folium
 import pandas as pd
 from folium import features
 from streamlit_folium import folium_static
+import numpy as np
 
 def create_map():
     # Create the map object with the CartoDB Positron tileset and set the initial zoom location to England
@@ -17,61 +18,22 @@ def create_map():
         icon_image = row["marker_icon"]  # Column name in the CSV for marker icon image path
         icon = features.CustomIcon(icon_image, icon_size=(30, 30))
 
-        # Generate the HTML for the graph
-        graph_html = generate_graph_html(row["name"])  # Replace "generate_graph_html" with your function to generate the graph HTML
-
-        # Create a popup with the graph HTML
-        popup_content = folium.Popup(graph_html, max_width=800)
-
-        # Add the marker to the map with the custom popup
+        # Add the marker to the map
         marker = folium.Marker(
             location=[row["latitude"], row["longitude"]],
-            popup=popup_content,
+            popup=row["name"],
             tooltip=row["name"],
             icon=icon
         ).add_to(map)
 
+        # Add the marker index as a button on the sidebar
+        button = st.sidebar.button(f"Marker {index + 1}")
+
+        # Set the selected_marker value when the button is clicked
+        if button:
+            st.session_state.selected_marker = index
+
     return map
-
-def generate_graph_html(marker_name):
-    # Replace this function with your code to generate the HTML for the graph
-    # You can use Streamlit components or any other plotting library to generate the graph and return the HTML
-    html = f"""
-        <html>
-        <head>
-            <title>{marker_name} Graph</title>
-            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-        </head>
-        <body>
-
-        <div id="myPlot" style="width:100%;max-width:700px"></div>
-
-        <script>
-        const xArray = [50,60,70,80,90,100,110,120,130,140,150];
-        const yArray = [7,8,8,9,9,9,10,11,14,14,15];
-
-        // Define Data
-        const data = [{
-          x: xArray,
-          y: yArray,
-          mode: "markers"
-        }];
-
-        // Define Layout
-        const layout = {
-          xaxis: { range: [40, 160], title: "Square Meters" },
-          yaxis: { range: [5, 16], title: "Price in Millions" },  
-          title: "House Prices vs. Size"
-        };
-
-        // Display using Plotly
-        Plotly.newPlot("myPlot", data, layout);
-        </script>
-
-        </body>
-        </html>
-    """
-    return html
 
 def main():
     st.title("Monitoring Sites Map")
@@ -80,7 +42,18 @@ def main():
     map = create_map()
     folium_static(map)
 
+    selected_marker = st.session_state.get("selected_marker")
+
+    # Display graph below the map when a marker is clicked
+    if selected_marker is not None:
+        st.write(f"You clicked marker {selected_marker + 1}. Here is additional content.")
+
+        # Generate example data for the line chart
+        np.random.seed(selected_marker)
+        data = np.random.randn(100).cumsum()
+
+        # Display the line chart below the map
+        st.line_chart(data)
+
 if __name__ == "__main__":
     main()
-
-    
