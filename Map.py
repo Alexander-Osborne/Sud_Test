@@ -28,7 +28,11 @@ def render_map_page():
     # Load markers data from CSV
     markers_data = pd.read_csv('markers.csv')  # Replace 'markers.csv' with your CSV file path
 
-    m = folium.Map(location=[51.5074, -0.1278], zoom_start=12, tiles="CartoDB Positron")
+    # Coordinates of Hull
+    hull_coordinates = (53.7701, -0.3672)
+
+    m = folium.Map(location=hull_coordinates, zoom_start=12, tiles="CartoDB Positron")
+
 
     marker_clusters = {}
 
