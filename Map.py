@@ -26,10 +26,8 @@ def create_map():
             icon=icon
         ).add_to(map)
 
-        # Set the selected_marker value when the marker is clicked
-        button = st.button(f"Marker {index + 1}", key=f"marker_{index}")
-        if button:
-            st.session_state.selected_marker = index
+        # Add the marker index as a button on the map
+        map.add_child(folium.Popup(f'<button onclick="Streamlit.setComponentValue(\'selected_marker\', {index})">Marker {index + 1}</button>', parse_html=True))
 
     return map
 
@@ -51,8 +49,7 @@ def main():
         data = np.random.randn(100).cumsum()
 
         # Display the line chart below the map
-        chart_placeholder = st.empty()
-        chart_placeholder.line_chart(data)
+        st.line_chart(data)
 
 if __name__ == "__main__":
     main()
