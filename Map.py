@@ -1,37 +1,52 @@
 import streamlit as st
 import folium
-import random
+import numpy as np
+import matplotlib.pyplot as plt
 
+# Create a map with Hull University marker
+def create_map():
+    # Create a map centered on Hull University
+    map_center = [53.7677, -0.3665]  # Hull University coordinates
+    m = folium.Map(location=map_center, zoom_start=15)
+
+    # Add marker for Hull University
+    folium.Marker(
+        location=[53.7677, -0.3665],  # Hull University coordinates
+        popup="Hull University",
+        icon=folium.Icon(icon='cloud')
+    ).add_to(m)
+
+    return m
+
+# Generate random data for the graph
+def generate_random_data():
+    # Generate random data for the graph
+    x = np.linspace(0, 10, 100)
+    y = np.random.randn(100)
+
+    return x, y
+
+# Generate and display the graph
+def display_graph(x, y):
+    fig, ax = plt.subplots()
+    ax.plot(x, y)
+    st.pyplot(fig)
+
+# Main function
 def main():
-    # Set up the sidebar
-    st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox("Go to", ["Map", "Blank Page"])
+    # Create the map
+    map = create_map()
 
-    # Render the appropriate page based on the selection
-    if page == "Map":
-        render_map_page()
-    elif page == "Blank Page":
-        render_blank_page()
+    # Display the map
+    st.title('Map with Markers')
+    folium_static(map)
 
-def render_map_page():
-    st.title("Map Page")
+    # Handle marker click events
+    if st.button('Click Marker'):
+        # Generate random data for the graph
+        x, y = generate_random_data()
+        # Display the graph
+        display_graph(x, y)
 
-    # Create a map object
-    m = folium.Map(location=[51.5074, -0.1278], zoom_start=12)  # London coordinates as an example
-
-    # Generate random markers
-    for _ in range(10):
-        latitude = random.uniform(51.4, 51.6)
-        longitude = random.uniform(-0.2, 0.2)
-        marker = folium.Marker(location=[latitude, longitude], popup='Random Location')
-        marker.add_to(m)
-
-    # Render the map
-    folium_static(m)
-
-def render_blank_page():
-    st.title("Blank Page")
-    # Add content to your blank page here
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
