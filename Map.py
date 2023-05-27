@@ -23,6 +23,9 @@ def create_map():
             Streamlit.setComponentValue("selected_marker", {index});
         '''
 
+        # Escape the quotation marks inside the JavaScript code
+        js_code_escaped = js_code.replace('"', '&quot;')
+
         # Add the marker to the map and attach the JavaScript code to the marker's onclick event
         marker = folium.Marker(
             location=[row["latitude"], row["longitude"]],
@@ -31,7 +34,7 @@ def create_map():
             icon=icon
         ).add_to(map)
 
-        marker.add_child(folium.Popup(f'<div onclick="{js_code.replace("\"", "&quot;")}">Click Me</div>', parse_html=True))
+        marker.add_child(folium.Popup(f'<div onclick="{js_code_escaped}">Click Me</div>', parse_html=True))
 
     return map
 
