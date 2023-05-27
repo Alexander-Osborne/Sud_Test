@@ -66,7 +66,7 @@ def main():
         station_id = st.secrets["station_id"]
 
         # Define the number of days to retrieve data for
-        num_days = 14
+        num_days = 1
 
         # Initialize an empty list to store the data frames for each day
         data_frames = []
