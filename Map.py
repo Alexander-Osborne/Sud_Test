@@ -30,10 +30,10 @@ fig = go.Figure(go.Scattermapbox(
     text=df['Marker']
 ))
 
-# Set the mapbox style and center the map
+# Set the layout for the map
 fig.update_layout(
     mapbox=dict(
-        style='carto-positron',
+        style='open-street-map',
         center=dict(lat=latitude, lon=longitude),
         zoom=zoom_level
     ),
