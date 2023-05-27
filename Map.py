@@ -1,6 +1,6 @@
 import streamlit as st
 import folium
-from streamlit_folium import st_folium
+from streamlit_folium import folium_static
 
 def main():
     st.title("Monitoring Sites Map")
@@ -26,7 +26,7 @@ def main():
         tooltip=site["name"]
     ).add_to(map)
 
-    folium_static(map)
+    st_folium(map)
 
 if __name__ == "__main__":
     main()
