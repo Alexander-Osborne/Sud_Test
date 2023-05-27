@@ -31,7 +31,7 @@ def render_map_page():
     # Coordinates of Hull
     hull_coordinates = (53.7701, -0.3672)
 
-    m = folium.Map(location=hull_coordinates, zoom_start=12, tiles="Stamen Toner")
+    m = folium.Map(location=hull_coordinates, zoom_start=12, tiles="Stamen Toner",max_zoom = 25)
 
     marker_clusters = {}
 
