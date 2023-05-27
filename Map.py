@@ -1,58 +1,36 @@
 import streamlit as st
-import pandas as pd
 import folium
-import numpy as np
-import matplotlib.pyplot as plt
 
-# Generate random data for the map markers
-def generate_random_data(num_markers):
-    data = pd.DataFrame({
-        'latitude': np.random.uniform(-90, 90, num_markers),
-        'longitude': np.random.uniform(-180, 180, num_markers)
-    })
-    return data
+def main():
+    # Set up the sidebar
+    st.sidebar.title("Navigation")
+    page = st.sidebar.selectbox("Go to", ["Map", "Blank Page"])
 
-# Create a map with markers
-def create_map(data):
-    # Create a map centered on a specific location
-    map_center = [data['latitude'].mean(), data['longitude'].mean()]
-    m = folium.Map(location=map_center, zoom_start=12)
+    # Render the appropriate page based on the selection
+    if page == "Map":
+        render_map_page()
+    elif page == "Blank Page":
+        render_blank_page()
+
+def render_map_page():
+    st.title("Map Page")
+
+    # Create a map object
+    m = folium.Map(location=[latitude, longitude], zoom_start=12)
 
     # Add markers to the map
-    for index, row in data.iterrows():
-        folium.Marker(
-            location=[row['latitude'], row['longitude']],
-            icon=folium.Icon(icon='cloud')
-        ).add_to(m)
+    marker1 = folium.Marker(location=[latitude1, longitude1], popup='Location 1')
+    marker1.add_to(m)
 
-    return m
+    marker2 = folium.Marker(location=[latitude2, longitude2], popup='Location 2')
+    marker2.add_to(m)
 
-# Generate random data for the graph
-def generate_random_graph():
-    # Generate random data for the graph
-    x = np.linspace(0, 10, 100)
-    y = np.random.randn(100)
+    # Render the map
+    folium_static(m)
 
-    # Create and display the graph
-    fig, ax = plt.subplots()
-    ax.plot(x, y)
-    st.pyplot(fig)
+def render_blank_page():
+    st.title("Blank Page")
+    # Add content to your blank page here
 
-# Main function
-def main():
-    # Generate random data for the map markers
-    data = generate_random_data(num_markers=10)
-
-    # Create the map
-    map = create_map(data)
-
-    # Display the map
-    st.title('Map with Markers')
-    folium_static(map)
-
-    # Handle marker click events
-    if st.button('Click Marker'):
-        generate_random_graph()
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
