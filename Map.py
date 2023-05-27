@@ -197,7 +197,7 @@ def render_blank_page():
                 
             # Convert 'moist_soil_last_2' to percentage
             if 'moist_soil_last_2' in df.columns:
-                df['moist_soil_last_2'] = df['moist_soil_last_2'] * 100
+                df['moist_soil_last_2'] = df['moist_soil_last_2'] * 1
                 
             # Append the extracted data to the list
             data_frames.append(df)
