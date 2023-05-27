@@ -71,8 +71,6 @@ def render_blank_page():
     # Load the image
     image = Image.open('Swale.jpg')
 
-  
-
     st.subheader('Image')
     st.image(image, caption='Outfall of Swale')
 
@@ -83,6 +81,9 @@ def render_blank_page():
 
     # Select the number of days
     num_days = st.slider("Select the number of days", min_value=1, max_value=30, value=1)
+
+    # User input for lsid_to_filter
+    lsid_to_filter = st.number_input("Enter the lsid to filter", value=478072)
 
     # Initialize an empty list to store the data frames for each day
     data_frames = []
@@ -149,8 +150,7 @@ def render_blank_page():
         # Convert the JSON data into a tree
         tree = json_data
 
-        # Filter the JSON tree based on "lsid" equal to 459397
-        lsid_to_filter = 478072
+        # Filter the JSON tree based on user input for "lsid"
         filtered_tree = filter_tree(tree, lsid_to_filter)
 
         # Extract the relevant information from the JSON
