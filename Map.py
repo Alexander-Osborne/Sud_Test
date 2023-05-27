@@ -1,27 +1,29 @@
-import streamlit as st
 import folium
+import streamlit as st
+
 from streamlit_folium import st_folium
 
-def main():
-    st.title("Monitoring Sites Map")
-    st.markdown("Map showing the location of monitoring sites")
+m = folium.Map(location=[39.949610, -75.150282], zoom_start=13)
 
-    site = {
-        "name": "Site 1",
-        "latitude": 37.7749,
-        "longitude": -122.4194,
-        "url": "https://example.com/site1"
-    }
-    
-    map = folium.Map(location=[site["latitude"], site["longitude"]], zoom_start=10)
+folium.Marker(
+    [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
+).add_to(m)
+folium.Marker(
+    [39.95887, -75.150026],
+    popup="Independence Hall",
+    tooltip="Independence Hall",
+).add_to(m)
+folium.Marker(
+    [39.965570, -75.180966],
+    popup="Philadelphia Museum of Art",
+    tooltip="Philadelphia Museum of Art",
+).add_to(m)
 
-    folium.Marker(
-        location=[site["latitude"], site["longitude"]],
-        popup=f'<a href="{site["url"]}" target="_blank">{site["name"]}</a>',
-        tooltip=site["name"]
-    ).add_to(map)
+c1, c2 = st.columns(2)
+with c1:
+    output = st_folium(
+        m, width=700, height=500, returned_objects=["last_object_clicked"]
+    )
 
-    st_folium(map)
-
-if __name__ == "__main__":
-    main()
+with c2:
+    st.write(output)
