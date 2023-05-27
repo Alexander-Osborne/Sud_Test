@@ -2,7 +2,8 @@ import streamlit as st
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, TapTool, OpenURL
 from bokeh.tile_providers import get_provider, Vendors
-from streamlit.bokeh_events import streamlit_bokeh_events
+from streamlit_bokeh_events import st_bokeh_chart
+
 
 # Define the map location and zoom level
 location = (51.5074, -0.1278)  # London, UK
