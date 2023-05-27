@@ -83,7 +83,7 @@ def render_blank_page():
     station_id = st.secrets["station_id"]
 
     # Select the number of days
-    num_days = st.slider("Select the number of days", min_value=1, max_value=30, value=14)
+    num_days = st.slider("Select the number of days", min_value=1, max_value=30, value=1)
 
     # Initialize an empty list to store the data frames for each day
     data_frames = []
