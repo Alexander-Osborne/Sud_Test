@@ -48,7 +48,7 @@ def render_map_page():
         longitude = row['longitude']
         classification = row['classification']
         name = row['name']
-        additional_details = row['additional_details']  # Add the column name from your CSV that contains additional details
+        image_url = row['image_url']  # Add the column name from your CSV that contains the image URL
 
         # Construct the path to the custom marker icon for the classification
         if classification == 'Swale':
@@ -62,10 +62,15 @@ def render_map_page():
         # Create a custom icon
         custom_icon = folium.CustomIcon(icon_image=icon_path, icon_size=(30, 30))
 
-        # Create the tooltip content with the name and additional details
-        tooltip_content = f"<b>{name}</b><br>{additional_details}"
+        # Construct the tooltip content with the name and thumbnail image
+        thumbnail_html = f'<img src="{image_url}" alt="Thumbnail" width="100">'
+        tooltip_content = f"<b>{name}</b><br>{thumbnail_html}"
 
-        marker = folium.Marker(location=[latitude, longitude], popup=name, tooltip=tooltip_content, icon=custom_icon)
+        # Create the popup content with the name and larger image
+        popup_html = f'<h4>{name}</h4><img src="{image_url}" alt="Image" width="300">'
+        popup = folium.Popup(html=popup_html, max_width=400)
+
+        marker = folium.Marker(location=[latitude, longitude], popup=popup, tooltip=tooltip_content, icon=custom_icon)
         marker.add_to(marker_clusters[classification])
 
     # Add marker clusters to the map
