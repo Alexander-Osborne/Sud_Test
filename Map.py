@@ -14,7 +14,8 @@ zoom_level = 10
 data = {
     'Marker': ['Marker 1', 'Marker 2'],
     'Latitude': [51.5074, 51.5072],
-    'Longitude': [-0.1278, -0.1276]
+    'Longitude': [-0.1278, -0.1276],
+    'URL': ['https://www.google.com', 'https://www.openai.com']
 }
 df = pd.DataFrame(data)
 
@@ -27,7 +28,9 @@ fig = go.Figure(go.Scattermapbox(
         size=10,
         color='blue'
     ),
-    text=df['Marker']
+    text=df['Marker'],
+    customdata=df['URL'],
+    hovertemplate='<b>%{text}</b><br><a href="%{customdata}" target="_blank">Click here</a> to open URL'
 ))
 
 # Set the layout for the map
@@ -42,20 +45,3 @@ fig.update_layout(
 
 # Render the map in Streamlit
 st.plotly_chart(fig)
-
-# Get the selected marker's index
-selected_marker_idx = st.selectbox("Select a marker", range(len(df)), format_func=lambda i: df['Marker'][i])
-
-# Define the JavaScript code snippet
-javascript_code = """
-<script>
-    var marker = document.getElementsByClassName('scattermapbox trace')[0].data[{selected_marker_idx}];
-    marker.on('click', function() {
-        window.open('https://www.google.com', '_blank');
-    });
-</script>
-"""
-
-# Embed the JavaScript code in the app using the component API
-st.components.v1.html(javascript_code)
-
