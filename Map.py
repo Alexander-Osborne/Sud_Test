@@ -45,7 +45,7 @@ fig.update_layout(
 st.plotly_chart(fig)
 
 # Get the current map view
-map_data = st.deck_gl_chart(viewport=st.pydeck_chart.get_view_state())
+map_data = st.pydeck_chart(viewport=st.deck_gl_chart.get_view_state())
 
 # Generate graphs based on the current map view
 if map_data is not None:
