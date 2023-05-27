@@ -175,27 +175,27 @@ def render_blank_page():
             filtered_tree = filter_tree(tree, lsid_to_filter)
 
             # Extract the relevant information from the JSON
-            sensor_data = filtered_tree['sensors'][0]['data']
+sensor_data = filtered_tree['sensors'][0]['data']
 
-            # Convert the data into a DataFrame
-            df = pd.json_normalize(sensor_data)
+# Convert the data into a DataFrame
+df = pd.json_normalize(sensor_data)
 
-            # Convert 'depth' from feet to meters
-            if 'depth' in df.columns:
-            df['depth'] = df['depth'] * 0.3048
+# Convert 'depth' from feet to meters
+if 'depth' in df.columns:
+    df['depth'] = df['depth'] * 0.3048
 
-            # Convert 'ts' from Unix timestamp to datetime
-            df['ts'] = pd.to_datetime(df['ts'], unit='s')
+# Convert 'ts' from Unix timestamp to datetime
+df['ts'] = pd.to_datetime(df['ts'], unit='s')
 
-            # Convert 'temp' from Fahrenheit to Celsius
-            if 'temp' in df.columns:
-            df['temp'] = (df['temp'] - 32) * 5 / 9
+# Convert 'temp' from Fahrenheit to Celsius
+if 'temp' in df.columns:
+    df['temp'] = (df['temp'] - 32) * 5 / 9
 
-            # Append the extracted data to the list
-            data_frames.append(df)
+# Append the extracted data to the list
+data_frames.append(df)
 
-            # Concatenate all the data frames into a single data frame
-            combined_df = pd.concat(data_frames)
+# Concatenate all the data frames into a single data frame
+combined_df = pd.concat(data_frames)
 
 # Display the line chart for 'depth' if available
 if 'depth' in combined_df.columns:
@@ -213,15 +213,11 @@ if 'salinity' in combined_df.columns:
 if 'rainfall_mm' in combined_df.columns:
     st.line_chart(combined_df[['ts', 'rainfall_mm']].rename(columns={'ts': 'DateTime', 'rainfall_mm': 'Rainfall'}).set_index('DateTime'))
 
-        # Download button for CSV file
-        csv_data = combined_df.to_csv(index=False)
-        b64 = base64.b64encode(csv_data.encode()).decode()
-        href = f'<a href="data:file/csv;base64,{b64}" download="SuDSlab_Data.csv">Download SuDSlab Data</a>'
-        st.markdown(href, unsafe_allow_html=True)
+# Download button for CSV file
+csv_data = combined_df.to_csv(index=False)
+b64 = base64.b64encode(csv_data.encode()).decode()
+href = f'<a href="data:file/csv;base64,{b64}" download="SuDSlab_Data.csv">Download SuDSlab Data</a>'
+st.markdown(href, unsafe_allow_html=True)
 
-    else:
-        st.warning("Please enter the lsid value to proceed.")
-
-if __name__ == "__main__":
-    main()
-
+else:
+    st.warning("Please enter the lsid value to proceed.")
