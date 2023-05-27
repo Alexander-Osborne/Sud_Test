@@ -46,13 +46,16 @@ st.plotly_chart(fig)
 # Get the selected marker's index
 selected_marker_idx = st.selectbox("Select a marker", range(len(df)), format_func=lambda i: df['Marker'][i])
 
-# Add custom JavaScript code to handle the click event
-javascript = f"""
-    <script>
+# Define the JavaScript code snippet
+javascript_code = """
+<script>
     var marker = document.getElementsByClassName('scattermapbox trace')[0].data[{selected_marker_idx}];
-    marker.on('click', function() {{
+    marker.on('click', function() {
         window.open('https://www.google.com', '_blank');
-    }});
-    </script>
+    });
+</script>
 """
-st.markdown(javascript, unsafe_allow_html=True)
+
+# Embed the JavaScript code in the app using the component API
+st.components.v1.html(javascript_code)
+
