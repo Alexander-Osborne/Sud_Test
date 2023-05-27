@@ -1,3 +1,3 @@
-﻿latitude,longitude,classification,name,marker_icons
-53.771552,-0.36425564,Swale,Input,Swale_Icon.png
-53.77112399,-0.364314649,Swale,Output,Swale_Icon.png
+﻿latitude,longitude,classification,name,marker_icons,additional_details
+53.771552,-0.36425564,Swale,Input,Swale_Icon.png,478072
+53.77112399,-0.364314649,Swale,Output,Swale_Icon.png,478073
