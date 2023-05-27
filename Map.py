@@ -38,13 +38,6 @@ def render_map_page():
 
         markers.append((marker, feature_group))
 
-    # Add layer control to toggle markers
-    layer_control = folium.plugins.LayersControl(collapsed=False)
-    layer_control.add_to(m)
-
-    # Render the map
-    folium_static(m)
-
     # Checkbox to toggle markers
     selected_classes = st.multiselect("Select Classes", classes, default=classes)
 
@@ -53,7 +46,10 @@ def render_map_page():
         if feature_group.name in selected_classes:
             feature_group.add_to(m)
         else:
-            m.get_root().remove_child(feature_group)
+            m.get_root().add_child(folium.Element(f"<style>.leaflet-pane .leaflet-overlay-pane .{feature_group.get_name().replace(' ', '')} {{display: none;}}</style>"))
+
+    # Render the map
+    folium_static(m)
 
 def render_blank_page():
     st.title("Blank Page")
