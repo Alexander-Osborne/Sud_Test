@@ -6,11 +6,16 @@ from folium import features
 from streamlit_folium import folium_static
 
 def get_user_location():
-    g = geocoder.ip('me')
-    if g.latlng:
-        return g.latlng
-    else:
+    if "gps" not in st.session_state:
         return None
+
+    return st.session_state["gps"]
+
+def set_user_location():
+    if "gps" not in st.session_state:
+        g = geocoder.ip('me')
+        if g.latlng:
+            st.session_state["gps"] = g.latlng
 
 def create_map():
     user_location = get_user_location()
@@ -42,6 +47,8 @@ def create_map():
 def main():
     st.title("Monitoring Sites Map")
     st.markdown("Map showing the location of monitoring sites")
+
+    set_user_location()  # Retrieve and store user's GPS coordinates
 
     map = create_map()
     folium_static(map)
