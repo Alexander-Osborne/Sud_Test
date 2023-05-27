@@ -44,17 +44,19 @@ fig.update_layout(
 # Render the map in Streamlit
 st.plotly_chart(fig)
 
-# Get the selected marker's index
-selected_marker_idx = st.selectbox("Select a marker", range(len(df)), format_func=lambda i: df['Marker'][i])
+# Get the current map view
+map_data = st.deck_gl_chart(viewport=st.pydeck_chart.get_view_state())
 
-# Define random data for the graph
-x = np.linspace(0, 10, 100)
-y = np.sin(x)
+# Generate graphs based on the current map view
+if map_data is not None:
+    lat_range = [map_data["latitude"] - map_data["latitude_delta"] / 2,
+                 map_data["latitude"] + map_data["latitude_delta"] / 2]
+    lon_range = [map_data["longitude"] - map_data["longitude_delta"] / 2,
+                 map_data["longitude"] + map_data["longitude_delta"] / 2]
 
-# Add conditional statements based on the selected marker
-if selected_marker_idx == 0:
-    st.write("You selected Marker 1.")
+    # Generate random data for the graph
+    x = np.linspace(lat_range[0], lat_range[1], 100)
+    y = np.sin(x)
+
+    # Display the graph based on the current map view
     st.plotly_chart(go.Figure(data=go.Scatter(x=x, y=y), layout=go.Layout(height=400)))
-elif selected_marker_idx == 1:
-    st.write("You selected Marker 2.")
-    st.plotly_chart(go.Figure(data=go.Scatter(x=x, y=-y), layout=go.Layout(height=400)))
