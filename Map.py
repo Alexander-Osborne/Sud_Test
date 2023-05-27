@@ -15,13 +15,25 @@ m = folium.Map(location=location, zoom_start=13)
 # Create a marker cluster group
 marker_cluster = MarkerCluster()
 
-# Register the click event handler
-def on_click(e):
-    lat, lon = e.latlng
-    marker = folium.Marker([lat, lon], popup='Marker')
-    marker.add_to(marker_cluster)
+# Add a custom JavaScript callback function for click events
+callback = '''
+function(e){
+    var popup = L.popup()
+        .setLatLng(e.latlng)
+        .setContent("Marker")
+        .openOn(map);
 
-m.add_child(folium.ClickForMarker(callback=on_click))
+    var marker = L.marker(e.latlng)
+        .addTo(markerCluster);
+
+    marker.bindPopup(popup);
+}
+'''
+
+# Add the JavaScript callback function to the map
+m.add_child(folium.Element(callback))
+
+# Add the marker cluster group to the map
 m.add_child(marker_cluster)
 
 # Render the map in Streamlit
