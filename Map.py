@@ -214,10 +214,12 @@ def render_blank_page():
         if 'rainfall_mm' in combined_df.columns:
             st.line_chart(combined_df[['ts', 'rainfall_mm']].rename(columns={'ts': 'DateTime', 'rainfall_mm': 'Rainfall'}).set_index('DateTime'))
         
-        # Display the line chart for 'moist_soil_last_1' and 'moist_soil_last_2' if available
-        if 'moist_soil_last_1' in combined_df.columns and 'moist_soil_last_2' in combined_df.columns:
-            chart_data = combined_df[['ts', 'moist_soil_last_1', 'moist_soil_last_2']].rename(columns={'ts': 'DateTime', 'moist_soil_last_1': 'Soil Moisture 1', 'moist_soil_last_2': 'Soil Moisture 2'})
+        # Check if any of the 'moist_soil_last' columns exist in the combined DataFrame
+        moist_soil_columns = [col for col in combined_df.columns if col.startswith('moist_soil_last_')]
+        if len(moist_soil_columns) > 0:
+            chart_data = combined_df[['ts'] + moist_soil_columns].rename(columns={'ts': 'DateTime'})
             st.line_chart(chart_data.set_index('DateTime'))
+
 
             
             
