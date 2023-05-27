@@ -40,7 +40,7 @@ def render_map_page():
         marker_clusters[classification] = MarkerCluster(name=classification)
 
     # Define the path to the directory containing custom marker icons
-    icon_directory = ''
+    icon_directory = 'marker_icons/'
 
     # Add markers to the map
     for _, row in markers_data.iterrows():
