@@ -1,28 +1,28 @@
 import streamlit as st
 import folium
+import pandas as pd
+from folium import features
 from streamlit_folium import folium_static
 
 def create_map():
     # Create the map object with the CartoDB Positron tileset
     map = folium.Map(location=[53.7647, -0.3490], zoom_start=10, tiles='CartoDB Positron')
 
-    site = {
-        "name": "Hull University",
-        "latitude": 53.7647,
-        "longitude": -0.3490,
-        "url": "https://www.hull.ac.uk/"
-    }
+    # Read marker information from the CSV file
+    markers_df = pd.read_csv("markers.csv")
 
-    # Create a custom marker icon with an image
-    icon_image = 'Swale_image.png'  # Path to the custom marker image
-    icon = folium.features.CustomIcon(icon_image, icon_size=(30, 30))
+    # Create markers for each row in the CSV
+    for index, row in markers_df.iterrows():
+        # Create a custom marker icon with an image
+        icon_image = row["marker_icon"]  # Column name in the CSV for marker icon image path
+        icon = features.CustomIcon(icon_image, icon_size=(30, 30))
 
-    folium.Marker(
-        location=[site["latitude"], site["longitude"]],
-        popup=f'<a href="{site["url"]}" target="_blank">{site["name"]}</a>',
-        tooltip=site["name"],
-        icon=icon
-    ).add_to(map)
+        folium.Marker(
+            location=[row["latitude"], row["longitude"]],
+            popup=f'<a href="{row["url"]}" target="_blank">{row["name"]}</a>',
+            tooltip=row["name"],
+            icon=icon
+        ).add_to(map)
 
     return map
 
