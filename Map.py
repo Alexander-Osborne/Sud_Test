@@ -82,8 +82,8 @@ def render_blank_page():
     api_key = st.secrets["api_key"]
     station_id = st.secrets["station_id"]
 
-    # Define the number of days to retrieve data for
-    num_days = 14
+    # Select the number of days
+    num_days = st.slider("Select the number of days", min_value=1, max_value=30, value=14)
 
     # Initialize an empty list to store the data frames for each day
     data_frames = []
