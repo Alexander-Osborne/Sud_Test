@@ -68,22 +68,19 @@ def render_blank_page():
     # Create a DataFrame with a single row containing Hull University coordinates
     df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
 
-    # Load the image
-    image = Image.open('Swale.jpg')
-
-    st.subheader('Image')
-    st.image(image, caption='Outfall of Swale')
 
     # Retrieve secrets from Streamlit Secrets
     secret_key = st.secrets["secret_key"]
     api_key = st.secrets["api_key"]
     station_id = st.secrets["station_id"]
 
+    # User input for lsid_to_filter
+    lsid_to_filter = st.number_input("Enter the lsid to filter")
+    
     # Select the number of days
     num_days = st.slider("Select the number of days", min_value=1, max_value=30, value=1)
 
-    # User input for lsid_to_filter
-    lsid_to_filter = st.number_input("Enter the lsid to filter")
+
 
     if lsid_to_filter:
         # Initialize an empty list to store the data frames for each day
