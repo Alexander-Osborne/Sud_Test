@@ -46,14 +46,10 @@ selected_swales = st.checkbox("Swales", value=True)
 selected_rain = st.checkbox("Rain", value=True)
 
 # Add or remove marker groups based on selected checkboxes
-if selected_swales:
-    m.get_root().add_child(swale_group)
-else:
+if not selected_swales:
     m.get_root().add_child(folium.LayerControl().add_to(m))
-    m.get_root().remove(swale_group)
+    swale_group.get_root().get_name() in m.get_root().children and m.get_root().remove_child(swale_group)
 
-if selected_rain:
-    m.get_root().add_child(rain_group)
-else:
+if not selected_rain:
     m.get_root().add_child(folium.LayerControl().add_to(m))
-    m.get_root().remove(rain_group)
+    rain_group.get_root().get_name() in m.get_root().children and m.get_root().remove_child(rain_group)
