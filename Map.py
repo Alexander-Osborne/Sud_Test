@@ -43,7 +43,221 @@ def generate_graph_html(marker_name):
         </head>
         <body>
             <h1>{marker_name} Graph</h1>
-            <p>Replace this with your graph HTML</p>
+            <!-- Horizontal, rounded -->
+
+<div class="container horizontal rounded">
+  <h2>Horizontal, Rounded</h2>
+  <div class="progress-bar horizontal">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>100%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar horizontal">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>75%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar horizontal">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>60%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar horizontal">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>20%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar horizontal">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>34%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar horizontal">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>82%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Horizontal, flat -->
+
+<div class="container horizontal flat">
+  <h2>Horizontal, Flat</h2>
+  <div class="progress-bar horizontal">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>100%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar horizontal">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>75%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar horizontal">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>60%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar horizontal">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>20%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar horizontal">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>34%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar horizontal">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>82%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Vertical, rounded -->
+
+
+<div class="container vertical rounded">
+  <h2>Vertical, Rounded</h2>
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>100%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>75%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>60%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>20%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>34%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>82%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Vertical, flat -->
+
+
+<div class="container vertical flat">
+  <h2>Vertical, Flat</h2>
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>100%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>75%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>60%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>20%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>34%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill">
+        <span>82%</span>
+      </div>
+    </div>
+  </div>
+</div>
         </body>
         </html>
     """
