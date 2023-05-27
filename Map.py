@@ -190,7 +190,11 @@ def render_blank_page():
             # Convert 'temp' from Fahrenheit to Celsius
             if 'temp' in df.columns:
                 df['temp'] = (df['temp'] - 32) * 5 / 9
-
+            
+            # Convert 'moist_soil_last_1' to percentage
+            if 'moist_soil_last_1' in df.columns:
+                df['moist_soil_last_1'] = df['moist_soil_last_1'] * 100
+            
             # Append the extracted data to the list
             data_frames.append(df)
 
@@ -215,8 +219,7 @@ def render_blank_page():
         
         # Display the line chart for 'moist_soil_last_1' if available
         if 'moist_soil_last_1' in combined_df.columns:
-             df['moist_soil_last_1'] = df['moist_soil_last_1'] * 100
-                st.line_chart(combined_df[['ts', 'moist_soil_last_1']].rename(columns={'ts': 'DateTime', 'moist_soil_last_1': 'Soil Moisture'}).set_index('DateTime'))
+            st.line_chart(combined_df[['ts', 'moist_soil_last_1']].rename(columns={'ts': 'DateTime', 'moist_soil_last_1': 'Soil Moisture'}).set_index('DateTime'))
 
             
             
