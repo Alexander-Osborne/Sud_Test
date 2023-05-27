@@ -1,3 +1,3 @@
 ﻿latitude,longitude,classification,name,marker_icons,additional_details,image_url
-53.771552,-0.36425564,Swale,Input,Swale_Icon.png,478072,"f'<img src=""https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/4116a924b590a742c5044af3cfe271dbab296cf5/Swale.jpg"" alt=""Thumbnail"" width=""100"">'"
-53.77112399,-0.364314649,Swale,Output,Swale_Icon.png,478073,"f'<img src=""https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/4116a924b590a742c5044af3cfe271dbab296cf5/Swale.jpg"" alt=""Thumbnail"" width=""100"">'"
+53.771552,-0.36425564,Swale,Input,Swale_Icon.png,478072,https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/4116a924b590a742c5044af3cfe271dbab296cf5/Swale.jpg
+53.77112399,-0.364314649,Swale,Output,Swale_Icon.png,478073,https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/4116a924b590a742c5044af3cfe271dbab296cf5/Swale.jpg
