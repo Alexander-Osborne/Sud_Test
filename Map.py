@@ -21,6 +21,7 @@ def create_map():
         js_code = f'''
             var checkbox = document.getElementById('checkbox{index}');
             checkbox.checked = true;
+            Streamlit.setComponentValue("selected_marker", {index});
         '''
 
         # Add the marker to the map and attach the JavaScript code to the marker's onclick event
@@ -42,9 +43,11 @@ def main():
     map = create_map()
     folium_static(map)
 
+    selected_marker = st.session_state.get("selected_marker")
+
     # Display additional content when a marker is clicked
-    if st.checkbox("Show Additional Content"):
-        st.write("This is the additional content that appears when a marker is clicked.")
+    if selected_marker is not None:
+        st.write(f"You clicked marker {selected_marker}. Here is additional content.")
 
 if __name__ == "__main__":
     main()
