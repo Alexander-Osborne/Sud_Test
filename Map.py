@@ -1,30 +1,23 @@
 import streamlit as st
 import folium
-from folium import plugins
 from streamlit_folium import folium_static
 
 def create_map():
-    # Create the map object with a different tileset
-    map = folium.Map(location=[53.7647, -0.3490], zoom_start=10, tiles='Stamen Terrain')
-    
+    map = folium.Map(location=[53.7647, -0.3490], zoom_start=10)
+
     site = {
-        "name": "Site 1",
-        "latitude": 37.7749,
-        "longitude": -122.4194,
-        "url": "https://example.com/site1"
+        "name": "Hull University",
+        "latitude": 53.7647,
+        "longitude": -0.3490,
+        "url": "https://www.hull.ac.uk/"
     }
-    
-    # Create a custom marker icon with an image
-    icon_image = 'Swale_image.png'  # Path to the custom marker image
-    icon = folium.features.CustomIcon(icon_image, icon_size=(30, 30))
-    
+
     folium.Marker(
         location=[site["latitude"], site["longitude"]],
         popup=f'<a href="{site["url"]}" target="_blank">{site["name"]}</a>',
-        tooltip=site["name"],
-        icon=icon
+        tooltip=site["name"]
     ).add_to(map)
-    
+
     return map
 
 def main():
