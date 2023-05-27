@@ -215,7 +215,7 @@ def render_blank_page():
         
         # Display the line chart for 'moist_soil_last_1' if available
         if 'moist_soil_last_1' in combined_df.columns:
-            df['moist_soil_last_1'] = (df['moist_soil_last_1'] *100)
+            df['moist_soil_last_1'] = df['moist_soil_last_1'] *100
             st.line_chart(combined_df[['ts', 'moist_soil_last_1']].rename(columns={'ts': 'DateTime', 'moist_soil_last_1': 'Soil Moisture'}).set_index('DateTime'))
 
             
