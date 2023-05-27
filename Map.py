@@ -1,5 +1,6 @@
 import streamlit as st
 import folium
+import random
 
 def main():
     # Set up the sidebar
@@ -16,14 +17,14 @@ def render_map_page():
     st.title("Map Page")
 
     # Create a map object
-    m = folium.Map(location=[latitude, longitude], zoom_start=12)
+    m = folium.Map(location=[51.5074, -0.1278], zoom_start=12)  # London coordinates as an example
 
-    # Add markers to the map
-    marker1 = folium.Marker(location=[latitude1, longitude1], popup='Location 1')
-    marker1.add_to(m)
-
-    marker2 = folium.Marker(location=[latitude2, longitude2], popup='Location 2')
-    marker2.add_to(m)
+    # Generate random markers
+    for _ in range(10):
+        latitude = random.uniform(51.4, 51.6)
+        longitude = random.uniform(-0.2, 0.2)
+        marker = folium.Marker(location=[latitude, longitude], popup='Random Location')
+        marker.add_to(m)
 
     # Render the map
     folium_static(m)
