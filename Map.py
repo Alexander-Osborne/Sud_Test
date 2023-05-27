@@ -1,8 +1,7 @@
 import streamlit as st
 import folium
 import pandas as pd
-from folium import features
-from streamlit_folium import folium_static
+import pydeck as pdk
 import numpy as np
 
 def create_map():
@@ -16,7 +15,7 @@ def create_map():
     for index, row in markers_df.iterrows():
         # Create a custom marker icon with an image
         icon_image = row["marker_icon"]  # Column name in the CSV for marker icon image path
-        icon = features.CustomIcon(icon_image, icon_size=(30, 30))
+        icon = folium.features.CustomIcon(icon_image, icon_size=(30, 30))
 
         # Add the marker to the map
         marker = folium.Marker(
@@ -24,10 +23,13 @@ def create_map():
             popup=row["name"],
             tooltip=row["name"],
             icon=icon
-        ).add_to(map)
+        )
 
         # Add the marker index as a button on the map
-        map.add_child(folium.Popup(f'<button onclick="Streamlit.setComponentValue(\'selected_marker\', {index})">Marker {index + 1}</button>', parse_html=True))
+        marker.add_child(folium.Popup(f'<button onclick="setSelectedMarker({index})">Marker {index + 1}</button>', parse_html=True))
+
+        # Add the marker to the map
+        marker.add_to(map)
 
     return map
 
@@ -36,7 +38,12 @@ def main():
     st.markdown("Map showing the location of monitoring sites")
 
     map = create_map()
-    folium_static(map)
+    map.save("map.html")
+    st.pydeck_chart(pdk.Deck(
+        map_style="mapbox://styles/mapbox/light-v9",
+        initial_view_state=pdk.ViewState(latitude=53.0, longitude=-1.0, zoom=6),
+        layers=[]
+    ), use_container_width=True)
 
     selected_marker = st.session_state.get("selected_marker")
 
