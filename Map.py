@@ -220,10 +220,10 @@ def render_blank_page():
             chart_data = combined_df[['ts'] + moist_soil_columns].rename(columns={'ts': 'DateTime'})
             st.line_chart(chart_data.set_index('DateTime'))
 
-        # Check if any of the 'moist_soil_last' columns exist in the combined DataFrame
+        # Check if any of the 'salinity_last' columns exist in the combined DataFrame
         salinity_columns = [col for col in combined_df.columns if col.startswith('salinity_last_')]
-        if len(salininty_columns) > 0:
-            chart_data = combined_df[['ts'] + salininty_columns].rename(columns={'ts': 'DateTime'})
+        if len(salinity_columns) > 0:
+            chart_data = combined_df[['ts'] + salinity_columns].rename(columns={'ts': 'DateTime'})
             st.line_chart(chart_data.set_index('DateTime'))
 
             
