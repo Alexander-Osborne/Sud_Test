@@ -43,13 +43,16 @@ fig.update_layout(
 # Render the map in Streamlit
 st.plotly_chart(fig)
 
-# Get the selected marker's coordinates
-selected_marker = st.selectbox("Select a marker", df['Marker'])
+# Get the selected marker's index
+selected_marker_idx = st.selectbox("Select a marker", range(len(df)), format_func=lambda i: df['Marker'][i])
 
-# Add conditional statements based on the selected marker
-if selected_marker == "Marker 1":
-    st.write("You selected Marker 1. Add your Streamlit code here.")
-    # Add your Streamlit code for Marker 1
-elif selected_marker == "Marker 2":
-    st.write("You selected Marker 2. Add your Streamlit code here.")
-    # Add your Streamlit code for Marker 2
+# Add custom JavaScript code to handle the click event
+javascript = f"""
+    <script>
+    var marker = document.getElementsByClassName('scattermapbox trace')[0].data[{selected_marker_idx}];
+    marker.on('click', function() {{
+        window.open('https://www.google.com', '_blank');
+    }});
+    </script>
+"""
+st.markdown(javascript, unsafe_allow_html=True)
