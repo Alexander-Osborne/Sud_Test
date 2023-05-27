@@ -18,7 +18,7 @@ def create_map():
         icon = features.CustomIcon(icon_image, icon_size=(30, 30))
 
         # Define the JavaScript code to be executed on marker click
-        js_code = f'''
+        js_code = """
             var checkbox = document.getElementById('checkbox{index}');
             checkbox.checked = true;
             
@@ -159,15 +159,15 @@ def create_map():
             # Display the line chart for 'salinity'
             st.line_chart(salinity_data.rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
             
-  '''
+ """
             
             
         
 
         # Create a popup with checkbox and JavaScript code
-        popup_content = f'''
+        popup_content = """
             <input type="checkbox" id="checkbox{index}" onclick="{js_code}">Click Me
-        '''
+        """
 
         # Add the marker to the map with the custom popup
         marker = folium.Marker(
