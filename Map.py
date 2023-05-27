@@ -21,17 +21,35 @@ def create_map():
         js_code = f'''
             var checkbox = document.getElementById('checkbox{index}');
             checkbox.checked = true;
+            
+            // Add your code here to run when the marker is clicked
+            // Import the necessary libraries and execute the desired code
+            import hmac
+            import hashlib
+            from urllib.parse import urlencode
+            import time
+            import requests
+            import json
+            import pandas as pd
+            from PIL import Image
+            
+            st.title('SuDS'' _lab_ '' UK - Wilberforce 001')
+            
+            # Rest of your code...
         '''
 
-        # Add the marker to the map and attach the JavaScript code to the marker's onclick event
+        # Create a popup with checkbox and JavaScript code
+        popup_content = f'''
+            <input type="checkbox" id="checkbox{index}" onclick="{js_code}">Click Me
+        '''
+
+        # Add the marker to the map with the custom popup
         marker = folium.Marker(
             location=[row["latitude"], row["longitude"]],
-            popup=row["name"],
+            popup=popup_content,
             tooltip=row["name"],
             icon=icon
         ).add_to(map)
-
-        marker.add_child(folium.Popup(f'<input type="checkbox" id="checkbox{index}" onclick="{js_code}">Click Me'))
 
     return map
 
@@ -41,10 +59,6 @@ def main():
 
     map = create_map()
     folium_static(map)
-
-    # Display additional content when a marker is clicked
-    if st.checkbox("Show Additional Content"):
-        st.write("This is the additional content that appears when a marker is clicked.")
 
 if __name__ == "__main__":
     main()
