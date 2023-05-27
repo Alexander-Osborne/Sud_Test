@@ -52,15 +52,15 @@ def generate_graph_html(marker_name):
 
         // Define Data
         const data = [{
-          x:xArray,
-          y:yArray,
-          mode:"markers"
+          x: xArray,
+          y: yArray,
+          mode: "markers"
         }];
 
         // Define Layout
         const layout = {
-          xaxis: {range: [40, 160], title: "Square Meters"},
-          yaxis: {range: [5, 16], title: "Price in Millions"},  
+          xaxis: { range: [40, 160], title: "Square Meters" },
+          yaxis: { range: [5, 16], title: "Price in Millions" },  
           title: "House Prices vs. Size"
         };
 
@@ -82,3 +82,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    
