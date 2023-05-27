@@ -190,14 +190,7 @@ def render_blank_page():
             # Convert 'temp' from Fahrenheit to Celsius
             if 'temp' in df.columns:
                 df['temp'] = (df['temp'] - 32) * 5 / 9
-            
-            # Convert 'moist_soil_last_1' to percentage
-            if 'moist_soil_last_1' in df.columns:
-                df['moist_soil_last_1'] = df['moist_soil_last_1'] * 100
-                
-            # Convert 'moist_soil_last_2' to percentage
-            if 'moist_soil_last_2' in df.columns:
-                df['moist_soil_last_2'] = df['moist_soil_last_2'] * 1
+         
                 
             # Append the extracted data to the list
             data_frames.append(df)
