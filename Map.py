@@ -85,7 +85,7 @@ def render_map_page():
 
     
 def render_blank_page():
-    st.title('SuDS_lab_UK - Wilberforce 001')
+    st.title('SuDS_lab_UK - Data Viewer')
 
     # Define the coordinates for Hull University
     hull_uni_coordinates = (53.77114698979646, -0.36430683784066786)
