@@ -30,18 +30,23 @@ def render_map_page():
         classification = random.choice(classes)
 
         marker = folium.Marker(location=[latitude, longitude], popup='Random Location', tooltip=classification)
-        marker.add_to(m)
-        markers.append((marker, classification))
 
-    # Get unique classes
-    unique_classes = list(set([c for _, c in markers]))
+        # Create a feature group for each class
+        feature_group = folium.FeatureGroup(name=classification)
+        marker.add_to(feature_group)
+        feature_group.add_to(m)
 
-    # Checkbox to toggle markers
-    selected_classes = st.multiselect("Select Classes", unique_classes, default=unique_classes)
+        markers.append((marker, feature_group))
 
-    # Filter and display markers based on selected classes
-    for marker, classification in markers:
-        if classification in selected_classes:
-            marker.add_to(m)
-        else:
-            marker.add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add_to(m).add
+    # Add layer control to toggle markers
+    folium.LayerControl().add_to(m)
+
+    # Render the map
+    folium_static(m)
+
+def render_blank_page():
+    st.title("Blank Page")
+    # Add content to your blank page here
+
+if __name__ == "__main__":
+    main()
