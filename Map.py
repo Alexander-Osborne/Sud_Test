@@ -3,6 +3,7 @@ import folium
 import numpy as np
 import pandas as pd
 import altair as alt
+import base64
 
 # Create a map with Hull University marker
 def create_map():
@@ -47,7 +48,10 @@ def main():
 
     # Display the map
     st.title('Map with Markers')
-    st.markdown(map._repr_html_(), unsafe_allow_html=True)
+    tmpfile = "map.html"
+    map.save(tmpfile)
+    html = open(tmpfile).read()
+    st.markdown(html, unsafe_allow_html=True)
 
     # Handle marker click events
     if st.button('Click Marker'):
