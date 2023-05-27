@@ -221,3 +221,6 @@ st.markdown(href, unsafe_allow_html=True)
 
 else:
     st.warning("Please enter the lsid value to proceed.")
+
+if __name__ == "__main__":
+main()
