@@ -4,7 +4,8 @@ from folium import plugins
 from streamlit_folium import folium_static
 
 def create_map():
-    map = folium.Map(location=[37.7749, -122.4194], zoom_start=10)
+    # Create the map object with a different tileset
+    map = folium.Map(location=[37.7749, -122.4194], zoom_start=10, tiles='Stamen Terrain')
     
     site = {
         "name": "Site 1",
@@ -13,14 +14,15 @@ def create_map():
         "url": "https://example.com/site1"
     }
     
-    # Create a custom marker icon
-    icon = folium.features.CustomIcon("Swale_image.png", icon_size=(30, 30))
+    # Create a custom marker icon with an image
+    icon_image = 'Swale_image.png'  # Path to the custom marker image
+    icon = folium.features.CustomIcon(icon_image, icon_size=(30, 30))
     
     folium.Marker(
         location=[site["latitude"], site["longitude"]],
         popup=f'<a href="{site["url"]}" target="_blank">{site["name"]}</a>',
         tooltip=site["name"],
-        icon=icon  # Set the custom icon
+        icon=icon
     ).add_to(map)
     
     return map
