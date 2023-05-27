@@ -45,13 +45,13 @@ folium_static(m)
 selected_swales = st.checkbox("Swales", value=True)
 selected_rain = st.checkbox("Rain", value=True)
 
-# Perform actions based on the selected markers
+# Set the visibility of marker groups based on selected checkboxes
 if selected_swales:
-    st.write("Selected Swales:")
-    swale_markers = df.loc[df['Type'] == 'swale', 'Marker']
-    st.write(swale_markers)
+    m.get_root().add_child(swale_group)
+else:
+    m.get_root().remove_child(swale_group)
 
 if selected_rain:
-    st.write("Selected Rain:")
-    rain_markers = df.loc[df['Type'] == 'rain', 'Marker']
-    st.write(rain_markers)
+    m.get_root().add_child(rain_group)
+else:
+    m.get_root().remove_child(rain_group)
