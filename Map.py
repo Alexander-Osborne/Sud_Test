@@ -159,14 +159,14 @@ for i in range(num_days):
 # Concatenate all the data frames into a single data frame
 combined_df = pd.concat(data_frames)
 
-        # Display the line chart for 'depth'
-        st.line_chart(depth_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
+# Display the line chart for 'depth'
+st.line_chart(depth_data.rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
                      
-        # Display the line chart for 'temperature'
-        st.line_chart(temperature_data.rename(columns={'ts': 'DateTime', 'temp': 'Temperature (\u00B0C)'}).set_index('DateTime'))
+# Display the line chart for 'temperature'
+st.line_chart(temperature_data.rename(columns={'ts': 'DateTime', 'temp': 'Temperature (\u00B0C)'}).set_index('DateTime'))
 
-        # Display the line chart for 'salinity'
-        st.line_chart(salinity_data.rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
+# Display the line chart for 'salinity'
+st.line_chart(salinity_data.rename(columns={'ts': 'DateTime', 'salinity': 'Salinity'}).set_index('DateTime'))
 
 if __name__ == "__main__":
     main()
