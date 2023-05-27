@@ -26,10 +26,8 @@ def create_map():
             icon=icon
         ).add_to(map)
 
-        # Add the marker index as a button on the sidebar
-        button = st.sidebar.button(f"Marker {index + 1}")
-
-        # Set the selected_marker value when the button is clicked
+        # Set the selected_marker value when the marker is clicked
+        button = st.button(f"Marker {index + 1}", key=f"marker_{index}")
         if button:
             st.session_state.selected_marker = index
 
@@ -53,7 +51,8 @@ def main():
         data = np.random.randn(100).cumsum()
 
         # Display the line chart below the map
-        st.line_chart(data)
+        chart_placeholder = st.empty()
+        chart_placeholder.line_chart(data)
 
 if __name__ == "__main__":
     main()
