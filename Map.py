@@ -126,7 +126,7 @@ def render_blank_page():
 
     if lsid_to_filter:
         # Update the page title based on the selected lsid
-        st.title(lsid_options[lsid_to_filter])
+        st.markdown(lsid_options[lsid_to_filter])
 
         # Initialize an empty list to store the data frames for each day
         data_frames = []
