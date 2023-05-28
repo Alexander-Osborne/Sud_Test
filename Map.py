@@ -25,9 +25,13 @@ def main():
 def render_map_page():
     st.markdown('<h1 style="text-align: center;">SuDS<span style="font-style: italic;">lab</span> UK</h1>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; font-size: 18px;">A Living Lab for Sustainable Drainage</p>', unsafe_allow_html=True)
-    st.write("SuDS<span style='font-style: italic;'>lab</span> UK provides a unique research tool for the academic study of sustainable drainage. Increasing our understanding of how system components interact to influence the overall hydrological performance of a small catchment, as well as allowing us to examine in detail the effect of soil substrates in water attenuation. We share data from SuDSlab UK openly to help and encourage others to innovate new and better sustainable drainage solutions.")
 
-   
+    paragraph = """
+    SuDS*lab* UK provides a unique research tool for the academic study of sustainable drainage. Increasing our understanding of how system components interact to influence the overall hydrological performance of a small catchment, as well as allowing us to examine in detail the effect of soil substrates in water attenuation. We share data from SuDSlab UK openly to help and encourage others to innovate new and better sustainable drainage solutions.
+    """
+
+    st.markdown(paragraph)
+
 
     # Load markers data from CSV
     markers_data = pd.read_csv('markers.csv')  # Replace 'markers.csv' with your CSV file path
