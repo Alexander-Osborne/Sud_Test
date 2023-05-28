@@ -94,6 +94,7 @@ def render_map_page():
     
 def render_blank_page():
     st.markdown('<h1 style="text-align: center;">SuDS<span style="font-style: italic;">lab</span> UK</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; font-size: 18px;">Data Viewer and Download</p>', unsafe_allow_html=True)
 
 
     # Define the coordinates for Hull University
