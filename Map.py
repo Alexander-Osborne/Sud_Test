@@ -105,9 +105,11 @@ def render_blank_page():
     lsid_options = {
         478072: "SuDSlab-UoH-Wilberforce-002 (Input)",
         478073: "SuDSlab-UoH-Wilberforce-002 (Output)",
-        570517: "SuDSlab-UoH-Planter-001 (Input)",
-        570522: "SuDSlab-UoH-Planter-001 (Output)",
-        599263: "SuDSlab-UoH-Planter-001 (Soil)"
+        570520: "SuDSlab-UoH-Planter-001 (Input)",
+        570521: "SuDSlab-UoH-Planter-001 (Output)",
+        599263: "SuDSlab-UoH-Planter-001 (Soil)",
+        570517: "SuDSlab-UoH-Planter-002 (Input)",
+        570522: "SuDSlab-UoH-Planter-002 (Output)"
     }  # Example lsid options with corresponding titles
 
     lsid_to_filter = st.selectbox("Select Sensor ID", options=list(lsid_options.keys()), format_func=lambda x: lsid_options[x])
