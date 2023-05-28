@@ -23,7 +23,7 @@ def main():
         render_blank_page()
 
 def render_map_page():
-    st.title("Map Page")
+    st.markdown('<h1 style="text-align: center;">SuDS<span style="font-style: italic;">lab</span> UK</h1>', unsafe_allow_html=True)
 
     # Load markers data from CSV
     markers_data = pd.read_csv('markers.csv')  # Replace 'markers.csv' with your CSV file path
