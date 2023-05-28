@@ -224,8 +224,8 @@ def render_blank_page():
         most_recent_timestamp = filtered_tree['sensors'][0]['data'][0]['ts']
         most_recent_datetime = datetime.datetime.fromtimestamp(most_recent_timestamp)
 
-    # Display the most recent timestamp in a user-friendly format
-    st.markdown(f"**Most Recent Data:** {most_recent_datetime}")
+        # Display the most recent timestamp in a user-friendly format
+        st.markdown(f"**Most Recent Data:** {most_recent_datetime}")
         
         # Display the line chart for 'depth' if available
         if 'depth' in combined_df.columns:
