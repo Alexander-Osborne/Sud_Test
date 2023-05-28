@@ -244,4 +244,5 @@ def render_blank_page():
     else:
         st.warning("Please enter the lsid value to proceed.")
 
-if __name
+if __name__ == "__main__":
+    main()
