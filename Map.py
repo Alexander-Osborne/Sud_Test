@@ -219,7 +219,14 @@ def render_blank_page():
 
         # Concatenate all the data frames into a single data frame
         combined_df = pd.concat(data_frames)
+       
+        # Retrieve the most recent timestamp from the JSON data
+        most_recent_timestamp = filtered_tree['sensors'][0]['data'][0]['ts']
+        most_recent_datetime = datetime.datetime.fromtimestamp(most_recent_timestamp)
 
+    # Display the most recent timestamp in a user-friendly format
+    st.markdown(f"**Most Recent Data:** {most_recent_datetime}")
+        
         # Display the line chart for 'depth' if available
         if 'depth' in combined_df.columns:
             st.line_chart(combined_df[['ts', 'depth']].rename(columns={'ts': 'DateTime', 'depth': 'Depth (m)'}).set_index('DateTime'))
