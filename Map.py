@@ -39,7 +39,7 @@ def render_map_page():
     # Coordinates of Hull
     hull_coordinates = (53.7701, -0.3672)
 
-    m = folium.Map(location=hull_coordinates, zoom_start=9, tiles="openstreetmap", max_zoom=19)
+    m = folium.Map(location=hull_coordinates, zoom_start=9, tiles="openstreetmap", max_zoom=19,height=600)
 
     marker_clusters = {}
 
@@ -91,8 +91,7 @@ def render_map_page():
     folium.LayerControl().add_to(m)
 
     # Render the map
-    map_html = f'<div style="width: 100%; height: 600px;">{folium_static(m)}</div>'
-    st.markdown(map_html, unsafe_allow_html=True)
+    folium_static(m)
 
     
 def render_blank_page():
