@@ -91,7 +91,8 @@ def render_map_page():
     folium.LayerControl().add_to(m)
 
     # Render the map
-    folium_static(m)
+    map_html = f'<div style="width: 100%; height: 600px;">{folium_static(m)}</div>'
+    st.markdown(map_html, unsafe_allow_html=True)
 
     
 def render_blank_page():
