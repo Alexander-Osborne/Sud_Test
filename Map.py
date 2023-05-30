@@ -77,7 +77,7 @@ def render_map_page():
         tooltip_content = f"<b>{name}</b><br>{thumbnail_html}<br><i>{additional_details}</i>"
 
         # Create the popup content with the name and larger image
-        popup_html = f'<h4>{name}</h4><img src="{image_url}" alt="Image" width="300"><p>{additional_details}</p>'
+        popup_html = f'<h4>{name}</h4><img src="{image_url}" alt="Image" width="200"><p>{additional_details}</p>'
         popup = folium.Popup(html=popup_html, max_width=400)
 
         marker = folium.Marker(location=[latitude, longitude], popup=popup, tooltip=tooltip_content, icon=custom_icon)
