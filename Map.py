@@ -63,6 +63,8 @@ def render_map_page():
             icon_path = icon_directory + 'Swale_Icon.png'
         elif classification == 'Planter':
             icon_path = icon_directory + 'Planter_Icon.png'
+        elif classification == 'Weather':
+            icon_path = icon_directory + 'Weather_Icon.png'
         else:
             # Use a default icon if no matching classification is found
             icon_path = icon_directory + 'default_icon.png'  # Replace 'default_icon.png' with your default icon path
