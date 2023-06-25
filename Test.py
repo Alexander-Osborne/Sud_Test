@@ -128,21 +128,17 @@ def render_data_viewer_page():
         </html>
         """
 
-    # Display the map in Streamlit
-    components.html(map_html, height=450)
+      # Define the LSID and number of days inputs
+    lsid_to_filter = st.text_input('Insert a number')
+    num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
-    lsid_to_filter = None
-
-    while not lsid_to_filter:
-        lsid_to_filter = st.text_input('Insert a number')
-
+    # Add a button to generate data
+    if st.button('Generate'):
         try:
             lsid_to_filter = int(lsid_to_filter)
         except ValueError:
             st.write("Please enter a valid number")
-
-    # Select the number of days
-    num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
+        else:
 
     if st.button('Generate'):
 
