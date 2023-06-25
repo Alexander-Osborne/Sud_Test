@@ -140,8 +140,6 @@ def render_data_viewer_page():
             st.write("Please enter a valid number")
         else:
 
-    if st.button('Generate'):
-
         # Initialize an empty list to store the data frames for each day
         data_frames = []
 
