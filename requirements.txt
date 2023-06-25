@@ -5,3 +5,4 @@ streamlit_folium==0.6.13
 geocoder==1.38.1
 bokeh==3.1.1
 matplotlib==3.7.1
+altair==5.0.1
