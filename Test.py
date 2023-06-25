@@ -209,6 +209,12 @@ def render_blank_page():
     # Display the map in Streamlit
     components.html(map_html, height=450)
 
+    # Place the input elements in the other half of the page using beta_columns
+    col1, col2 = st.beta_columns(2)
+    with col2:
+        lsid_to_filter = st.text_input('Insert a number')
+        num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
+
     lsid_to_filter = None
 
     while not lsid_to_filter:
