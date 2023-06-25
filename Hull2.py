@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import folium
 from streamlit_folium import folium_static
 from folium.plugins import MarkerCluster
@@ -13,6 +12,7 @@ import json
 import pandas as pd
 from PIL import Image
 import base64
+import pyperclip  # Added library for clipboard functionality
 
 def main():
     st.sidebar.title("Navigation")
@@ -32,7 +32,6 @@ def render_map_page():
     """
 
     st.markdown(paragraph)
-
 
     # Load markers data from CSV
     markers_data = pd.read_csv('markers.csv')  # Replace 'markers.csv' with your CSV file path
@@ -73,22 +72,17 @@ def render_map_page():
         # Create a custom icon
         custom_icon = folium.CustomIcon(icon_image=icon_path, icon_size=(30, 30))
         additional_details = row['additional_details']
-
         # Construct the tooltip content with the name and thumbnail image
         thumbnail_html = f'<img src="{image_url}" alt="Thumbnail" width="300">'
         tooltip_content = f"<b>{name}</b><br>{thumbnail_html}<br><i>{additional_details}</i>"
 
         # Create the popup content with the name and larger image
         popup_html = f'<h4>{name}</h4><img src="{image_url}" alt="Image" width="200"><p>{additional_details}</p>'
+        popup_html += f'<button onclick="copyToClipboard(\'{name}\')">Copy Me</button>'  # Added "Copy Me" button
         popup = folium.Popup(html=popup_html, max_width=400)
-
-        def on_marker_click(e):
-            st.text_input("Copy the Marker Name:", value=name, key=f"marker_{name}", readonly=True)
 
         marker = folium.Marker(location=[latitude, longitude], popup=popup, tooltip=tooltip_content, icon=custom_icon)
         marker.add_to(marker_clusters[classification])
-
-        marker.add_child(folium.ClickForMarker(popup, callback=on_marker_click))
 
     # Add marker clusters to the map
     for marker_cluster in marker_clusters.values():
@@ -99,6 +93,10 @@ def render_map_page():
 
     # Render the map
     folium_static(m)
+
+# Function to copy text to clipboard using pyperclip
+def copy_to_clipboard(text):
+    pyperclip.copy(text)
 
 if __name__ == '__main__':
     main()
