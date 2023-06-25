@@ -38,7 +38,7 @@ def render_data_viewer_page():
 
     
     # Define the HTML code for the map
-map_html = """
+    map_html = """
         <!DOCTYPE html>
         <html>
         <head>
@@ -87,11 +87,11 @@ map_html = """
           <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/leaflet.markercluster.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0"></script>
           <script>
-            var map = L.map('map').setView([53.771552, -0.36425564], 10); // Set initial view to the first marker
+            var map = L.map('map').setView([53.771552, -0.36425564], 9); // Set initial view to the first marker
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
               attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-              maxZoom: 19,
+              maxZoom: 18,
             }).addTo(map);
 
             // Create a marker cluster group
