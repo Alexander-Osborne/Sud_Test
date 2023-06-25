@@ -1,6 +1,5 @@
 import streamlit as st
 from streamlit import components as stc
-from streamlit.script_runner import RerunException
 
 # Define the HTML code for the map
 map_html = """
