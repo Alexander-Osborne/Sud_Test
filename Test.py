@@ -199,14 +199,23 @@ def render_blank_page():
     # Display the map and selected marker ID in Streamlit
     components.html(map_html, height=600)
 
+    selected_sensor_id = st._get_widget_value("__input__")
+    
+    if selected_sensor_id:
+    # Update the selected sensor_id in session state
+    st.session_state.selected_sensor_id = selected_sensor_id
 
+    # Use the selected sensor_id elsewhere in your Streamlit app
+    if st.session_state.selected_sensor_id:
+        st.write("Selected Sensor ID:", st.session_state.selected_sensor_id)
+
+    
     
     lsid_to_filter = st.session_state.get("__input__")
 
     if lsid_to_filter:
         # Update the page title based on the selected lsid
         st.markdown(f"<h2 style='text-align: center;'>{lsid_options[lsid_to_filter]}</h2>", unsafe_allow_html=True)
-
 
 
         # Initialize an empty list to store the data frames for each day
