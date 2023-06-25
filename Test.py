@@ -112,9 +112,7 @@ def render_blank_page():
     api_key = st.secrets["api_key"]
     station_id = st.secrets["station_id"]
 
-    # Select the number of days
-    num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
-
+    
     # Define the HTML code for the map
     map_html = """
         <!DOCTYPE html>
@@ -220,6 +218,9 @@ def render_blank_page():
             lsid_to_filter = int(lsid_to_filter)
         except ValueError:
             st.write("Please enter a valid number")
+    
+        # Select the number of days
+        num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
         # Initialize an empty list to store the data frames for each day
         data_frames = []
