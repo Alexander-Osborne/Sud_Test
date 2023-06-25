@@ -124,7 +124,22 @@ def render_blank_page():
         570522: "SuDSlab-UoH-Planter-002 (Output)"
     }  # Example lsid options with corresponding titles
 
-    lsid_to_filter = st.selectbox("Select Sensor ID", options=list(lsid_options.keys()), format_func=lambda x: lsid_options[x])
+# Create a dictionary to map lsid to sensor names
+    lsid_to_sensor = {lsid: sensor_name for lsid, sensor_name in lsid_options.items()}
+
+    # Create a Folium map for sensor selection
+    sensor_map = folium.Map(location=hull_uni_coordinates, zoom_start=12, control_scale=True)
+
+    # Add markers to the map for each sensor
+    for lsid, sensor_name in lsid_to_sensor.items():
+        marker = folium.Marker(location=hull_uni_coordinates, popup=sensor_name)
+        marker.add_to(sensor_map)
+
+    # Render the sensor selection map
+    folium_static(sensor_map)
+
+    # Get user-selected sensor ID
+    lsid_to_filter = st.selectbox("Select Sensor ID", options=list(lsid_to_sensor.keys()), format_func=lambda x: lsid_to_sensor[x])
 
     
     if lsid_to_filter:
