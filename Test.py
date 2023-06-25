@@ -22,11 +22,6 @@ def render_data_viewer_page():
     logo_image = Image.open("Logo.png")
     st.image(logo_image, use_column_width=True)
 
-    # Rest of the code ...
-    st.markdown('<h1 style="text-align: center;">SuDS<span style="font-style: italic;">lab</span> UK</h1>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: center; font-size: 18px;">Data Viewer and Download</p>', unsafe_allow_html=True)
-
-
     # Define the coordinates for Hull University
     hull_uni_coordinates = (53.77114698979646, -0.36430683784066786)
 
