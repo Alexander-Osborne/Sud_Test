@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import folium
 from streamlit_folium import folium_static
 from folium.plugins import MarkerCluster
@@ -98,13 +99,100 @@ def render_blank_page():
     st.markdown('<h1 style="text-align: center;">SuDS<span style="font-style: italic;">lab</span> UK</h1>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; font-size: 18px;">Data Viewer and Download</p>', unsafe_allow_html=True)
 
+    # Define the HTML code for the map
+    map_html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>UK Map with Markers</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+      <style>
+        #map { height: 400px; }
+      </style>
+    </head>
+    <body>
+      <div id="map"></div>
+
+      <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0"></script>
+      <script>
+        var map = L.map('map').setView([53.771552, -0.36425564], 15); // Set initial view to the first marker
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+          maxZoom: 18,
+        }).addTo(map);
+
+        // Fetch the CSV file
+        fetch('https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/markers.csv')
+          .then(response => response.text())
+          .then(data => {
+            // Parse the CSV data
+            var parsedData = Papa.parse(data, { header: true }).data;
+
+            // Define the base URL for marker icons
+            var iconBaseUrl = 'https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/marker_icons/';
+
+            // Store the selected marker name
+            var selectedMarkerId = '';
+
+            // Iterate through the parsed data and add markers to the map
+            parsedData.forEach(row => {
+              var lat = parseFloat(row.latitude);
+              var lng = parseFloat(row.longitude);
+
+              if (!isNaN(lat) && !isNaN(lng)) {
+                var iconUrl = iconBaseUrl + row.marker_icons.trim();
+                var markerIcon = L.icon({
+                  iconUrl: iconUrl,
+                  iconSize: [32, 32],
+                  iconAnchor: [16, 32],
+                  popupAnchor: [0, -32]
+                });
+
+                var popupContent = "<b>" + row.sensor_id + "</b><br>" + row.additional_details;
+                var marker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
+                marker.bindPopup(popupContent).on('popupopen', function(e) {
+                  selectedMarkerId = row.sensor_id;
+                  // Send the selected marker ID to Streamlit
+                  sendSelectedMarkerId(selectedMarkerId);
+                }).on('popupclose', function(e) {
+                  selectedMarkerId = '';
+                  // Clear the selected marker ID in Streamlit
+                  sendSelectedMarkerId(selectedMarkerId);
+                });
+              }
+            });
+          });
+
+        function sendSelectedMarkerId(id) {
+          // Clear the selected marker ID in Streamlit
+          var idElement = document.getElementById('selected-marker-id');
+          if (idElement === null) {
+            idElement = document.createElement('div');
+            idElement.id = 'selected-marker-id';
+            document.body.appendChild(idElement);
+          }
+          idElement.innerHTML = "<h3>Selected Marker ID:</h3><p>" + id + "</p>";
+          // Send the selected marker ID to Streamlit via Streamlit's JS API
+          Streamlit.setComponentValue(id);
+        }
+      </script>
+    </body>
+    </html>
+    """
+
+    # Display the map and selected marker ID in Streamlit
+    selected_marker_id = components.html(map_html, height=600)
+
+    # Output the selected marker ID
+    st.write("Selected Sensor ID:", selected_marker_id)
 
     # Define the coordinates for Hull University
     hull_uni_coordinates = (53.77114698979646, -0.36430683784066786)
 
     # Create a DataFrame with a single row containing Hull University coordinates
     df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
-
 
     # Retrieve secrets from Streamlit Secrets
     secret_key = st.secrets["secret_key"]
@@ -124,12 +212,12 @@ def render_blank_page():
         570522: "SuDSlab-UoH-Planter-002 (Output)"
     }  # Example lsid options with corresponding titles
 
-    lsid_to_filter = st.selectbox("Select Sensor ID", options=list(lsid_options.keys()), format_func=lambda x: lsid_options[x])
+    if selected_marker_id:
+        # Extract the sensor ID from the selected marker ID output
+        selected_sensor_id = selected_marker_id.split(':')[1].strip()
 
-    if lsid_to_filter:
-        # Update the page title based on the selected lsid
-        st.markdown(f"<h2 style='text-align: center;'>{lsid_options[lsid_to_filter]}</h2>", unsafe_allow_html=True)
-
+        # Update the page title based on the selected sensor ID
+        st.markdown(f"<h2 style='text-align: center;'>{lsid_options[selected_sensor_id]}</h2>", unsafe_allow_html=True)
 
         # Initialize an empty list to store the data frames for each day
         data_frames = []
