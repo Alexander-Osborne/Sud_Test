@@ -211,7 +211,7 @@ def render_blank_page():
     # Display the map in Streamlit
     components.html(map_html, height=600)
 
-    lsid_to_filter= st.number_input('Insert a number')
+    lsid_to_filter= st.text_input('Insert a number')
 
     if lsid_to_filter:
         # Update the page title based on the selected lsid
