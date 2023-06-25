@@ -36,7 +36,7 @@ map_html = """
         var iconBaseUrl = 'https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/marker_icons/';
 
         // Store the selected marker name
-        var selectedMarkerName = '';
+        var selectedMarkerId = '';
 
         // Iterate through the parsed data and add markers to the map
         parsedData.forEach(row => {
@@ -52,35 +52,36 @@ map_html = """
               popupAnchor: [0, -32]
             });
 
-            var popupContent = "<b>" + row.name + "</b><br>" + row.additional_details;
+            var popupContent = "<b>" + row.sensor_id + "</b><br>" + row.additional_details;
             var marker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
             marker.bindPopup(popupContent).on('popupopen', function(e) {
-              selectedMarkerName = row.name;
-              // Send the selected marker name to Streamlit
-              sendSelectedMarkerName(selectedMarkerName);
+              selectedMarkerId = row.sensor_id;
+              // Send the selected marker ID to Streamlit
+              sendSelectedMarkerId(selectedMarkerId);
             }).on('popupclose', function(e) {
-              selectedMarkerName = '';
-              // Clear the selected marker name in Streamlit
-              sendSelectedMarkerName(selectedMarkerName);
+              selectedMarkerId = '';
+              // Clear the selected marker ID in Streamlit
+              sendSelectedMarkerId(selectedMarkerId);
             });
           }
         });
       });
 
-    function sendSelectedMarkerName(name) {
-      // Clear the selected marker name in Streamlit
-      var nameElement = document.getElementById('selected-marker-name');
-      if (nameElement === null) {
-        nameElement = document.createElement('div');
-        nameElement.id = 'selected-marker-name';
-        document.body.appendChild(nameElement);
+    function sendSelectedMarkerId(id) {
+      // Clear the selected marker ID in Streamlit
+      var idElement = document.getElementById('selected-marker-id');
+      if (idElement === null) {
+        idElement = document.createElement('div');
+        idElement.id = 'selected-marker-id';
+        document.body.appendChild(idElement);
       }
-      nameElement.innerHTML = "<h3>Selected Marker Name:</h3><p>" + name + "</p>";
+      idElement.innerHTML = "<h3>Selected Marker ID:</h3><p>" + id + "</p>";
     }
   </script>
 </body>
 </html>
 """
 
-# Display the map and selected marker name in Streamlit
+# Display the map and selected marker ID in Streamlit
 components.html(map_html, height=600)
+
