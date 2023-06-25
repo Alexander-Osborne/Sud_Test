@@ -93,12 +93,16 @@ def render_map_page():
     # Render the map
     folium_static(m)
 
+    # Add a text box below the map
+    st.text_area("Marker Name", key="marker_name")
+
 # JavaScript code for copying the marker name to clipboard
 copy_script = '''
 <script>
 function copyToClipboard(name) {
-    navigator.clipboard.writeText(name);
-    alert("Copied to clipboard: " + name);
+    var markerName = name;
+    navigator.clipboard.writeText(markerName);
+    alert("Copied to clipboard: " + markerName);
 }
 </script>
 '''
