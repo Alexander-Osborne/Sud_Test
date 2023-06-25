@@ -35,8 +35,8 @@ map_html = """
         // Define the base URL for marker icons
         var iconBaseUrl = 'https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/marker_icons/';
 
-        // Store the selected sensor_id
-        var selectedSensorId = '';
+        // Store the selected marker name
+        var selectedMarkerId = '';
 
         // Iterate through the parsed data and add markers to the map
         parsedData.forEach(row => {
@@ -55,21 +55,37 @@ map_html = """
             var popupContent = "<b>" + row.sensor_id + "</b><br>" + row.additional_details;
             var marker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
             marker.bindPopup(popupContent).on('popupopen', function(e) {
-              selectedSensorId = row.sensor_id;
-              // Send the selected sensor_id to Streamlit
-              window.parent.postMessage(selectedSensorId, '*');
+              selectedMarkerId = row.sensor_id;
+              // Send the selected marker ID to Streamlit
+              sendSelectedMarkerId(selectedMarkerId);
             }).on('popupclose', function(e) {
-              selectedSensorId = '';
-              // Clear the selected sensor_id in Streamlit
-              window.parent.postMessage(selectedSensorId, '*');
+              selectedMarkerId = '';
+              // Clear the selected marker ID in Streamlit
+              sendSelectedMarkerId(selectedMarkerId);
             });
           }
         });
       });
+
+    function sendSelectedMarkerId(id) {
+      // Clear the selected marker ID in Streamlit
+      var idElement = document.getElementById('selected-marker-id');
+      if (idElement === null) {
+        idElement = document.createElement('div');
+        idElement.id = 'selected-marker-id';
+        document.body.appendChild(idElement);
+      }
+      idElement.innerHTML = "<h3>Selected Marker ID:</h3><p>" + id + "</p>";
+      // Send the selected marker ID to Streamlit via Streamlit's JS API
+      Streamlit.setComponentValue(id);
+    }
   </script>
 </body>
 </html>
 """
 
-# Display the map
-st.html(map_html, height=600)
+# Display the map and selected marker ID in Streamlit
+selected_marker_id = components.html(map_html, height=600)
+
+# Output the selected marker ID
+st.write("Selected Sensor ID:", selected_marker_id)
