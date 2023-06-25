@@ -14,17 +14,11 @@ from PIL import Image
 import base64
 
 def main():
-    st.sidebar.title("Navigation")
-    page = st.sidebar.radio("Go to", ["Location Viewer", "Data Viewer"])
+    render_data_viewer_page()
 
-    if page == "Location Viewer":
-        render_map_page()
-    elif page == "Data Viewer":
-        render_blank_page()
-
-def render_map_page():
+def render_data_viewer_page():
     st.markdown('<h1 style="text-align: center;">SuDS<span style="font-style: italic;">lab</span> UK</h1>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: center; font-size: 18px;">A Living Lab for Sustainable Drainage</p>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; font-size: 18px;">Data Viewer and Download</p>', unsafe_allow_html=True)
 
     paragraph = """
     SuDS*lab* UK provides a unique research tool for the academic study of sustainable drainage. Increasing our understanding of how system components interact to influence the overall hydrological performance of a small catchment, as well as allowing us to examine in detail the effect of soil substrates in water attenuation. We share data from SuDS*lab* UK openly to help and encourage others to innovate new and better sustainable drainage solutions.
