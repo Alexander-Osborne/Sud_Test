@@ -79,6 +79,7 @@ def render_map_page(session_state):
         # Create a custom icon
         custom_icon = folium.CustomIcon(icon_image=icon_path, icon_size=(30, 30))
         additional_details = row['additional_details']
+
         # Construct the tooltip content with the name and thumbnail image
         thumbnail_html = f'<img src="{image_url}" alt="Thumbnail" width="300">'
         tooltip_content = f"<b>{name}</b><br>{thumbnail_html}<br><i>{additional_details}</i>"
@@ -87,14 +88,18 @@ def render_map_page(session_state):
         popup_html = f'<h4>{name}</h4><img src="{image_url}" alt="Image" width="200"><p>{additional_details}</p>'
         popup = folium.Popup(html=popup_html, max_width=400)
 
-        def on_marker_click(e):
+        def on_marker_click(name):
             session_state.name = name
             st.experimental_rerun()
 
-        marker = folium.Marker(location=[latitude, longitude], popup=popup, tooltip=tooltip_content, icon=custom_icon)
-        marker.add_to(marker_clusters[classification])
-
-        marker.add_child(folium.ClickForMarker(popup, callback=on_marker_click))
+        folium.Marker(
+            location=[latitude, longitude],
+            popup=popup,
+            tooltip=tooltip_content,
+            icon=custom_icon
+        ).add_to(marker_clusters[classification]).add_child(
+            folium.ClickForCallback(on_marker_click, name)
+        )
 
     # Add marker clusters to the map
     for marker_cluster in marker_clusters.values():
