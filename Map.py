@@ -271,6 +271,7 @@ def render_blank_page():
 
     else:
         st.warning("Please enter the lsid value to proceed.")
-
+# Render the map
+    folium_static(m)
 if __name__ == "__main__":
     main()
