@@ -207,7 +207,7 @@ def render_blank_page():
         """
 
     # Place the input elements in the second column using st.columns
-        col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
     # Display the HTML map in the first column
     with col1:
