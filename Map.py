@@ -105,8 +105,6 @@ def render_blank_page():
     # Create a DataFrame with a single row containing Hull University coordinates
     df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
 
-    m = folium.Map(location=[53.7701, -0.3672], zoom_start=9)
-
     # Retrieve secrets from Streamlit Secrets
     secret_key = st.secrets["secret_key"]
     api_key = st.secrets["api_key"]
@@ -115,28 +113,36 @@ def render_blank_page():
     # Select the number of days
     num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
-    lsid_options = {
-        478072: "SuDSlab-UoH-Wilberforce-002 (Input)",
-        478073: "SuDSlab-UoH-Wilberforce-002 (Output)",
-        570520: "SuDSlab-UoH-Planter-001 (Input)",
-        570521: "SuDSlab-UoH-Planter-001 (Output)",
-        599263: "SuDSlab-UoH-Planter-001 (Soil)",
-        570517: "SuDSlab-UoH-Planter-002 (Input)",
-        570522: "SuDSlab-UoH-Planter-002 (Output)"
-    }  # Example lsid options with corresponding titles
+# Load markers data from CSV
+    markers_data = pd.read_csv('markers.csv')  # Replace 'markers.csv' with your CSV file path
 
-    # Create a dictionary to map lsid to sensor names
-    lsid_to_sensor = {lsid: sensor_name for lsid, sensor_name in lsid_options.items()}
+    # Create a folium map centered on a specific location
+    m = folium.Map(location=[53.7701, -0.3672], zoom_start=9)
 
-    # Get the clicked marker's data from the session state
-    if 'map_clicked' in st.session_state:
-        clicked_marker_data = st.session_state['map_clicked']
-        if 'sensor_id' in clicked_marker_data:
-            selected_sensor_id = clicked_marker_data['sensor_id']
-        else:
-            selected_sensor_id = None
-    else:
-        selected_sensor_id = None
+    # Create marker clusters for each classification
+    marker_clusters = {}
+    for classification in markers_data['classification'].unique():
+        marker_clusters[classification] = MarkerCluster(name=classification)
+
+    # Add markers to the marker clusters
+    for _, row in markers_data.iterrows():
+        latitude = row['latitude']
+        longitude = row['longitude']
+        classification = row['classification']
+        name = row['name']
+
+        marker = folium.Marker([latitude, longitude], popup=name)
+        marker.add_to(marker_clusters[classification])
+
+    # Add marker clusters to the map
+    for marker_cluster in marker_clusters.values():
+        marker_cluster.add_to(m)
+
+    # Add layer control to toggle marker clusters
+    folium.LayerControl().add_to(m)
+
+    # Render the map
+    folium_static(m)
 
     if selected_sensor_id:
         # Update the page title based on the selected sensor ID
