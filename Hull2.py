@@ -88,7 +88,7 @@ def render_map_page(session_state):
         popup_html = f'<h4>{name}</h4><img src="{image_url}" alt="Image" width="200"><p>{additional_details}</p>'
         popup = folium.Popup(html=popup_html, max_width=400)
 
-        def on_marker_click(name):
+        def on_marker_click(e, name):
             session_state.name = name
             st.experimental_rerun()
 
@@ -98,7 +98,7 @@ def render_map_page(session_state):
             tooltip=tooltip_content,
             icon=custom_icon
         ).add_to(marker_clusters[classification]).add_child(
-            folium.ClickForCallback(on_marker_click, name)
+            folium.ClickForCallback(on_marker_click, name=name)
         )
 
     # Add marker clusters to the map
