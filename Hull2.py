@@ -74,4 +74,40 @@ def render_map_page(session_state):
             icon_path = icon_directory + 'Weather_Icon.png'
         else:
             # Use a default icon if no matching classification is found
-            icon_path = icon_directory + 'default_icon.png'  #
+            icon_path = icon_directory + 'default_icon.png'  # Replace 'default_icon.png' with your default icon path
+
+        # Create a custom icon
+        custom_icon = folium.CustomIcon(icon_image=icon_path, icon_size=(30, 30))
+        additional_details = row['additional_details']
+        # Construct the tooltip content with the name and thumbnail image
+        thumbnail_html = f'<img src="{image_url}" alt="Thumbnail" width="300">'
+        tooltip_content = f"<b>{name}</b><br>{thumbnail_html}<br><i>{additional_details}</i>"
+
+        # Create the popup content with the name and larger image
+        popup_html = f'<h4>{name}</h4><img src="{image_url}" alt="Image" width="200"><p>{additional_details}</p>'
+        popup = folium.Popup(html=popup_html, max_width=400)
+
+        def on_marker_click(e):
+            session_state.name = name
+            st.experimental_rerun()
+
+        marker = folium.Marker(location=[latitude, longitude], popup=popup, tooltip=tooltip_content, icon=custom_icon)
+        marker.add_to(marker_clusters[classification])
+
+        marker.add_child(folium.ClickForMarker(popup, callback=on_marker_click))
+
+    # Add marker clusters to the map
+    for marker_cluster in marker_clusters.values():
+        marker_cluster.add_to(m)
+
+    # Add layer control to toggle marker clusters
+    folium.LayerControl().add_to(m)
+
+    # Render the map
+    folium_static(m)
+
+    if session_state.name:
+        st.sidebar.success(f"Name '{session_state.name}' copied to clipboard!")
+
+if __name__ == '__main__':
+    main()
