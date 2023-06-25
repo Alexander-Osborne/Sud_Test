@@ -10,10 +10,23 @@ map_html = """
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
   <style>
     #map { height: 400px; }
+    .popup-message {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 999;
+      transition: opacity 0.5s;
+    }
   </style>
 </head>
 <body>
   <div id="map"></div>
+  <div id="popup-message"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0"></script>
@@ -35,9 +48,6 @@ map_html = """
         // Define the base URL for marker icons
         var iconBaseUrl = 'https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/marker_icons/';
 
-        // Store the selected marker name
-        var selectedMarkerId = '';
-
         // Iterate through the parsed data and add markers to the map
         parsedData.forEach(row => {
           var lat = parseFloat(row.latitude);
@@ -54,25 +64,11 @@ map_html = """
 
             var popupContent = "<b>" + row.sensor_id + "</b><br>" + row.additional_details;
             var marker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
-            marker.bindPopup(popupContent).on('popupopen', function(e) {
-              selectedMarkerId = row.sensor_id;
-              // Send the selected marker ID to Streamlit
-              sendSelectedMarkerId(selectedMarkerId);
-            }).on('popupclose', function(e) {
-              selectedMarkerId = '';
-              // Clear the selected marker ID in Streamlit
-              sendSelectedMarkerId(selectedMarkerId);
-            }).on('click', function(e) {
+            marker.bindPopup(popupContent).on('click', function(e) {
               // Copy the sensor ID to the clipboard
               navigator.clipboard.writeText(row.sensor_id)
                 .then(function() {
-                  var copiedElement = document.getElementById('copied-message');
-                  if (copiedElement === null) {
-                    copiedElement = document.createElement('div');
-                    copiedElement.id = 'copied-message';
-                    document.body.appendChild(copiedElement);
-                  }
-                  copiedElement.innerHTML = "Copied to Clipboard";
+                  showPopupMessage("Copied to Clipboard");
                   console.log('Sensor ID copied to clipboard: ' + row.sensor_id);
                 })
                 .catch(function(error) {
@@ -83,8 +79,15 @@ map_html = """
         });
       });
 
-    function sendSelectedMarkerId(id) {
-      // No longer needed
+    function showPopupMessage(message) {
+      var popupMessageElement = document.getElementById('popup-message');
+      if (popupMessageElement !== null) {
+        popupMessageElement.innerText = message;
+        popupMessageElement.style.opacity = 1;
+        setTimeout(function() {
+          popupMessageElement.style.opacity = 0;
+        }, 2000);
+      }
     }
   </script>
 </body>
