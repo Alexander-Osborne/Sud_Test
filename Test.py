@@ -207,7 +207,7 @@ def render_blank_page():
         """
 
     # Display the map in Streamlit
-    components.html(map_html, height=400)
+    components.html(map_html, height=410)
 
     lsid_to_filter = None
 
