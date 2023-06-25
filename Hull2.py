@@ -77,8 +77,7 @@ def render_map_page():
 
         # Create the popup content with the name and larger image
         popup_html = f'<h4>{name}</h4><img src="{image_url}" alt="Image" width="200"><p>{additional_details}</p>'
-        popup_html += f'<input type="text" value="{name}" id="marker_name" readonly>'
-        popup_html += '<button onclick="copyToClipboard()">Copy</button>'  # Added "Copy" button
+        popup_html += f'<button onclick="copyToClipboard(\'{name}\')">Copy Me</button>'  # Added "Copy Me" button
         popup = folium.Popup(html=popup_html, max_width=400)
 
         marker = folium.Marker(location=[latitude, longitude], popup=popup, tooltip=tooltip_content, icon=custom_icon)
@@ -94,18 +93,16 @@ def render_map_page():
     # Render the map
     folium_static(m)
 
-# JavaScript code for copying to clipboard
+# JavaScript code for copying the marker name to clipboard
 copy_script = '''
 <script>
-function copyToClipboard() {
-    var markerName = document.getElementById("marker_name");
-    markerName.select();
-    document.execCommand("copy");
-    alert("Copied to clipboard: " + markerName.value);
+function copyToClipboard(name) {
+    navigator.clipboard.writeText(name);
+    alert("Copied to clipboard: " + name);
 }
 </script>
 '''
 
 if __name__ == '__main__':
-    st.code(copy_script, language='javascript')
+    st.markdown(copy_script, unsafe_allow_html=True)
     main()
