@@ -206,6 +206,17 @@ def render_blank_page():
         </html>
         """
 
+    lsid_to_filter = None
+
+    while not lsid_to_filter:
+        lsid_to_filter = st.text_input('Insert a number')
+
+        try:
+            lsid_to_filter = int(lsid_to_filter)
+        except ValueError:
+            st.write("Please enter a valid number")
+
+    
     # Place the input elements in the second column using st.columns
     col1, col2 = st.columns(2)
 
@@ -221,18 +232,8 @@ def render_blank_page():
     # Create an empty placeholder element to push subsequent content below the columns
     empty_placeholder = st.empty()
     
-    lsid_to_filter = None
 
-    while not lsid_to_filter:
-        lsid_to_filter = st.text_input('Insert a number')
-
-        try:
-            lsid_to_filter = int(lsid_to_filter)
-        except ValueError:
-            st.write("Please enter a valid number")
     
-        # Select the number of days
-        num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
         # Initialize an empty list to store the data frames for each day
         data_frames = []
