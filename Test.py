@@ -203,7 +203,7 @@ def render_blank_page():
     
     if selected_sensor_id:
     # Update the selected sensor_id in session state
-    st.session_state.selected_sensor_id = selected_sensor_id
+        st.session_state.selected_sensor_id = selected_sensor_id
 
     # Use the selected sensor_id elsewhere in your Streamlit app
     if st.session_state.selected_sensor_id:
