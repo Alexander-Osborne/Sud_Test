@@ -114,28 +114,17 @@ def render_blank_page():
     # Select the number of days
     num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
+    lsid_options = {
+        478072: "SuDSlab-UoH-Wilberforce-002 (Input)",
+        478073: "SuDSlab-UoH-Wilberforce-002 (Output)",
+        570520: "SuDSlab-UoH-Planter-001 (Input)",
+        570521: "SuDSlab-UoH-Planter-001 (Output)",
+        599263: "SuDSlab-UoH-Planter-001 (Soil)",
+        570517: "SuDSlab-UoH-Planter-002 (Input)",
+        570522: "SuDSlab-UoH-Planter-002 (Output)"
+    }  # Example lsid options with corresponding titles
 
-        
-if page == "Data Viewer":
-    sensor_locations = {
-        478072: [53.771146, -0.364306],
-        478073: [53.771236, -0.364406],
-        570520: [53.771326, -0.364506],
-        570521: [53.771416, -0.364606],
-        599263: [53.771506, -0.364706],
-        570517: [53.771596, -0.364806],
-        570522: [53.771686, -0.364906]
-    }  # Example sensor locations. Replace these with your actual sensor coordinates
-
-    m = folium.Map(location=[53.771146, -0.364306], zoom_start=15)
-
-    for lsid, coords in sensor_locations.items():
-        folium.Marker(coords, popup=str(lsid)).add_to(m)
-
-    folium_static(m)
-
-    lsid_to_filter = st.text_input("Enter the Sensor ID by clicking on the map above")
-
+    lsid_to_filter = st.selectbox("Select Sensor ID", options=list(lsid_options.keys()), format_func=lambda x: lsid_options[x])
 
     
     if lsid_to_filter:
