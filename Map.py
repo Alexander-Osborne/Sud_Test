@@ -97,11 +97,11 @@ def render_map_page():
 def render_blank_page():
     st.title("Data Viewer")
 
-    # Create a folium map centered on a specific location
-    m = folium.Map(location=[53.7701, -0.3672], zoom_start=9)
-
     # Load markers data from CSV
     markers_data = pd.read_csv('markers.csv')  # Replace 'markers.csv' with your CSV file path
+
+    # Create a folium map centered on a specific location
+    m = folium.Map(location=[53.7701, -0.3672], zoom_start=9)
 
     # Create marker clusters for each classification
     marker_clusters = {}
@@ -128,35 +128,20 @@ def render_blank_page():
     # Render the map
     folium_static(m)
 
-    # Define the coordinates for Hull University
-    hull_uni_coordinates = (53.77114698979646, -0.36430683784066786)
+    # Retrieve the selected sensor ID from the clicked marker
+    selected_sensor_id = st.selectbox("Select Sensor ID", options=list(markers_data['name']), format_func=lambda x: x)
 
-    # Create a DataFrame with a single row containing Hull University coordinates
-    df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
+    if selected_sensor_id:
+        # Update the page title based on the selected sensor ID
+        st.markdown(f"<h2 style='text-align: center;'>{selected_sensor_id}</h2>", unsafe_allow_html=True)
 
-    # Retrieve secrets from Streamlit Secrets
-    secret_key = st.secrets["secret_key"]
-    api_key = st.secrets["api_key"]
-    station_id = st.secrets["station_id"]
+        # Retrieve secrets from Streamlit Secrets
+        secret_key = st.secrets["secret_key"]
+        api_key = st.secrets["api_key"]
+        station_id = st.secrets["station_id"]
 
-    # Select the number of days
-    num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
-
-    lsid_options = {
-        478072: "SuDSlab-UoH-Wilberforce-002 (Input)",
-        478073: "SuDSlab-UoH-Wilberforce-002 (Output)",
-        570520: "SuDSlab-UoH-Planter-001 (Input)",
-        570521: "SuDSlab-UoH-Planter-001 (Output)",
-        599263: "SuDSlab-UoH-Planter-001 (Soil)",
-        570517: "SuDSlab-UoH-Planter-002 (Input)",
-        570522: "SuDSlab-UoH-Planter-002 (Output)"
-    }  # Example lsid options with corresponding titles
-
-    lsid_to_filter = st.selectbox("Select Sensor ID", options=list(lsid_options.keys()), format_func=lambda x: lsid_options[x])
-
-    if lsid_to_filter:
-        # Update the page title based on the selected lsid
-        st.markdown(f"<h2 style='text-align: center;'>{lsid_options[lsid_to_filter]}</h2>", unsafe_allow_html=True)
+        # Select the number of days
+        num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
         # Initialize an empty list to store the data frames for each day
         data_frames = []
@@ -287,7 +272,6 @@ def render_blank_page():
 
     else:
         st.warning("Please enter the lsid value to proceed.")
-# Render the map
-    folium_static(m)
+
 if __name__ == "__main__":
     main()
