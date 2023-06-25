@@ -23,8 +23,8 @@ def main():
         render_blank_page()
 
 def render_map_page():
-    logo = Image.open('Logo.png')  # Replace 'logo.png' with your logo file
-    st.image(logo, use_column_width=True)
+    st.markdown('<h1 style="text-align: center;">SuDS<span style="font-style: italic;">lab</span> UK</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; font-size: 18px;">A Living Lab for Sustainable Drainage</p>', unsafe_allow_html=True)
 
     paragraph = """
     SuDS*lab* UK provides a unique research tool for the academic study of sustainable drainage. Increasing our understanding of how system components interact to influence the overall hydrological performance of a small catchment, as well as allowing us to examine in detail the effect of soil substrates in water attenuation. We share data from SuDS*lab* UK openly to help and encourage others to innovate new and better sustainable drainage solutions.
@@ -95,57 +95,44 @@ def render_map_page():
 
     
 def render_blank_page():
-    st.title("Data Viewer")
+    st.markdown('<h1 style="text-align: center;">SuDS<span style="font-style: italic;">lab</span> UK</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; font-size: 18px;">Data Viewer and Download</p>', unsafe_allow_html=True)
 
-    # Load markers data from CSV
-    markers_data = pd.read_csv('markers.csv')  # Replace 'markers.csv' with your CSV file path
 
-    # Create a folium map centered on a specific location
-    m = folium.Map(location=[53.7701, -0.3672], zoom_start=9)
+    # Define the coordinates for Hull University
+    hull_uni_coordinates = (53.77114698979646, -0.36430683784066786)
 
-    # Create marker clusters for each classification
-    marker_clusters = {}
-    for classification in markers_data['classification'].unique():
-        marker_clusters[classification] = MarkerCluster(name=classification)
+    # Create a DataFrame with a single row containing Hull University coordinates
+    df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
 
-    # Add markers to the marker clusters
-    for _, row in markers_data.iterrows():
-        latitude = row['latitude']
-        longitude = row['longitude']
-        classification = row['classification']
-        name = row['name']
 
-        marker = folium.Marker([latitude, longitude], popup=name)
-        marker.add_to(marker_clusters[classification])
+    # Retrieve secrets from Streamlit Secrets
+    secret_key = st.secrets["secret_key"]
+    api_key = st.secrets["api_key"]
+    station_id = st.secrets["station_id"]
 
-    # Add marker clusters to the map
-    for marker_cluster in marker_clusters.values():
-        marker_cluster.add_to(m)
+    # Select the number of days
+    num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
-    # Add layer control to toggle marker clusters
-    folium.LayerControl().add_to(m)
+    lsid_options = {
+        478072: "SuDSlab-UoH-Wilberforce-002 (Input)",
+        478073: "SuDSlab-UoH-Wilberforce-002 (Output)",
+        570520: "SuDSlab-UoH-Planter-001 (Input)",
+        570521: "SuDSlab-UoH-Planter-001 (Output)",
+        599263: "SuDSlab-UoH-Planter-001 (Soil)",
+        570517: "SuDSlab-UoH-Planter-002 (Input)",
+        570522: "SuDSlab-UoH-Planter-002 (Output)"
+    }  # Example lsid options with corresponding titles
 
-    # Render the map
-    folium_static(m)
+    lsid_to_filter = st.selectbox("Select Sensor ID", options=list(lsid_options.keys()), format_func=lambda x: lsid_options[x])
 
-    # Retrieve the selected sensor ID from the clicked marker
-    selected_sensor_id = st.selectbox("Select Sensor ID", options=list(markers_data['name']), format_func=lambda x: x)
+    if lsid_to_filter:
+        # Update the page title based on the selected lsid
+        st.markdown(f"<h2 style='text-align: center;'>{lsid_options[lsid_to_filter]}</h2>", unsafe_allow_html=True)
 
-    if selected_sensor_id:
-        # Update the page title based on the selected sensor ID
-        st.markdown(f"<h2 style='text-align: center;'>{selected_sensor_id}</h2>", unsafe_allow_html=True)
-
-        # Retrieve secrets from Streamlit Secrets
-        secret_key = st.secrets["secret_key"]
-        api_key = st.secrets["api_key"]
-        station_id = st.secrets["station_id"]
-
-        # Select the number of days
-        num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
         # Initialize an empty list to store the data frames for each day
         data_frames = []
-
 
         # Loop over the past 'num_days' to retrieve data for each day
         for i in range(num_days):
