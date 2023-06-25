@@ -38,7 +38,7 @@ def render_data_viewer_page():
 
     
     # Define the HTML code for the map
-        map_html = """
+    map_html = """
         <!DOCTYPE html>
         <html>
         <head>
