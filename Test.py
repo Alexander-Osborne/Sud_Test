@@ -38,6 +38,7 @@ def render_data_viewer_page():
 
     
     # Define the HTML code for the map
+    map_html = """
     <!DOCTYPE html>
     <html>
     <head>
@@ -196,7 +197,7 @@ def render_data_viewer_page():
       </script>
     </body>
     </html>
-    '''
+"""
 
     # Insert map
     components.html(map_html, height=430)
