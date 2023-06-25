@@ -68,11 +68,14 @@ map_html = """
       });
 
     function sendSelectedMarkerName(name) {
-      // Print the selected marker name in Streamlit
-      var nameElement = document.createElement('div');
+      // Clear the selected marker name in Streamlit
+      var nameElement = document.getElementById('selected-marker-name');
+      if (nameElement === null) {
+        nameElement = document.createElement('div');
+        nameElement.id = 'selected-marker-name';
+        document.body.appendChild(nameElement);
+      }
       nameElement.innerHTML = "<h3>Selected Marker Name:</h3><p>" + name + "</p>";
-      document.body.innerHTML = '';
-      document.body.appendChild(nameElement);
     }
   </script>
 </body>
