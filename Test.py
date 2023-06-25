@@ -57,43 +57,54 @@ map_html = """
             marker.bindPopup(popupContent).on('popupopen', function(e) {
               selectedMarkerId = row.sensor_id;
               // Send the selected marker ID to Streamlit
-              sendSelectedMarkerId(selectedMarkerId);
+              Streamlit.sendCustomMessage(JSON.stringify({ selectedMarkerId: selectedMarkerId }));
             }).on('popupclose', function(e) {
               selectedMarkerId = '';
               // Clear the selected marker ID in Streamlit
-              sendSelectedMarkerId(selectedMarkerId);
+              Streamlit.sendCustomMessage(JSON.stringify({ selectedMarkerId: selectedMarkerId }));
             });
           }
         });
       });
-
-    function sendSelectedMarkerId(id) {
-      // Clear the selected marker ID in Streamlit
-      var idElement = document.getElementById('selected-marker-id');
-      if (idElement === null) {
-        idElement = document.createElement('div');
-        idElement.id = 'selected-marker-id';
-        document.body.appendChild(idElement);
-      }
-      idElement.innerHTML = id;
-      // Send the selected marker ID to Streamlit
-      const selectedMarkerIdElement = document.getElementById('selected-marker-id');
-      selectedMarkerIdElement.value = id;
-      selectedMarkerIdElement.dispatchEvent(new Event('change'));
-    }
   </script>
 </body>
 </html>
 """
 
-# Display the map and selected marker ID in Streamlit
-components.html(map_html, height=600)
-
-# Display the selected marker ID using st.write
+# Display the map using CustomComponent
 selected_marker_id = st.empty()
-selected_marker_id_value = st.text_input("Selected Marker ID:", key='selected-marker-id')
+component_value = selected_marker_id.value
 
-if selected_marker_id_value:
-    selected_marker_id.write(f"Selected Marker ID: {selected_marker_id_value}")
+if component_value:
+    selected_marker_id.write(f"Selected Marker ID: {component_value}")
 else:
     selected_marker_id.write("No marker selected.")
+
+# Define the JavaScript code for handling custom messages
+custom_js_code = """
+(function() {
+  // Define the function to handle custom messages
+  const handleCustomMessage = (event) => {
+    const messageData = JSON.parse(event.data);
+    if (messageData.selectedMarkerId) {
+      // Update the value of the selected marker ID
+      const selectedMarkerId = messageData.selectedMarkerId;
+      const selectedMarkerIdElement = document.getElementById('streamlit-selected-marker-id');
+      selectedMarkerIdElement.value = selectedMarkerId;
+      selectedMarkerIdElement.dispatchEvent(new Event('change'));
+    }
+  };
+
+  // Listen for custom messages from the Streamlit app
+  window.addEventListener('message', handleCustomMessage);
+})();
+"""
+
+# Display the HTML code with CustomComponent
+components.html(map_html, height=600, scrolling=True)
+
+# Display the selected marker ID using st.write
+selected_marker_id_value = st.text_input("Selected Marker ID:", key='streamlit-selected-marker-id')
+
+# Inject the JavaScript code for custom messages
+st.write("<script>{}</script>".format(custom_js_code), unsafe_allow_html=True)
