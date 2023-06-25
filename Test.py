@@ -38,145 +38,165 @@ def render_data_viewer_page():
 
     
     # Define the HTML code for the map
-    map_html = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>UK Map with Markers</title>
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/MarkerCluster.css" />
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/MarkerCluster.Default.css" />
-          <style>
-            #map { height: 400px; }
-            .popup-message {
-              position: absolute;
-              top: 10px;
-              left: 50%;
-              transform: translateX(-50%);
-              background-color: rgba(0, 0, 0, 0.8);
-              color: #fff;
-              padding: 10px;
-              border-radius: 5px;
-              z-index: 999;
-              transition: opacity 0.5s;
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>UK Map with Markers and LayersControl</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/MarkerCluster.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/MarkerCluster.Default.css" />
+      <style>
+        #map { height: 400px; }
+        .popup-message {
+          position: absolute;
+          top: 10px;
+          left: 50%;
+          transform: translateX(-50%);
+          background-color: rgba(0, 0, 0, 0.8);
+          color: #fff;
+          padding: 10px;
+          border-radius: 5px;
+          z-index: 999;
+          transition: opacity 0.5s;
+        }
+        
+        /* Custom Cluster Styles */
+        .custom-cluster-icon {
+          background-color: #3d8d9bff;
+          color: #fff;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          line-height: 40px;
+          text-align: center;
+          font-weight: bold;
+          cursor: pointer;
+        }
+        
+        .custom-cluster-icon:hover {
+          background-color: #0056b3;
+        }
+      </style>
+    </head>
+    <body>
+      <div id="map"></div>
+      <div id="popup-message"></div>
+    
+      <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/leaflet.markercluster.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0"></script>
+      <script>
+        var map = L.map('map').setView([53.771552, -0.36425564], 9); // Set initial view to the first marker
+    
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+          maxZoom: 18,
+        }).addTo(map);
+    
+        // Create a marker cluster group
+        var markers = L.markerClusterGroup({
+          iconCreateFunction: function(cluster) {
+            var childCount = cluster.getChildCount();
+            var clusterSize = "large";
+    
+            if (childCount < 10) {
+              clusterSize = "small";
+            } else if (childCount < 100) {
+              clusterSize = "medium";
             }
-            
-            /* Custom Cluster Styles */
-            .custom-cluster {
-              background-color: #3d8d9bff;
-              color: #fff;
-              border-radius: 50%;
-              width: 40px;
-              height: 40px;
-              line-height: 40px;
-              text-align: center;
-              font-weight: bold;
-              cursor: pointer;
-            }
-            
-            .custom-cluster:hover {
-              background-color: #0056b3;
-            }
-          </style>
-        </head>
-        <body>
-          <div id="map"></div>
-          <div id="popup-message"></div>
-
-          <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/leaflet.markercluster.js"></script>
-          <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0"></script>
-          <script>
-            var map = L.map('map').setView([53.771552, -0.36425564], 9); // Set initial view to the first marker
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-              maxZoom: 18,
-            }).addTo(map);
-
-            // Create a marker cluster group
-            var markers = L.markerClusterGroup({
-              iconCreateFunction: function(cluster) {
-                var childCount = cluster.getChildCount();
-                var clusterSize = "large";
-
-                if (childCount < 10) {
-                  clusterSize = "small";
-                } else if (childCount < 100) {
-                  clusterSize = "medium";
-                }
-
-                return L.divIcon({
-                  html: '<div class="custom-cluster">' + childCount + '</div>',
-                  className: 'custom-cluster-icon custom-cluster-' + clusterSize,
-                  iconSize: L.point(40, 40),
-                  iconAnchor: L.point(20, 20)  // Adjust the icon anchor to center the cluster icon
+    
+            return L.divIcon({
+              html: '<div class="custom-cluster-icon">' + childCount + '</div>',
+              className: 'custom-cluster-' + clusterSize,
+              iconSize: L.point(40, 40),
+              iconAnchor: L.point(20, 20)  // Adjust the icon anchor to center the cluster icon
+            });
+          }
+        });
+    
+        // Create separate marker layers for each classification
+        var swaleLayer = L.markerClusterGroup();
+        var planterLayer = L.markerClusterGroup();
+        var weatherLayer = L.markerClusterGroup();
+    
+        // Fetch the CSV file
+        fetch('https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/markers.csv')
+          .then(response => response.text())
+          .then(data => {
+            // Parse the CSV data
+            var parsedData = Papa.parse(data, { header: true }).data;
+    
+            // Define the base URL for marker icons
+            var iconBaseUrl = 'https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/marker_icons/';
+    
+            // Iterate through the parsed data and add markers to the respective layers
+            parsedData.forEach(row => {
+              var lat = parseFloat(row.latitude);
+              var lng = parseFloat(row.longitude);
+              var name = row.name;
+              var sensor_id = row.sensor_id;
+              var additional_details = row.additional_details;
+              var image_url = row.image_url;
+              var classification = row.classification; // Assuming the classification is available in the CSV
+    
+              if (!isNaN(lat) && !isNaN(lng)) {
+                var iconUrl = iconBaseUrl + row.marker_icons.trim();
+                var markerIcon = L.icon({
+                  iconUrl: iconUrl,
+                  iconSize: [32, 32],
+                  iconAnchor: [16, 32],
+                  popupAnchor: [0, -32]
                 });
+    
+                var popupContent = `<b>${name}</b><br>Sensor ID: ${sensor_id}<br>${additional_details}<br><img src="${image_url}" width="100px">`;
+                var marker = L.marker([lat, lng], { icon: markerIcon });
+                marker.bindPopup(popupContent).on('click', function(e) {
+                  // Copy the sensor ID to the clipboard
+                  navigator.clipboard.writeText(sensor_id)
+                    .then(function() {
+                      showPopupMessage("Copied Sensor ID to Clipboard");
+                      console.log('Sensor ID copied to clipboard');
+                    })
+                    .catch(function(err) {
+                      console.error('Could not copy text: ', err);
+                    });
+                });
+    
+                // Add the marker to the respective layer based on classification
+                if (classification === "Swale") {
+                  swaleLayer.addLayer(marker);
+                } else if (classification === "Planter") {
+                  planterLayer.addLayer(marker);
+                } else if (classification === "Weather") {
+                  weatherLayer.addLayer(marker);
+                }
               }
             });
-
-            // Fetch the CSV file
-            fetch('https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/markers.csv')
-              .then(response => response.text())
-              .then(data => {
-                // Parse the CSV data
-                var parsedData = Papa.parse(data, { header: true }).data;
-
-                // Define the base URL for marker icons
-                var iconBaseUrl = 'https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/marker_icons/';
-
-                // Iterate through the parsed data and add markers to the cluster group
-                parsedData.forEach(row => {
-                  var lat = parseFloat(row.latitude);
-                  var lng = parseFloat(row.longitude);
-                  var name = row.name;
-                  var sensor_id = row.sensor_id;
-                  var additional_details = row.additional_details;
-                  var image_url = row.image_url;
-
-                  if (!isNaN(lat) && !isNaN(lng)) {
-                    var iconUrl = iconBaseUrl + row.marker_icons.trim();
-                    var markerIcon = L.icon({
-                      iconUrl: iconUrl,
-                      iconSize: [32, 32],
-                      iconAnchor: [16, 32],
-                      popupAnchor: [0, -32]
-                    });
-
-                    var popupContent = `<b>${name}</b><br>Sensor ID: ${sensor_id}<br>${additional_details}<br><img src="${image_url}" width="100px">`;
-                    var marker = L.marker([lat, lng], { icon: markerIcon });
-                    marker.bindPopup(popupContent).on('click', function(e) {
-                      // Copy the sensor ID to the clipboard
-                      navigator.clipboard.writeText(sensor_id)
-                        .then(function() {
-                          showPopupMessage("Copied Sensor ID to Clipboard");
-                          console.log('Sensor ID copied to clipboard');
-                        })
-                        .catch(function(err) {
-                          console.error('Could not copy text: ', err);
-                        });
-                    });
-
-                    markers.addLayer(marker);
-                  }
-                });
-
-                // Add the marker cluster group to the map
-                map.addLayer(markers);
-              });
-
-            function showPopupMessage(message) {
-              var popup = document.getElementById("popup-message");
-              popup.textContent = message;
-              popup.style.opacity = "1";
-              setTimeout(function() {
-                popup.style.opacity = "0";
-              }, 2000);
-            }
-          </script>
-        </body>
-        </html>
-    """
+    
+            // Add the marker layers to the map
+            map.addLayer(swaleLayer);
+            map.addLayer(planterLayer);
+            map.addLayer(weatherLayer);
+    
+            // Create a LayersControl and add the marker layers as overlays
+            var layersControl = L.control.layers(null, null, { collapsed: false }).addTo(map);
+            layersControl.addOverlay(swaleLayer, "Swale");
+            layersControl.addOverlay(planterLayer, "Planter");
+            layersControl.addOverlay(weatherLayer, "Weather");
+          });
+    
+        function showPopupMessage(message) {
+          var popup = document.getElementById("popup-message");
+          popup.textContent = message;
+          popup.style.opacity = "1";
+          setTimeout(function() {
+            popup.style.opacity = "0";
+          }, 2000);
+        }
+      </script>
+    </body>
+    </html>
+    '''
 
     # Insert map
     components.html(map_html, height=430)
