@@ -12,7 +12,6 @@ import json
 import pandas as pd
 from PIL import Image
 import base64
-import pyperclip  # Added library for clipboard functionality
 
 def main():
     st.sidebar.title("Navigation")
@@ -95,7 +94,7 @@ def render_map_page():
     # Render the map
     folium_static(m)
 
-# Function to copy text to clipboard using JavaScript
+# JavaScript code for copying to clipboard
 copy_script = '''
 <script>
 function copyToClipboard() {
@@ -108,5 +107,5 @@ function copyToClipboard() {
 '''
 
 if __name__ == '__main__':
-    st.markdown(copy_script, unsafe_allow_html=True)
+    st.code(copy_script, language='javascript')
     main()
