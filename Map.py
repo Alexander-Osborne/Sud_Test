@@ -114,23 +114,25 @@ def render_blank_page():
     # Select the number of days
     num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
-    selected_sensor_id = None
+    clicked_marker_data = None
 
-    # Get the clicked marker's sensor ID
+    # Get the clicked marker's data from the session state
     if 'map_clicked' in st.session_state:
         clicked_marker_data = st.session_state['map_clicked']
-        if 'sensor_id' in clicked_marker_data:
-            selected_sensor_id = clicked_marker_data['sensor_id']
 
-    lsid_options = {
-        478072: "SuDSlab-UoH-Wilberforce-002 (Input)",
-        478073: "SuDSlab-UoH-Wilberforce-002 (Output)",
-        570520: "SuDSlab-UoH-Planter-001 (Input)",
-        570521: "SuDSlab-UoH-Planter-001 (Output)",
-        599263: "SuDSlab-UoH-Planter-001 (Soil)",
-        570517: "SuDSlab-UoH-Planter-002 (Input)",
-        570522: "SuDSlab-UoH-Planter-002 (Output)"
-    }  # Example lsid options with corresponding titles
+    if clicked_marker_data and 'sensor_id' in clicked_marker_data:
+        # Update the page title based on the selected sensor ID
+        selected_sensor_id = clicked_marker_data['sensor_id']
+        lsid_options = {
+            478072: "SuDSlab-UoH-Wilberforce-002 (Input)",
+            478073: "SuDSlab-UoH-Wilberforce-002 (Output)",
+            570520: "SuDSlab-UoH-Planter-001 (Input)",
+            570521: "SuDSlab-UoH-Planter-001 (Output)",
+            599263: "SuDSlab-UoH-Planter-001 (Soil)",
+            570517: "SuDSlab-UoH-Planter-002 (Input)",
+            570522: "SuDSlab-UoH-Planter-002 (Output)"
+        }  # Example lsid options with corresponding titles
+
 
     # Create a dictionary to map lsid to sensor names
     lsid_to_sensor = {lsid: sensor_name for lsid, sensor_name in lsid_options.items()}
