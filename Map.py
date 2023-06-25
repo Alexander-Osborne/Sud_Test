@@ -114,6 +114,14 @@ def render_blank_page():
     # Select the number of days
     num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
+    selected_sensor_id = None
+
+    # Get the clicked marker's sensor ID
+    if 'map_clicked' in st.session_state:
+        clicked_marker_data = st.session_state['map_clicked']
+        if 'sensor_id' in clicked_marker_data:
+            selected_sensor_id = clicked_marker_data['sensor_id']
+
     lsid_options = {
         478072: "SuDSlab-UoH-Wilberforce-002 (Input)",
         478073: "SuDSlab-UoH-Wilberforce-002 (Output)",
@@ -124,24 +132,9 @@ def render_blank_page():
         570522: "SuDSlab-UoH-Planter-002 (Output)"
     }  # Example lsid options with corresponding titles
 
-# Create a dictionary to map lsid to sensor names
+    # Create a dictionary to map lsid to sensor names
     lsid_to_sensor = {lsid: sensor_name for lsid, sensor_name in lsid_options.items()}
 
-    # Create a Folium map for sensor selection
-    sensor_map = folium.Map(location=hull_uni_coordinates, zoom_start=12, control_scale=True)
-
-    # Add markers to the map for each sensor
-    for lsid, sensor_name in lsid_to_sensor.items():
-        marker = folium.Marker(location=hull_uni_coordinates, popup=sensor_name)
-        marker.add_to(sensor_map)
-
-    # Render the sensor selection map
-    folium_static(sensor_map)
-
-    # Get user-selected sensor ID
-    lsid_to_filter = st.selectbox("Select Sensor ID", options=list(lsid_to_sensor.keys()), format_func=lambda x: lsid_to_sensor[x])
-
-    
     if lsid_to_filter:
         # Update the page title based on the selected lsid
         st.markdown(f"<h2 style='text-align: center;'>{lsid_options[lsid_to_filter]}</h2>", unsafe_allow_html=True)
