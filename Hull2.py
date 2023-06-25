@@ -14,22 +14,16 @@ import pandas as pd
 from PIL import Image
 import base64
 
-class SessionState:
-    def __init__(self):
-        self.name = None
-
 def main():
-    session_state = SessionState()
-
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to", ["Location Viewer", "Data Viewer"])
 
     if page == "Location Viewer":
-        render_map_page(session_state)
+        render_map_page()
     elif page == "Data Viewer":
         render_blank_page()
 
-def render_map_page(session_state):
+def render_map_page():
     st.markdown('<h1 style="text-align: center;">SuDS<span style="font-style: italic;">lab</span> UK</h1>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; font-size: 18px;">A Living Lab for Sustainable Drainage</p>', unsafe_allow_html=True)
 
@@ -88,18 +82,13 @@ def render_map_page(session_state):
         popup_html = f'<h4>{name}</h4><img src="{image_url}" alt="Image" width="200"><p>{additional_details}</p>'
         popup = folium.Popup(html=popup_html, max_width=400)
 
-        def on_marker_click(e, name):
-            session_state.name = name
-            st.experimental_rerun()
+        def on_marker_click(e):
+            st.text_input("Copy the Marker Name:", value=name, key=f"marker_{name}", readonly=True)
 
-        folium.Marker(
-            location=[latitude, longitude],
-            popup=popup,
-            tooltip=tooltip_content,
-            icon=custom_icon
-        ).add_to(marker_clusters[classification]).add_child(
-            folium.ClickForCallback(on_marker_click, name=name)
-        )
+        marker = folium.Marker(location=[latitude, longitude], popup=popup, tooltip=tooltip_content, icon=custom_icon)
+        marker.add_to(marker_clusters[classification])
+
+        marker.add_child(folium.ClickForMarker(popup, callback=on_marker_click))
 
     # Add marker clusters to the map
     for marker_cluster in marker_clusters.values():
@@ -110,9 +99,6 @@ def render_map_page(session_state):
 
     # Render the map
     folium_static(m)
-
-    if session_state.name:
-        st.sidebar.success(f"Name '{session_state.name}' copied to clipboard!")
 
 if __name__ == '__main__':
     main()
