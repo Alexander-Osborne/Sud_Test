@@ -200,9 +200,6 @@ def render_blank_page():
     components.html(map_html, height=600)
 
 
-    st._get_widget_value("__input__")
-
-
     
     lsid_to_filter = st.session_state.get("__input__")
 
