@@ -14,6 +14,14 @@ import pandas as pd
 from PIL import Image
 import base64
 
+function copyToClipboard(elementId) {
+    var copyText = document.getElementById(elementId).textContent;
+    navigator.clipboard.writeText(copyText);
+    alert("Copied the sensor ID: " + copyText);
+}
+
+
+
 def main():
     render_data_viewer_page()
 
