@@ -8,3 +8,5 @@ matplotlib==3.7.1
 altair==5.0.1
 vega-datasets==0.9.0
 Jinja2==3.1.2
+dash==2.10.2
+dash-leaflet==0.1.26
