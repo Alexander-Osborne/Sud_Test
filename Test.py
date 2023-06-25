@@ -58,6 +58,10 @@ map_html = """
               selectedMarkerName = row.name;
               // Send the selected marker name to Streamlit
               sendSelectedMarkerName(selectedMarkerName);
+            }).on('popupclose', function(e) {
+              selectedMarkerName = '';
+              // Clear the selected marker name in Streamlit
+              sendSelectedMarkerName(selectedMarkerName);
             });
           }
         });
@@ -67,6 +71,7 @@ map_html = """
       // Print the selected marker name in Streamlit
       var nameElement = document.createElement('div');
       nameElement.innerHTML = "<h3>Selected Marker Name:</h3><p>" + name + "</p>";
+      document.body.innerHTML = '';
       document.body.appendChild(nameElement);
     }
   </script>
