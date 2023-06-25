@@ -140,97 +140,97 @@ def render_data_viewer_page():
             st.write("Please enter a valid number")
         else:
 
-        # Initialize an empty list to store the data frames for each day
-        data_frames = []
-
-        # Loop over the past 'num_days' to retrieve data for each day
-        for i in range(num_days):
-            # Calculate the start and end timestamps for the current day
-            start_timestamp = str(int(time.time()) - (i + 1) * 86400)
-            end_timestamp = str(int(time.time()) - i * 86400)
-
-            # Step 1: Sort parameters by parameter name
-            params = {
-                "api-key": api_key,
-                "end-timestamp": end_timestamp,
-                "start-timestamp": start_timestamp,
-                "station-id": station_id,
-                "t": str(int(time.time()))
-            }
-            sorted_params = sorted(params.items(), key=lambda x: x[0])
-
-            # Step 2: Create concatenated string
-            concatenated_string = "".join([f"{param}{value}" for param, value in sorted_params])
-
-            # Step 3: Compute HMAC API Signature
-            message = concatenated_string.encode()
-            secret_key_bytes = secret_key.encode()
-            hmac_signature = hmac.new(secret_key_bytes, message, hashlib.sha256).hexdigest()
-
-            # Step 4: Generate API URL
-            base_url = "https://api.weatherlink.com/v2/historic/"
-            query_params = {
-                "api-key": api_key,
-                "t": str(int(time.time())),
-                "start-timestamp": start_timestamp,
-                "end-timestamp": end_timestamp
-            }
-            query_string = urlencode(query_params)
-            url = f"{base_url}{station_id}?{query_string}&api-signature={hmac_signature}"
-
-            # Step 5: Load JSON data from the API URL
-            response = requests.get(url)
-            json_data = response.json()
-
-            # Function to filter the JSON tree based on "lsid"
-            def filter_tree(data, lsid):
-                if isinstance(data, dict):
-                    tree = {}
-                    if "lsid" in data and data["lsid"] == lsid:
-                        return data
-                    else:
-                        for key, value in data.items():
-                            subtree = filter_tree(value, lsid)
+            # Initialize an empty list to store the data frames for each day
+            data_frames = []
+    
+            # Loop over the past 'num_days' to retrieve data for each day
+            for i in range(num_days):
+                # Calculate the start and end timestamps for the current day
+                start_timestamp = str(int(time.time()) - (i + 1) * 86400)
+                end_timestamp = str(int(time.time()) - i * 86400)
+    
+                # Step 1: Sort parameters by parameter name
+                params = {
+                    "api-key": api_key,
+                    "end-timestamp": end_timestamp,
+                    "start-timestamp": start_timestamp,
+                    "station-id": station_id,
+                    "t": str(int(time.time()))
+                }
+                sorted_params = sorted(params.items(), key=lambda x: x[0])
+    
+                # Step 2: Create concatenated string
+                concatenated_string = "".join([f"{param}{value}" for param, value in sorted_params])
+    
+                # Step 3: Compute HMAC API Signature
+                message = concatenated_string.encode()
+                secret_key_bytes = secret_key.encode()
+                hmac_signature = hmac.new(secret_key_bytes, message, hashlib.sha256).hexdigest()
+    
+                # Step 4: Generate API URL
+                base_url = "https://api.weatherlink.com/v2/historic/"
+                query_params = {
+                    "api-key": api_key,
+                    "t": str(int(time.time())),
+                    "start-timestamp": start_timestamp,
+                    "end-timestamp": end_timestamp
+                }
+                query_string = urlencode(query_params)
+                url = f"{base_url}{station_id}?{query_string}&api-signature={hmac_signature}"
+    
+                # Step 5: Load JSON data from the API URL
+                response = requests.get(url)
+                json_data = response.json()
+    
+                # Function to filter the JSON tree based on "lsid"
+                def filter_tree(data, lsid):
+                    if isinstance(data, dict):
+                        tree = {}
+                        if "lsid" in data and data["lsid"] == lsid:
+                            return data
+                        else:
+                            for key, value in data.items():
+                                subtree = filter_tree(value, lsid)
+                                if subtree:
+                                    tree[key] = subtree
+                            return tree
+                    elif isinstance(data, list):
+                        tree = []
+                        for item in data:
+                            subtree = filter_tree(item, lsid)
                             if subtree:
-                                tree[key] = subtree
+                                tree.append(subtree)
                         return tree
-                elif isinstance(data, list):
-                    tree = []
-                    for item in data:
-                        subtree = filter_tree(item, lsid)
-                        if subtree:
-                            tree.append(subtree)
-                    return tree
-
-            # Convert the JSON data into a tree
-            tree = json_data
-
-            # Filter the JSON tree based on user input for "lsid"
-            filtered_tree = filter_tree(tree, lsid_to_filter)
-
-            # Extract the relevant information from the JSON
-            sensor_data = filtered_tree['sensors'][0]['data']
-
-            # Convert the data into a DataFrame
-            df = pd.json_normalize(sensor_data)
-
-            # Convert 'depth' from feet to meters
-            if 'depth' in df.columns:
-                df['depth'] = df['depth'] * 0.3048
-
-            # Convert 'ts' from Unix timestamp to datetime
-            df['ts'] = pd.to_datetime(df['ts'], unit='s')
-
-            # Convert 'temp' from Fahrenheit to Celsius
-            if 'temp' in df.columns:
-                df['temp'] = (df['temp'] - 32) * 5 / 9
-
-            # Append the extracted data to the list
-            data_frames.append(df)
-
-        # Concatenate all the data frames into a single data frame
-        combined_df = pd.concat(data_frames)
-      
+    
+                # Convert the JSON data into a tree
+                tree = json_data
+    
+                # Filter the JSON tree based on user input for "lsid"
+                filtered_tree = filter_tree(tree, lsid_to_filter)
+    
+                # Extract the relevant information from the JSON
+                sensor_data = filtered_tree['sensors'][0]['data']
+    
+                # Convert the data into a DataFrame
+                df = pd.json_normalize(sensor_data)
+    
+                # Convert 'depth' from feet to meters
+                if 'depth' in df.columns:
+                    df['depth'] = df['depth'] * 0.3048
+    
+                # Convert 'ts' from Unix timestamp to datetime
+                df['ts'] = pd.to_datetime(df['ts'], unit='s')
+    
+                # Convert 'temp' from Fahrenheit to Celsius
+                if 'temp' in df.columns:
+                    df['temp'] = (df['temp'] - 32) * 5 / 9
+    
+                # Append the extracted data to the list
+                data_frames.append(df)
+    
+            # Concatenate all the data frames into a single data frame
+            combined_df = pd.concat(data_frames)
+          
         
         # Display the line chart for 'depth' if available
         if 'depth' in combined_df.columns:
