@@ -58,10 +58,14 @@ map_html = """
               selectedMarkerName = row.name;
               // Send the selected marker name to Streamlit
               sendSelectedMarkerName(selectedMarkerName);
+              // Trigger immediate re-render of Streamlit app
+              st.experimental_set_query_params(selectedMarkerName=selectedMarkerName);
             }).on('popupclose', function(e) {
               selectedMarkerName = '';
               // Clear the selected marker name in Streamlit
               sendSelectedMarkerName(selectedMarkerName);
+              // Trigger immediate re-render of Streamlit app
+              st.experimental_set_query_params(selectedMarkerName=selectedMarkerName);
             });
           }
         });
@@ -82,5 +86,12 @@ map_html = """
 </html>
 """
 
+# Get the selected marker name from Streamlit's query parameters
+selected_marker_name = st.experimental_get_query_params().get("selectedMarkerName", [None])[0]
+
 # Display the map and selected marker name in Streamlit
 components.html(map_html, height=600)
+
+# Print the selected marker name in Streamlit
+if selected_marker_name is not None:
+    st.write("Selected Marker Name:", selected_marker_name)
