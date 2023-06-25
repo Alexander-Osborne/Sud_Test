@@ -1,8 +1,8 @@
 import streamlit as st
 from dash import Dash
 import dash_html_components as html
-import dash_leaflet as dl
 from dash_extensions import webcomponents as wc
+import dash_leaflet as dl
 
 # Set Streamlit app title and layout
 st.set_page_config(page_title='University of Hull Map', layout='wide')
