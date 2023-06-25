@@ -217,7 +217,10 @@ def render_blank_page():
     with col2:
         lsid_to_filter = st.text_input('Insert a number')
         num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
-
+        
+    # Create an empty placeholder element to push subsequent content below the columns
+    empty_placeholder = st.empty()
+    
     lsid_to_filter = None
 
     while not lsid_to_filter:
