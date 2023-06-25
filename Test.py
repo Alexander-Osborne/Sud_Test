@@ -76,6 +76,11 @@ map_html = """
         document.body.appendChild(idElement);
       }
       idElement.innerHTML = "<h3>Selected Marker ID:</h3><p>" + id + "</p>";
+
+      // Send the selected marker ID to Streamlit
+      const selectedMarkerIdElement = document.getElementById('streamlit-selected-marker-id');
+      selectedMarkerIdElement.value = id;
+      selectedMarkerIdElement.dispatchEvent(new Event('change'));
     }
   </script>
 </body>
@@ -84,3 +89,12 @@ map_html = """
 
 # Display the map and selected marker ID in Streamlit
 components.html(map_html, height=600)
+
+# Display the selected marker ID using st.write
+selected_marker_id = st.empty()
+selected_marker_id_value = st.text_input("Selected Marker ID:", key='streamlit-selected-marker-id')
+
+if selected_marker_id_value:
+    selected_marker_id.write(f"Selected Marker ID: {selected_marker_id_value}")
+else:
+    selected_marker_id.write("No marker selected.")
