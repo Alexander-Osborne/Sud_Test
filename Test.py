@@ -35,8 +35,8 @@ map_html = """
         // Define the base URL for marker icons
         var iconBaseUrl = 'https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/marker_icons/';
 
-        // Store the selected marker names
-        var selectedMarkerNames = [];
+        // Store the selected marker name
+        var selectedMarkerName = '';
 
         // Iterate through the parsed data and add markers to the map
         parsedData.forEach(row => {
@@ -55,33 +55,24 @@ map_html = """
             var popupContent = "<b>" + row.name + "</b><br>" + row.additional_details;
             var marker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
             marker.bindPopup(popupContent).on('popupopen', function(e) {
-              var popup = e.popup;
-              var markerName = row.name;
-              if (!selectedMarkerNames.includes(markerName)) {
-                selectedMarkerNames.push(markerName);
-                // Send the selected marker names to Streamlit
-                sendSelectedMarkerNames(selectedMarkerNames);
-              }
+              selectedMarkerName = row.name;
+              // Send the selected marker name to Streamlit
+              sendSelectedMarkerName(selectedMarkerName);
             });
           }
         });
       });
 
-    function sendSelectedMarkerNames(names) {
-      // Print the selected marker names in Streamlit
-      var namesElement = document.createElement('div');
-      namesElement.innerHTML = "<h3>Selected Marker Names:</h3>";
-      names.forEach(function(name) {
-        var nameElement = document.createElement('p');
-        nameElement.innerHTML = name;
-        namesElement.appendChild(nameElement);
-      });
-      document.body.appendChild(namesElement);
+    function sendSelectedMarkerName(name) {
+      // Print the selected marker name in Streamlit
+      var nameElement = document.createElement('div');
+      nameElement.innerHTML = "<h3>Selected Marker Name:</h3><p>" + name + "</p>";
+      document.body.appendChild(nameElement);
     }
   </script>
 </body>
 </html>
 """
 
-# Display the map and selected marker names in Streamlit
+# Display the map and selected marker name in Streamlit
 components.html(map_html, height=600)
