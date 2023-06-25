@@ -1,9 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-# bootstrap 4 collapse example
-components.html(
-    """
+# Define the HTML code for the map
+map_html = """
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +10,7 @@ components.html(
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
   <style>
     #map { height: 400px; }
+    .popup-contents { margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -36,6 +36,9 @@ components.html(
         // Define the base URL for marker icons
         var iconBaseUrl = 'https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/marker_icons/';
 
+        // Define an array to store the popup contents
+        var popupContents = [];
+
         // Iterate through the parsed data and add markers to the map
         parsedData.forEach(row => {
           var lat = parseFloat(row.latitude);
@@ -51,26 +54,39 @@ components.html(
             });
 
             var popupContent = "<b>" + row.name + "</b><br>" + row.additional_details;
+            popupContents.push(popupContent); // Store the popup content in the array
+
             var marker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
             marker.bindPopup(popupContent).on('popupopen', function(e) {
               var popup = e.popup;
-              var contentElement = popup.getContent();
-              // Send the popup content to an external destination
-              sendPopupContent(contentElement.innerHTML);
+              var contentElement = document.createElement('div');
+              contentElement.className = 'popup-contents';
+              contentElement.innerHTML = popupContent;
+              document.body.appendChild(contentElement);
             });
           }
         });
-      });
 
-    function sendPopupContent(content) {
-      // Replace this with your own logic to send the popup content to an external destination
-      // For example, you can use AJAX, fetch, or submit a form to send the content to a server-side script
-      console.log('Popup content:', content);
-    }
+        // Function to send the popup content to Streamlit
+        function sendPopupContent(content) {
+          // Print the popup content below the map in Streamlit
+          var contentElement = document.createElement('div');
+          contentElement.innerHTML = content;
+          document.body.appendChild(contentElement);
+        }
+
+        // Add event listeners to markers to send popup content to Streamlit
+        var markers = document.querySelectorAll('.leaflet-marker-icon');
+        markers.forEach(function(marker, index) {
+          marker.addEventListener('click', function() {
+            sendPopupContent(popupContents[index]);
+          });
+        });
+      });
   </script>
 </body>
 </html>
+"""
 
-    """,
-    height=600,
-)
+# Display the map and popup contents in Streamlit
+components.html(map_html, height=600)
