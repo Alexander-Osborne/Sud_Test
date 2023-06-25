@@ -89,7 +89,8 @@ def render_map_page():
 
     # Add layer control to toggle marker clusters
     folium.LayerControl().add_to(m)
-
+    
+    MousePosition().add_to(m)
     # Render the map
     folium_static(m)
 
