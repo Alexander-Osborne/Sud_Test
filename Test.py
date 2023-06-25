@@ -66,6 +66,13 @@ map_html = """
               // Copy the sensor ID to the clipboard
               navigator.clipboard.writeText(row.sensor_id)
                 .then(function() {
+                  var copiedElement = document.getElementById('copied-message');
+                  if (copiedElement === null) {
+                    copiedElement = document.createElement('div');
+                    copiedElement.id = 'copied-message';
+                    document.body.appendChild(copiedElement);
+                  }
+                  copiedElement.innerHTML = "Copied to Clipboard";
                   console.log('Sensor ID copied to clipboard: ' + row.sensor_id);
                 })
                 .catch(function(error) {
@@ -77,19 +84,12 @@ map_html = """
       });
 
     function sendSelectedMarkerId(id) {
-      // Clear the selected marker ID in Streamlit
-      var idElement = document.getElementById('selected-marker-id');
-      if (idElement === null) {
-        idElement = document.createElement('div');
-        idElement.id = 'selected-marker-id';
-        document.body.appendChild(idElement);
-      }
-      idElement.innerHTML = "<h3>Selected Marker ID:</h3><p>" + id + "</p>";
+      // No longer needed
     }
   </script>
 </body>
 </html>
 """
 
-# Display the map and selected marker ID in Streamlit
+# Display the map in Streamlit
 components.html(map_html, height=600)
