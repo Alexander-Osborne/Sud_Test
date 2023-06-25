@@ -2,7 +2,6 @@ import streamlit as st
 import folium
 from streamlit_folium import folium_static
 from folium.plugins import MarkerCluster
-from folium.plugins import LatLngPopup
 import random
 import hmac
 import hashlib
@@ -90,11 +89,7 @@ def render_map_page():
 
     # Add layer control to toggle marker clusters
     folium.LayerControl().add_to(m)
-    
-    # Add the LatLngPopup to the map
-    lat_lng_popup = LatLngPopup()
-    lat_lng_popup.add_to(m)
-    
+
     # Render the map
     folium_static(m)
 
