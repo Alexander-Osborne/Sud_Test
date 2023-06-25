@@ -10,7 +10,9 @@ def render_map_page():
     # Create a sample DataFrame
     data = pd.DataFrame({
         'Location': ['Location 1', 'Location 2', 'Location 3'],
-        'Value': [10, 20, 15]
+        'Value': [10, 20, 15],
+        'Latitude': [53.7701, 53.772, 53.774],
+        'Longitude': [-0.3672, -0.368, -0.369]
     })
 
     # Create a Vega bar chart
@@ -29,6 +31,8 @@ def render_map_page():
     for _, row in data.iterrows():
         location = row['Location']
         value = row['Value']
+        latitude = row['Latitude']
+        longitude = row['Longitude']
 
         # Create the Vega chart HTML
         chart_html = chart.to_html()
@@ -38,7 +42,7 @@ def render_map_page():
 
         # Add the marker with the popup to the map
         folium.Marker(
-            location=[53.7701, -0.3672],  # Use your actual coordinates
+            location=[latitude, longitude],
             popup=popup
         ).add_to(m)
 
