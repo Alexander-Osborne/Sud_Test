@@ -1,7 +1,7 @@
 import streamlit as st
 import folium
 from streamlit_folium import folium_static
-from folium.plugins import MarkerCluster
+from folium.plugins import MarkerCluster, LatLngPopup
 import random
 import hmac
 import hashlib
