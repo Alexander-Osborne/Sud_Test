@@ -10,7 +10,6 @@ map_html = """
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
   <style>
     #map { height: 400px; }
-    .popup-contents { margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -36,8 +35,8 @@ map_html = """
         // Define the base URL for marker icons
         var iconBaseUrl = 'https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/marker_icons/';
 
-        // Define an array to store the popup contents
-        var popupContents = [];
+        // Store the name of the first marker
+        var markerName = '';
 
         // Iterate through the parsed data and add markers to the map
         parsedData.forEach(row => {
@@ -54,39 +53,28 @@ map_html = """
             });
 
             var popupContent = "<b>" + row.name + "</b><br>" + row.additional_details;
-            popupContents.push(popupContent); // Store the popup content in the array
-
             var marker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
             marker.bindPopup(popupContent).on('popupopen', function(e) {
-              var popup = e.popup;
-              var contentElement = document.createElement('div');
-              contentElement.className = 'popup-contents';
-              contentElement.innerHTML = popupContent;
-              document.body.appendChild(contentElement);
+              if (markerName === '') {
+                markerName = row.name;
+                // Send the marker name to Streamlit
+                sendMarkerName(markerName);
+              }
             });
           }
         });
-
-        // Function to send the popup content to Streamlit
-        function sendPopupContent(content) {
-          // Print the popup content below the map in Streamlit
-          var contentElement = document.createElement('div');
-          contentElement.innerHTML = content;
-          document.body.appendChild(contentElement);
-        }
-
-        // Add event listeners to markers to send popup content to Streamlit
-        var markers = document.querySelectorAll('.leaflet-marker-icon');
-        markers.forEach(function(marker, index) {
-          marker.addEventListener('click', function() {
-            sendPopupContent(popupContents[index]);
-          });
-        });
       });
+
+    function sendMarkerName(name) {
+      // Print the marker name in Streamlit
+      var nameElement = document.createElement('div');
+      nameElement.innerHTML = "<h3>Marker Name: " + name + "</h3>";
+      document.body.appendChild(nameElement);
+    }
   </script>
 </body>
 </html>
 """
 
-# Display the map and popup contents in Streamlit
+# Display the map and marker name in Streamlit
 components.html(map_html, height=600)
