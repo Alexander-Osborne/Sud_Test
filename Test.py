@@ -1,5 +1,6 @@
 import streamlit as st
-import streamlit.components.v1 as components
+from streamlit import components as stc
+from streamlit.script_runner import RerunException
 
 # Define the HTML code for the map
 map_html = """
@@ -57,11 +58,13 @@ map_html = """
             marker.bindPopup(popupContent).on('popupopen', function(e) {
               selectedMarkerId = row.sensor_id;
               // Send the selected marker ID to Streamlit
-              Streamlit.sendCustomMessage(JSON.stringify({ selectedMarkerId: selectedMarkerId }));
+              Streamlit.setComponentValue(selectedMarkerId);
+              Streamlit.reportChangedFormElement('selectedMarkerId');
             }).on('popupclose', function(e) {
               selectedMarkerId = '';
               // Clear the selected marker ID in Streamlit
-              Streamlit.sendCustomMessage(JSON.stringify({ selectedMarkerId: selectedMarkerId }));
+              Streamlit.setComponentValue(selectedMarkerId);
+              Streamlit.reportChangedFormElement('selectedMarkerId');
             });
           }
         });
@@ -71,40 +74,51 @@ map_html = """
 </html>
 """
 
-# Display the map using CustomComponent
-selected_marker_id = st.empty()
-component_value = selected_marker_id.value
+# Define the Streamlit component
+class MapComponent(stc.ComponentBase):
+    def __init__(self, **kwargs):
+        self.selected_marker_id = None
 
-if component_value:
-    selected_marker_id.write(f"Selected Marker ID: {component_value}")
+    def _update(self):
+        # Retrieve the selected marker ID from Streamlit
+        session_state = st.session_state.get(self.session_id)
+        if session_state is not None:
+            self.selected_marker_id = session_state.get('selected_marker_id')
+
+    def write(self, **kwargs):
+        self._update()
+
+        # Display the map using CustomComponent
+        stc.html(map_html, height=600, scrolling=True)
+
+        # Display the selected marker ID using st.write
+        if self.selected_marker_id:
+            st.write(f"Selected Marker ID: {self.selected_marker_id}")
+        else:
+            st.write("No marker selected.")
+
+    def generate_hash(self, args):
+        return ""
+
+    def get_args(self, hash):
+        return {}
+
+    def serialize(self, value):
+        return value
+
+    def deserialize(self, value):
+        return value
+
+# Register the Streamlit component
+stc.register(MapComponent)
+
+# Use the Streamlit component in your app
+map_component = MapComponent()
+map_component.write()
+
+# Retrieve the selected marker ID
+selected_marker_id = st.session_state.get('selected_marker_id')
+if selected_marker_id:
+    st.write(f"Selected Marker ID: {selected_marker_id}")
 else:
-    selected_marker_id.write("No marker selected.")
-
-# Define the JavaScript code for handling custom messages
-custom_js_code = """
-(function() {
-  // Define the function to handle custom messages
-  const handleCustomMessage = (event) => {
-    const messageData = JSON.parse(event.data);
-    if (messageData.selectedMarkerId) {
-      // Update the value of the selected marker ID
-      const selectedMarkerId = messageData.selectedMarkerId;
-      const selectedMarkerIdElement = document.getElementById('streamlit-selected-marker-id');
-      selectedMarkerIdElement.value = selectedMarkerId;
-      selectedMarkerIdElement.dispatchEvent(new Event('change'));
-    }
-  };
-
-  // Listen for custom messages from the Streamlit app
-  window.addEventListener('message', handleCustomMessage);
-})();
-"""
-
-# Display the HTML code with CustomComponent
-components.html(map_html, height=600, scrolling=True)
-
-# Display the selected marker ID using st.write
-selected_marker_id_value = st.text_input("Selected Marker ID:", key='streamlit-selected-marker-id')
-
-# Inject the JavaScript code for custom messages
-st.write("<script>{}</script>".format(custom_js_code), unsafe_allow_html=True)
+    st.write("No marker selected.")
