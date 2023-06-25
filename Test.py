@@ -44,6 +44,8 @@ def render_data_viewer_page():
         <head>
           <title>UK Map with Markers</title>
           <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/MarkerCluster.css" />
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/MarkerCluster.Default.css" />
           <style>
             #map { height: 400px; }
             .popup-message {
@@ -65,14 +67,18 @@ def render_data_viewer_page():
           <div id="popup-message"></div>
 
           <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/leaflet.markercluster.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0"></script>
           <script>
             var map = L.map('map').setView([53.771552, -0.36425564], 10); // Set initial view to the first marker
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
               attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-              maxZoom: 18,
+              maxZoom: 19,
             }).addTo(map);
+
+            // Create a marker cluster group
+            var markers = L.markerClusterGroup();
 
             // Fetch the CSV file
             fetch('https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/markers.csv')
@@ -84,7 +90,7 @@ def render_data_viewer_page():
                 // Define the base URL for marker icons
                 var iconBaseUrl = 'https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/marker_icons/';
 
-                // Iterate through the parsed data and add markers to the map
+                // Iterate through the parsed data and add markers to the cluster group
                 parsedData.forEach(row => {
                   var lat = parseFloat(row.latitude);
                   var lng = parseFloat(row.longitude);
@@ -103,7 +109,7 @@ def render_data_viewer_page():
                     });
 
                     var popupContent = `<b>${name}</b><br>Sensor ID: ${sensor_id}<br>${additional_details}<br><img src="${image_url}" width="100px">`;
-                    var marker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
+                    var marker = L.marker([lat, lng], { icon: markerIcon });
                     marker.bindPopup(popupContent).on('click', function(e) {
                       // Copy the sensor ID to the clipboard
                       navigator.clipboard.writeText(sensor_id)
@@ -115,8 +121,13 @@ def render_data_viewer_page():
                           console.error('Could not copy text: ', err);
                         });
                     });
+
+                    markers.addLayer(marker);
                   }
                 });
+
+                // Add the marker cluster group to the map
+                map.addLayer(markers);
               });
 
             function showPopupMessage(message) {
