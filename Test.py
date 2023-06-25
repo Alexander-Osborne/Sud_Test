@@ -18,9 +18,25 @@ def main():
     render_data_viewer_page()
 
 def render_data_viewer_page():
+    st.markdown('<style>div[data-testid="stSidebar"][aria-expanded="true"] { width: 0 !important; }</style>', unsafe_allow_html=True)
+
+    st.markdown(
+        """
+        <style>
+        .reportview-container .main .block-container {
+            max-width: 100%;
+            padding-top: 2rem;
+            padding-right: 2rem;
+            padding-left: 2rem;
+            padding-bottom: 12rem;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
     st.markdown('<h1 style="text-align: center;">SuDS<span style="font-style: italic;">lab</span> UK</h1>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; font-size: 18px;">Data Viewer and Download</p>', unsafe_allow_html=True)
-
 
 
     # Define the coordinates for Hull University
