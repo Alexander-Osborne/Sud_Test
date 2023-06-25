@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit import components as stc
+import streamlit.components.v1 as components
 
 # Define the HTML code for the map
 map_html = """
@@ -57,67 +57,39 @@ map_html = """
             marker.bindPopup(popupContent).on('popupopen', function(e) {
               selectedMarkerId = row.sensor_id;
               // Send the selected marker ID to Streamlit
-              Streamlit.setComponentValue(selectedMarkerId);
-              Streamlit.reportChangedFormElement('selectedMarkerId');
+              sendSelectedMarkerId(selectedMarkerId);
             }).on('popupclose', function(e) {
               selectedMarkerId = '';
               // Clear the selected marker ID in Streamlit
-              Streamlit.setComponentValue(selectedMarkerId);
-              Streamlit.reportChangedFormElement('selectedMarkerId');
+              sendSelectedMarkerId(selectedMarkerId);
+            }).on('click', function(e) {
+              // Copy the sensor ID to the clipboard
+              navigator.clipboard.writeText(row.sensor_id)
+                .then(function() {
+                  console.log('Sensor ID copied to clipboard: ' + row.sensor_id);
+                })
+                .catch(function(error) {
+                  console.error('Unable to copy sensor ID to clipboard: ', error);
+                });
             });
           }
         });
       });
+
+    function sendSelectedMarkerId(id) {
+      // Clear the selected marker ID in Streamlit
+      var idElement = document.getElementById('selected-marker-id');
+      if (idElement === null) {
+        idElement = document.createElement('div');
+        idElement.id = 'selected-marker-id';
+        document.body.appendChild(idElement);
+      }
+      idElement.innerHTML = "<h3>Selected Marker ID:</h3><p>" + id + "</p>";
+    }
   </script>
 </body>
 </html>
 """
 
-# Define the Streamlit component
-class MapComponent(stc.ComponentBase):
-    def __init__(self, **kwargs):
-        self.selected_marker_id = None
-
-    def _update(self):
-        # Retrieve the selected marker ID from Streamlit
-        session_state = st.session_state.get(self.session_id)
-        if session_state is not None:
-            self.selected_marker_id = session_state.get('selected_marker_id')
-
-    def write(self, **kwargs):
-        self._update()
-
-        # Display the map using CustomComponent
-        stc.html(map_html, height=600, scrolling=True)
-
-        # Display the selected marker ID using st.write
-        if self.selected_marker_id:
-            st.write(f"Selected Marker ID: {self.selected_marker_id}")
-        else:
-            st.write("No marker selected.")
-
-    def generate_hash(self, args):
-        return ""
-
-    def get_args(self, hash):
-        return {}
-
-    def serialize(self, value):
-        return value
-
-    def deserialize(self, value):
-        return value
-
-# Register the Streamlit component
-stc.register(MapComponent)
-
-# Use the Streamlit component in your app
-map_component = MapComponent()
-map_component.write()
-
-# Retrieve the selected marker ID
-selected_marker_id = st.session_state.get('selected_marker_id')
-if selected_marker_id:
-    st.write(f"Selected Marker ID: {selected_marker_id}")
-else:
-    st.write("No marker selected.")
+# Display the map and selected marker ID in Streamlit
+components.html(map_html, height=600)
