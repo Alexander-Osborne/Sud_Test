@@ -216,8 +216,8 @@ def render_blank_page():
 
         try:
             lsid_to_filter = int(lsid_to_filter)
-        except ValueError:
-            st.write("Please enter a valid number")
+        else:
+            st.warning("Please enter the lsid value to proceed.")
     
         # Select the number of days
         num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
