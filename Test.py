@@ -127,7 +127,8 @@ def render_data_viewer_page():
         </body>
         </html>
         """
-
+    # Insert map
+    components.html(map_html, height=600)
       # Define the LSID and number of days inputs
     lsid_to_filter = st.text_input('Insert a number')
     num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
