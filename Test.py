@@ -140,9 +140,11 @@ def render_data_viewer_page():
             lsid_to_filter = int(lsid_to_filter)
         except ValueError:
             st.write("Please enter a valid number")
-    
-        # Select the number of days
-        num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
+
+    # Select the number of days
+    num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
+
+    if st.button('Generate'):
 
         # Initialize an empty list to store the data frames for each day
         data_frames = []
