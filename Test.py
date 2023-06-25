@@ -2,8 +2,8 @@ import streamlit as st
 import folium
 from streamlit_folium import folium_static
 import altair as alt
+import json
 import pandas as pd
-from vega_datasets import data as vega_data
 
 def render_map_page():
     st.markdown('<h1 style="text-align: center;">Location Viewer with Vega Popups</h1>', unsafe_allow_html=True)
@@ -17,13 +17,19 @@ def render_map_page():
     })
 
     # Create a Vega bar chart
-    chart = alt.Chart(data).mark_bar().encode(
-        x='Location',
-        y='Value'
-    ).properties(
-        width=400,
-        height=300
-    ).to_dict()
+    vega_spec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+        "description": "Vega Bar Chart",
+        "data": {"values": data.to_dict(orient='records')},
+        "mark": "bar",
+        "encoding": {
+            "x": {"field": "Location", "type": "ordinal"},
+            "y": {"field": "Value", "type": "quantitative"}
+        }
+    }
+
+    # Convert the VegaLite specification to JSON
+    chart_json = json.dumps(vega_spec)
 
     # Create the Folium map
     m = folium.Map(location=[53.7701, -0.3672], zoom_start=9)
@@ -31,26 +37,8 @@ def render_map_page():
     # Add markers to the map with Vega popups
     for _, row in data.iterrows():
         location = row['Location']
-        value = row['Value']
         latitude = row['Latitude']
         longitude = row['Longitude']
-
-        # Create the Vega chart specification
-        vega_spec = {
-            "$schema": "https://vega.github.io/schema/vega/v5.json",
-            "width": 400,
-            "height": 300,
-            "description": "Vega Bar Chart",
-            "data": {"name": "source"},
-            "mark": "bar",
-            "encoding": {
-                "x": {"field": "Location", "type": "ordinal"},
-                "y": {"field": "Value", "type": "quantitative"}
-            }
-        }
-
-        # Embed the Vega chart specification as a VegaLite JSON string
-        chart_json = alt.vegalite(vgjson=vega_spec, data=data).to_json()
 
         # Create the Folium Vega popup
         folium.VegaLite(chart_json, width=420, height=320).add_to(folium.Marker([latitude, longitude], popup=folium.Popup()))
