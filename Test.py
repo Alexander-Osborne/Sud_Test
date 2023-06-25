@@ -204,11 +204,12 @@ def render_blank_page():
 
 
     
-    lsid_to_filter = st._get_widget_value("__input__")
+    lsid_to_filter = st.session_state.get("__input__")
 
     if lsid_to_filter:
         # Update the page title based on the selected lsid
         st.markdown(f"<h2 style='text-align: center;'>{lsid_options[lsid_to_filter]}</h2>", unsafe_allow_html=True)
+
 
 
         # Initialize an empty list to store the data frames for each day
