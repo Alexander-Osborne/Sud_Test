@@ -130,7 +130,7 @@ def render_data_viewer_page():
     # Insert map
     components.html(map_html, height=430)
       # Define the LSID and number of days inputs
-    lsid_to_filter = st.text_input('Insert a number')
+    lsid_to_filter = st.text_input('Insert Sensor ID from Map Above')
     num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
     # Add a button to generate data
@@ -268,7 +268,7 @@ def render_data_viewer_page():
         st.markdown(href, unsafe_allow_html=True)
 
     else:
-        st.warning("Please enter the lsid value to proceed.")
+        st.warning("Please enter the Sensor ID to proceed.")
 
 if __name__ == "__main__":
     main()
