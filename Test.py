@@ -38,7 +38,7 @@ def render_data_viewer_page():
 
     
     # Define the HTML code for the map
-    map_html = """
+map_html = """
         <!DOCTYPE html>
         <html>
         <head>
@@ -60,6 +60,23 @@ def render_data_viewer_page():
               z-index: 999;
               transition: opacity 0.5s;
             }
+            
+            /* Custom Cluster Styles */
+            .custom-cluster {
+              background-color: #3d8d9bff;
+              color: #fff;
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+              line-height: 40px;
+              text-align: center;
+              font-weight: bold;
+              cursor: pointer;
+            }
+            
+            .custom-cluster:hover {
+              background-color: #0056b3;
+            }
           </style>
         </head>
         <body>
@@ -70,7 +87,7 @@ def render_data_viewer_page():
           <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.1/leaflet.markercluster.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0"></script>
           <script>
-            var map = L.map('map').setView([53.771552, -0.36425564], 9); // Set initial view to the first marker
+            var map = L.map('map').setView([53.771552, -0.36425564], 10); // Set initial view to the first marker
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
               attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
@@ -78,7 +95,25 @@ def render_data_viewer_page():
             }).addTo(map);
 
             // Create a marker cluster group
-            var markers = L.markerClusterGroup();
+            var markers = L.markerClusterGroup({
+              iconCreateFunction: function(cluster) {
+                var childCount = cluster.getChildCount();
+                var clusterSize = "large";
+
+                if (childCount < 10) {
+                  clusterSize = "small";
+                } else if (childCount < 100) {
+                  clusterSize = "medium";
+                }
+
+                return L.divIcon({
+                  html: '<div class="custom-cluster">' + childCount + '</div>',
+                  className: 'custom-cluster-icon custom-cluster-' + clusterSize,
+                  iconSize: L.point(40, 40),
+                  iconAnchor: L.point(20, 20)  // Adjust the icon anchor to center the cluster icon
+                });
+              }
+            });
 
             // Fetch the CSV file
             fetch('https://raw.githubusercontent.com/Alexander-Osborne/Sud_Test/main/markers.csv')
@@ -142,6 +177,7 @@ def render_data_viewer_page():
         </body>
         </html>
     """
+
     # Insert map
     components.html(map_html, height=430)
       # Define the LSID and number of days inputs
