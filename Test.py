@@ -116,7 +116,7 @@ def render_blank_page():
     num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
     # Define the HTML code for the map
-        map_html = """
+    map_html = """
         <!DOCTYPE html>
         <html>
         <head>
