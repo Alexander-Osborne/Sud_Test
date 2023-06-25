@@ -185,7 +185,7 @@ def render_data_viewer_page():
     num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
 
     # Add a button to generate data
-    if st.button('Generate'):
+    if st.button('Generate Graphs and Data Download'):
         try:
             lsid_to_filter = int(lsid_to_filter)
         except ValueError:
