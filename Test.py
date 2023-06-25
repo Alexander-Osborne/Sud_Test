@@ -21,7 +21,7 @@ def main():
 
 def render_data_viewer_page():
     # Load and display the logo image
-    logo_image = Image.open("Logo.png")
+    logo_image = Image.open("Logo2.png")
     st.image(logo_image, use_column_width=True)
 
     # Define the coordinates for Hull University
