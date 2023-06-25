@@ -76,8 +76,6 @@ map_html = """
         document.body.appendChild(idElement);
       }
       idElement.innerHTML = "<h3>Selected Marker ID:</h3><p>" + id + "</p>";
-      // Send the selected marker ID to Streamlit via Streamlit's JS API
-      Streamlit.setComponentValue(id);
     }
   </script>
 </body>
@@ -85,7 +83,4 @@ map_html = """
 """
 
 # Display the map and selected marker ID in Streamlit
-selected_marker_id = components.html(map_html, height=600)
-
-# Output the selected marker ID
-st.write("Selected Sensor ID:", selected_marker_id)
+components.html(map_html, height=600)
