@@ -206,6 +206,9 @@ def render_blank_page():
         </html>
         """
 
+    # Display the map in Streamlit
+    components.html(map_html, height=600)
+
     lsid_to_filter = None
 
     while not lsid_to_filter:
@@ -215,25 +218,9 @@ def render_blank_page():
             lsid_to_filter = int(lsid_to_filter)
         except ValueError:
             st.write("Please enter a valid number")
-
     
-    # Place the input elements in the second column using st.columns
-    col1, col2 = st.columns(2)
-
-    # Display the HTML map in the first column
-    with col1:
-        components.html(map_html, height=600)
-
-    # Place the input elements in the second column using st.columns
-    with col2:
-        lsid_to_filter = st.text_input('Insert a number')
+        # Select the number of days
         num_days = st.slider("Select the number of days of data to view", min_value=1, max_value=30, value=1)
-        
-    # Create an empty placeholder element to push subsequent content below the columns
-    empty_placeholder = st.empty()
-    
-
-    
 
         # Initialize an empty list to store the data frames for each day
         data_frames = []
