@@ -108,7 +108,7 @@ def render_data_viewer_page():
                       // Copy the sensor ID to the clipboard
                       navigator.clipboard.writeText(sensor_id)
                         .then(function() {
-                          showPopupMessage("Copied to Clipboard");
+                          showPopupMessage("Copied Sensor ID to Clipboard");
                           console.log('Sensor ID copied to clipboard');
                         })
                         .catch(function(err) {
