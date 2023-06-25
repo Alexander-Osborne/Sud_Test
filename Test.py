@@ -3,6 +3,7 @@ import folium
 from streamlit_folium import folium_static
 import altair as alt
 import pandas as pd
+from vega_datasets import data as vega_data
 
 def render_map_page():
     st.markdown('<h1 style="text-align: center;">Location Viewer with Vega Popups</h1>', unsafe_allow_html=True)
@@ -22,7 +23,7 @@ def render_map_page():
     ).properties(
         width=400,
         height=300
-    )
+    ).to_dict()
 
     # Create the Folium map
     m = folium.Map(location=[53.7701, -0.3672], zoom_start=9)
@@ -34,19 +35,30 @@ def render_map_page():
         latitude = row['Latitude']
         longitude = row['Longitude']
 
-        # Create the Vega chart HTML
-        chart_html = chart.to_html()
+        # Create the Vega chart specification
+        vega_spec = {
+            "$schema": "https://vega.github.io/schema/vega/v5.json",
+            "width": 400,
+            "height": 300,
+            "description": "Vega Bar Chart",
+            "data": {"name": "source"},
+            "mark": "bar",
+            "encoding": {
+                "x": {"field": "Location", "type": "ordinal"},
+                "y": {"field": "Value", "type": "quantitative"}
+            }
+        }
 
-        # Create the Folium popup with the Vega chart
-        popup = folium.Popup(chart_html, max_width=600)
+        # Embed the Vega chart specification as a VegaLite JSON string
+        chart_json = alt.vegalite(vgjson=vega_spec, data=data).to_json()
 
-        # Add the marker with the popup to the map
-        folium.Marker(
-            location=[latitude, longitude],
-            popup=popup
-        ).add_to(m)
+        # Create the Folium Vega popup
+        folium.VegaLite(chart_json, width=420, height=320).add_to(folium.Marker([latitude, longitude], popup=folium.Popup()))
 
-    # Render the map
+        # Add the marker to the map
+        folium.Marker([latitude, longitude], popup=popup).add_to(m)
+
+    # Render the map using folium_static
     folium_static(m)
 
 def main():
