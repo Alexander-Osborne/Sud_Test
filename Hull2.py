@@ -13,18 +13,23 @@ import json
 import pandas as pd
 from PIL import Image
 import base64
-import clipboard
+
+class SessionState:
+    def __init__(self):
+        self.name = None
 
 def main():
+    session_state = SessionState()
+
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to", ["Location Viewer", "Data Viewer"])
 
     if page == "Location Viewer":
-        render_map_page()
+        render_map_page(session_state)
     elif page == "Data Viewer":
         render_blank_page()
 
-def render_map_page():
+def render_map_page(session_state):
     st.markdown('<h1 style="text-align: center;">SuDS<span style="font-style: italic;">lab</span> UK</h1>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; font-size: 18px;">A Living Lab for Sustainable Drainage</p>', unsafe_allow_html=True)
 
@@ -69,37 +74,4 @@ def render_map_page():
             icon_path = icon_directory + 'Weather_Icon.png'
         else:
             # Use a default icon if no matching classification is found
-            icon_path = icon_directory + 'default_icon.png'  # Replace 'default_icon.png' with your default icon path
-
-        # Create a custom icon
-        custom_icon = folium.CustomIcon(icon_image=icon_path, icon_size=(30, 30))
-        additional_details = row['additional_details']
-        # Construct the tooltip content with the name and thumbnail image
-        thumbnail_html = f'<img src="{image_url}" alt="Thumbnail" width="300">'
-        tooltip_content = f"<b>{name}</b><br>{thumbnail_html}<br><i>{additional_details}</i>"
-
-        # Create the popup content with the name and larger image
-        popup_html = f'<h4>{name}</h4><img src="{image_url}" alt="Image" width="200"><p>{additional_details}</p>'
-        popup = folium.Popup(html=popup_html, max_width=400)
-
-        def on_marker_click(e):
-            clipboard.copy(name)
-            st.sidebar.success(f"Name '{name}' copied to clipboard!")
-
-        marker = folium.Marker(location=[latitude, longitude], popup=popup, tooltip=tooltip_content, icon=custom_icon)
-        marker.add_to(marker_clusters[classification])
-
-        marker.add_child(folium.ClickForMarker(popup, callback=on_marker_click))
-
-    # Add marker clusters to the map
-    for marker_cluster in marker_clusters.values():
-        marker_cluster.add_to(m)
-
-    # Add layer control to toggle marker clusters
-    folium.LayerControl().add_to(m)
-
-    # Render the map
-    folium_static(m)
-
-if __name__ == '__main__':
-    main()
+            icon_path = icon_directory + 'default_icon.png'  #
