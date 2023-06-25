@@ -105,6 +105,7 @@ def render_blank_page():
     # Create a DataFrame with a single row containing Hull University coordinates
     df1 = pd.DataFrame({'lat': [hull_uni_coordinates[0]], 'lon': [hull_uni_coordinates[1]]})
 
+   m = folium.Map(location=[53.7701, -0.3672], zoom_start=9)
 
     # Retrieve secrets from Streamlit Secrets
     secret_key = st.secrets["secret_key"]
