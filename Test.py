@@ -12,6 +12,18 @@ import json
 import pandas as pd
 from PIL import Image
 import base64
+from jinja2 import Template
+
+# Modify Marker template to include the onClick event
+click_template = """{% macro script(this, kwargs) %}
+    var {{ this.get_name() }} = L.marker(
+        {{ this.location|tojson }},
+        {{ this.options|tojson }}
+    ).addTo({{ this._parent.get_name() }}).on('click', onClick);
+{% endmacro %}"""
+
+# Change template to custom template
+Marker._template = Template(click_template)
 
 def main():
     st.sidebar.title("Navigation")
@@ -86,6 +98,18 @@ def render_map_page():
     # Add marker clusters to the map
     for marker_cluster in marker_clusters.values():
         marker_cluster.add_to(m)
+    # Create the onClick listener function as a branca element and add to the map html
+    click_js = """function onClick(e) {
+                     var point = e.latlng; alert(point)
+                     }"""
+                 
+    e = folium.Element(click_js)
+    html = m.get_root()
+    html.script.get_root().render()
+    html.script._children[e.get_name()] = e
+
+    #Add marker (click on map an alert will display with latlng values)
+    marker = folium.Marker([51.7678, -0.00675564]).add_to(m)
 
     # Add layer control to toggle marker clusters
     folium.LayerControl().add_to(m)
