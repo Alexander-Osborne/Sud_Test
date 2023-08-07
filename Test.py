@@ -17,9 +17,15 @@ import base64
 
 
 def main():
-    render_data_viewer_page()
+    st.sidebar.title('Navigation')
+    selection = st.sidebar.radio('Go to', ['Map and Real-Time Data', 'Historic Data'])
 
-def render_data_viewer_page():
+    if selection == 'Map and Real-Time Data':
+        render_map_and_real_time_data()
+    elif selection == 'Historic Data':
+        render_historic_data_page()
+
+def render_map_and_real_time_data():
     # Load and display the logo image
     logo_image = Image.open("Logo2.png")
     st.image(logo_image, use_column_width=True)
@@ -342,5 +348,10 @@ def render_data_viewer_page():
     else:
         st.warning("Please enter the Sensor ID to proceed.")
 
-if __name__ == "__main__":
+def render_historic_data_page():
+    st.title("Historic Data")
+    # Add code here to handle the display of historical data.
+    # You can use similar logic to what you used earlier for fetching and displaying data.
+
+if __name__ == '__main__':
     main()
