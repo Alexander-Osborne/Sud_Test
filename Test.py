@@ -15,11 +15,10 @@ from PIL import Image
 import base64
 
 
-
 def main():
     st.sidebar.title('Navigation')
-    section = None
-    
+    section = "real_time_data"  # Default section
+
     if st.sidebar.button('Map and Real-Time Data'):
         section = "real_time_data"
 
