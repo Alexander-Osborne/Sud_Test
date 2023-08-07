@@ -11,17 +11,17 @@ random_markers = [
     (-33.8688, 151.2093, "Sydney"),
 ]
 
-# Create a Streamlit session state
-if "selected_marker" not in st.session_state:
-    st.session_state.selected_marker = None
-
 def handle_click(location_name):
     st.session_state.selected_marker = location_name
-    st.experimental_rerun()
 
 def main():
     st.title("Random Marker Map")
-    
+
+    # Create a sidebar for displaying the selected marker name
+    st.sidebar.title("Selected Marker")
+    if "selected_marker" in st.session_state:
+        st.sidebar.write(st.session_state.selected_marker)
+
     # Create a Folium map centered on a random location
     map_center = random_markers[0][:2]
     m = folium.Map(location=map_center, zoom_start=3)
@@ -31,13 +31,17 @@ def main():
         marker = folium.Marker(location=[lat, lon], popup=location_name, tooltip=location_name)
         marker.add_to(m)
 
+    # Handle marker clicks
+    for lat, lon, location_name in random_markers:
+        folium.Marker(
+            location=[lat, lon],
+            popup=location_name,
+            tooltip=location_name,
+            icon=folium.Icon(icon="cloud"),
+            ).add_to(m).add_child(folium.Popup(location_name))
+    
     # Display the map in Streamlit using folium_static
     folium_static(m)
-
-    # Show the selected marker name on a new page
-    if st.session_state.selected_marker:
-        st.title("Selected Marker")
-        st.write(f"You clicked on the marker in {st.session_state.selected_marker}.")
 
 if __name__ == "__main__":
     main()
