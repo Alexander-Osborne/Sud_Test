@@ -1,7 +1,6 @@
 import streamlit as st
 import folium
 from streamlit_folium import folium_static
-from folium.plugins import Marker
 
 # Dummy data for random markers (latitude, longitude, and location name)
 random_markers = [
@@ -24,8 +23,7 @@ def main():
 
     # Add markers to the map
     for lat, lon, location_name in random_markers:
-        marker = Marker(location=[lat, lon], popup=location_name)
-        marker.add_to(m)
+        folium.Marker(location=[lat, lon], popup=location_name).add_to(m)
 
     # Display the map in Streamlit using folium_static
     folium_static(m)
