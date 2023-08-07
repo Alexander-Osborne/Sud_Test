@@ -15,22 +15,11 @@ from PIL import Image
 import base64
 
 
+
 def main():
-    st.sidebar.title('Navigation')
-    section = "real_time_data"  # Default section
+    render_data_viewer_page()
 
-    if st.sidebar.button('Map and Real-Time Data'):
-        section = "real_time_data"
-
-    if st.sidebar.button('Historic Data'):
-        section = "historic_data"
-
-    if section == "real_time_data":
-        render_map_and_real_time_data()
-    elif section == "historic_data":
-        render_historic_data_page()
-
-def render_map_and_real_time_data():
+def render_data_viewer_page():
     # Load and display the logo image
     logo_image = Image.open("Logo2.png")
     st.image(logo_image, use_column_width=True)
@@ -353,10 +342,5 @@ def render_map_and_real_time_data():
     else:
         st.warning("Please enter the Sensor ID to proceed.")
 
-def render_historic_data_page():
-    st.title("Historic Data")
-    # Add code here to handle the display of historical data.
-    # You can use similar logic to what you used earlier for fetching and displaying data.
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
