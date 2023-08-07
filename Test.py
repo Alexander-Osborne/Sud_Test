@@ -17,14 +17,19 @@ import base64
 
 
 def main():
-st.sidebar.title("Navigation")
-    if st.sidebar.button("Map and Real-Time Data"):
-        st.title("Map and Real-Time Data")
-        st.write("This is the map and real-time data section.")
+    st.sidebar.title('Navigation')
+    section = None
     
-    if st.sidebar.button("Historic Data"):
-        st.title("Historic Data")
-        st.write("This is the historic data section.")
+    if st.sidebar.button('Map and Real-Time Data'):
+        section = "real_time_data"
+
+    if st.sidebar.button('Historic Data'):
+        section = "historic_data"
+
+    if section == "real_time_data":
+        render_map_and_real_time_data()
+    elif section == "historic_data":
+        render_historic_data_page()
 
 def render_map_and_real_time_data():
     # Load and display the logo image
